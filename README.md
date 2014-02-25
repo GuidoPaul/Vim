@@ -1,13 +1,29 @@
-### Install
-1. clone the repo
+# Vim
+## Install with：
 
-		git clone git://github.com/BaoShenglin/Vim.git
+1. Install vim (root)
 
-1. rename it
+		apt-get install vim
+
+2. Clone the repo
+
+		cd ~/ && git clone git://github.com/BaoShenglin/Vim.git
+
+3. rename it
 
 		mv Vim ~/.vim
 
-1. set up ~/.vimrc link vimrc
+4. set up ~/.vimrc link vimrc
 
 		ln -s ~/.vim/vimrc ~/.vimrc
+
+## About plugin：
+
+1. clang_complete
+		1. you need install clang、libclang1 and libclang-dev (root)
+			
+			apt-get install clang libclang1 libclang-dev
+
+2. javacomplete
+		1. You can refer to this link for more information : [javacomplete](https://github.com/vim-scripts/javacomplete)
 
