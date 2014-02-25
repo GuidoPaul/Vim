@@ -31,7 +31,6 @@ Bundle 'terryma/vim-multiple-cursors'
 Bundle 'tpope/vim-surround'
 "Bundle 'Valloric/YouCompleteMe'  (需vim7.4,暂时不安装)
  
- 
 
 " vim-scripts
 Bundle 'bufexplorer.zip'
@@ -164,13 +163,16 @@ func SetTitle()
 		call setline(1, "/*************************************************************************") 
 		call append(line("."), "	> File Name: ".expand("%")) 
 		call append(line(".")+1, "	> Author: Bslin") 
-		call append(line(".")+2, "	> Mail:  ") 
+		call append(line(".")+2, "	> Mail: Baoshenglin1994@gmail.com") 
 		call append(line(".")+3, "	> Created Time: ".strftime("%c")) 
 		call append(line(".")+4, " ************************************************************************/") 
 		call append(line(".")+5, "")
 	endif
 	if &filetype == 'cpp'
-		call append(line(".")+6, "")
+		call append(line(".")+6, "#include <cstdio>")
+		call append(line(".")+7, "#include <iostream>")
+		call append(line(".")+8, "using namespace std;")
+		call append(line(".")+9, "")
 	endif
 	if &filetype == 'c'
 		call append(line(".")+6, "#include <stdio.h>")
@@ -273,7 +275,7 @@ map <F2> :NERDTreeToggle<CR>
 set foldenable              " 可使用折叠
 set foldmethod=indent       " 设置缩进折叠
 set foldcolumn=0            " 设置折叠区域的宽度
-setlocal foldlevel=1        " 设置折叠层数为
+setlocal foldlevel=3        " 设置折叠层数
 set foldlevelstart=99       " 打开文件是默认不折叠代码
 "set foldclose=all          " 设置为自动关闭折叠                
 nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
@@ -312,7 +314,7 @@ endfunc
 map <F8> :call Rungdb()<CR>
 func! Rungdb()
 	exec "w"
-	exec "!g++ % -g -o %<"
+	exec "!gcc % -g -o %<"
 	exec "!gdb ./%<"
 endfunc
 
@@ -517,6 +519,12 @@ autocmd Filetype java set omnifunc=javacomplete#Complete "java自动补全
 " "."映射出窗口
 autocmd FileType java,javascript,jsp inoremap <buffer> . .<C-X><C-O><C-P><Down>
 " autocmd FileType java inoremap <buffer> . .<C-X><C-O><C-P>
+
+
+"""""""""""""""""""""""""""""" 
+" phpcomplete
+"""""""""""""""""""""""""""""" 
+" autocmd FileType php set omnifunc=phpcomplete#CompletePHP "php自动补全
 
 """""""""""""""""""""""""""""" 
 " neocomplcache 
