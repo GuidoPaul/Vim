@@ -22,7 +22,7 @@
 1. clang_complete
 		1. you need install clang、libclang1 and libclang-dev (root)
 			
-			apt-get install clang libclang1 libclang-dev
+		apt-get install clang libclang1 libclang-dev
 
 2. javacomplete
 		1. You can refer to this link for more information : [javacomplete](https://github.com/vim-scripts/javacomplete)
