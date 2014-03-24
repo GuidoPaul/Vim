@@ -153,8 +153,8 @@ func SetTitle()
 		call setline(1,"\#!/bin/bash") 
 		call append(line("."), "") 
     elseif &filetype == 'python'
-        call setline(1,"#! /usr/bin/env/python")
-        call append(line("."),"# -* - coding: UTF-8 -* -")
+        call setline(1,"#!/usr/bin/env python")
+        call append(line("."),"# -*- coding: utf-8 -*-")
         call append(line(".")+1,"# Filename: ".expand("%"))
 		call append(line(".")+2, "") 
 "    elseif &filetype == 'mkd'
@@ -170,9 +170,8 @@ func SetTitle()
 	endif
 	if &filetype == 'cpp'
 		call append(line(".")+6, "#include <cstdio>")
-		call append(line(".")+7, "#include <iostream>")
-		call append(line(".")+8, "using namespace std;")
-		call append(line(".")+9, "")
+		call append(line(".")+7, "using namespace std;")
+		call append(line(".")+8, "")
 	endif
 	if &filetype == 'c'
 		call append(line(".")+6, "#include <stdio.h>")
@@ -244,7 +243,7 @@ nmap cc :!ctags -R <CR><CR>
 "生成一个cscope的数据库
 nmap ff :!cscope -Rbq <CR><CR>
 " 快捷键 F4 编译后，如有错误则打开quickfix窗口。（光标仍停留在源码窗口)
-autocmd FileType c,cpp map <buffer> <F4> :w<cr>:make<cr><cr>
+" autocmd FileType c,cpp map <buffer> <F4> :w<cr>:make<cr><cr>
 " 切换window
 map <C-h> <C-w>h
 map <C-j> <C-w>j
@@ -263,7 +262,7 @@ imap <C-e> <Esc>$
 set mouse=a "全部模式下 set mouse=v 可视模式下
 set selection=exclusive
 set selectmode=mouse,key
-" 去空行  
+" 去空行、行首、行尾
 nnoremap <F9> :g/^\s*$/d<CR> 
 " 比较文件  
 nnoremap <C-F2> :vert diffsplit 
@@ -314,7 +313,7 @@ endfunc
 map <F8> :call Rungdb()<CR>
 func! Rungdb()
 	exec "w"
-	exec "!gcc % -g -o %<"
+	exec "!g++ % -g -o %<"
 	exec "!gdb ./%<"
 endfunc
 
@@ -611,9 +610,6 @@ set cscopequickfix=s-,c-,d-,i-,t-,e-
 set makeprg=g++\ -o\ %<\ %\ -Wall\ -g 
 set makeprg=make\ %< 
 let g:exQF_window_height = 30 "限制高度为30
-"autocmd FileType c,cpp map <buffer> <leader><space> :w<cr>:make<cr>
-" 快捷键 F4 编译后，如有错误则打开quickfix窗口。（光标仍停留在源码窗口)
-autocmd FileType c,cpp map <buffer> <F4> :w<cr>:make<cr><cr>
 " 注意：需要开启netsting autocmd
 autocmd QuickFixCmdPost [^l]* nested cwindow
 "autocmd QuickFixCmdPost    l* nested lwindow
