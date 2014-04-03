@@ -104,6 +104,7 @@ set ruler            " 打开状态栏标尺
 set go=""            " 不要图形按钮,工具栏、菜单栏、滚动条
 "set guioptions-=T   " 隐藏工具栏
 "set guioptions-=m   " 隐藏菜单栏
+set vb t_vb=	     " 去掉声音提示
 set tabstop=4        " Tab键的宽度
 set shiftwidth=4     " 缩进的空白长度
 set softtabstop=4    " 统一缩进为4
