@@ -307,6 +307,10 @@ func! CompileRunGcc()
     elseif &filetype == 'mkd'
         exec "!~/.vim/markdown.pl % > %.html &"
         exec "!firefox %.html &"
+    elseif &filetype == 'asm'
+		exec "!nasm -f elf % && ld -m elf_i386 -s -o %< %<.o"
+		" exec "!ld -m elf_i386 -s -o %< %<.o"
+		exec "!time ./%<"
 	endif
 endfunc
 
