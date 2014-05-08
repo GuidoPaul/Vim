@@ -300,17 +300,18 @@ func! CompileRunGcc()
 	elseif &filetype == 'python'
 		exec "!time python2.7 %"
     elseif &filetype == 'html'
-        exec "!firefox % &"
+		exec "!firefox % &"
     elseif &filetype == 'go'
 "        exec "!go build %<"
-        exec "!time go run %"
+		exec "!time go run %"
     elseif &filetype == 'mkd'
-        exec "!~/.vim/markdown.pl % > %.html &"
-        exec "!firefox %.html &"
+		exec "!~/.vim/markdown.pl % > %.html &"
+		exec "!firefox %.html &"
     elseif &filetype == 'asm'
-		exec "!nasm -f elf % && ld -m elf_i386 -s -o %< %<.o"
-		" exec "!ld -m elf_i386 -s -o %< %<.o"
+		exec "!as -o %<.o % && ld -s -o %< %<.o"
 		exec "!time ./%<"
+		" exec "!nasm -f elf % && ld -m elf_i386 -s -o %< %<.o"
+		" exec "!time ./%<"
 	endif
 endfunc
 
@@ -328,22 +329,22 @@ map <F6> :call FormartSrc()<CR><CR>
 func FormartSrc()
     exec "w"
     if &filetype == 'c'
-        exec "!astyle --style=ansi -a --suffix=none %"
+		exec "!astyle --style=ansi -a --suffix=none %"
     elseif &filetype == 'cpp' || &filetype == 'hpp'
-        exec "r !astyle --style=ansi --one-line=keep-statements -a --suffix=none %> /dev/null 2>&1"
+		exec "r !astyle --style=ansi --one-line=keep-statements -a --suffix=none %> /dev/null 2>&1"
     elseif &filetype == 'perl'
-        exec "!astyle --style=gnu --suffix=none %"
+		exec "!astyle --style=gnu --suffix=none %"
     elseif &filetype == 'py'||&filetype == 'python'
-        exec "r !autopep8 -i --aggressive %"
+		exec "r !autopep8 -i --aggressive %"
     elseif &filetype == 'java'
-        exec "!astyle --style=java --suffix=none %"
+		exec "!astyle --style=java --suffix=none %"
     elseif &filetype == 'jsp'
-        exec "!astyle --style=gnu --suffix=none %"
+		exec "!astyle --style=gnu --suffix=none %"
     elseif &filetype == 'xml'
-        exec "!astyle --style=gnu --suffix=none %"
+		exec "!astyle --style=gnu --suffix=none %"
     else
-        exec "normal gg=G"
-        return
+		exec "normal gg=G"
+		return
     endif
     exec "e! %"
 endfunc
