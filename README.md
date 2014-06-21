@@ -1,29 +1,36 @@
-# Vim
-## Install with：
+I use pathogen to Manage my `'runtimepath'` with ease and Vundle to management my vim plugins. 
 
-1. Install vim (root)
+You can refer to this link for more information: [Pathogen]( https://github.com/tpope/vim-pathogen  )
+and [Vundle]( https://github.com/gmarik/vundle  )
 
-		apt-get install vim
+# Preparation:
+if you don't have vim.
+	
+	sudo apt-get install vim
 
-2. Clone the repo
+If you have used the vim.
 
-		cd ~/ && git clone git://github.com/BaoShenglin/Vim.git
+	mv ~/.vim ~/.vim_old
+	mv ~/.vimrc ~/.vimrc_old
 
-3. Rename it
+# Install with:
 
-		mv Vim ~/.vim
+	git clone git@github.com:GuidoPaul/Vim.git ~/.vim
+	ln -s ~/.vim/vimrc ~/.vimrc
 
-4. set up ~/.vimrc link vimrc
+# Install plugins:
 
-		ln -s ~/.vim/vimrc ~/.vimrc
+Launch `vim` and run `:PluginInstall`
 
-## About plugin：
+To install from command line: `vim +PluginInstall +qall`
 
-1. clang_complete
-		1. you need install clang、libclang1 and libclang-dev (root)
-			
-		apt-get install clang libclang1 libclang-dev
+## About plugins:
 
-2. javacomplete
-		1. You can refer to this link for more information : [javacomplete](https://github.com/vim-scripts/javacomplete)
+### 1. clang_complete
+you need install clang、libclang1 and libclang-dev (root)
+				
+	apt-get install clang libclang1 libclang-dev
+
+### 2. javacomplete
+You can refer to this link for more information : [javacomplete](https://github.com/vim-scripts/javacomplete)
 

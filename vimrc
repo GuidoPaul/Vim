@@ -1,52 +1,57 @@
 " VIM Configuration File
 " Copyright: 
-" Author: Bslin
+" Author: GuidoPaul
 "
-set nocompatible              " be iMproved
-filetype off                  " required!
+set nocompatible              " be iMproved, required
+filetype off                  " required
 
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
 
-" let Vundle manage Vundle
-" required! 
-Bundle 'gmarik/vundle'
+" let Vundle manage Vundle, required
+Plugin 'gmarik/Vundle.vim'
 
-" My bundles here:
-"
-" original repos on GitHub
+" My plugin here:
+" Keep Plugin commands between vundle#begin/end.
+" original plugin on GitHub repo
 
-Bundle 'jiangmiao/auto-pairs'
-Bundle 'Rip-Rip/clang_complete'
-Bundle 'kien/ctrlp.vim'
-Bundle 'Yggdroot/indentLine'
-Bundle 'Shougo/neocomplcache.vim'
-Bundle 'scrooloose/nerdtree'
-Bundle 'scrooloose/syntastic'
-Bundle 'majutsushi/tagbar'
-Bundle 'SirVer/ultisnips'
-Bundle 'bling/vim-airline'
-Bundle 'tpope/vim-commentary'
-Bundle 'terryma/vim-multiple-cursors'
-Bundle 'tpope/vim-surround'
-"Bundle 'Valloric/YouCompleteMe'  (需vim7.4,暂时不安装)
- 
-
-" vim-scripts
-Bundle 'bufexplorer.zip'
-Bundle 'javacomplete'
+" plugin on GitHub repo
+Plugin 'jiangmiao/auto-pairs'
+Plugin 'Rip-Rip/clang_complete'
+Plugin 'kien/ctrlp.vim'
+Plugin 'Yggdroot/indentLine'
+Plugin 'Shougo/neocomplcache.vim'
+Plugin 'scrooloose/nerdtree'
+Plugin 'scrooloose/syntastic'
+Plugin 'majutsushi/tagbar'
+Plugin 'SirVer/ultisnips'
+Plugin 'bling/vim-airline'
+Plugin 'tpope/vim-commentary'
+Plugin 'terryma/vim-multiple-cursors'
+Plugin 'tpope/vim-surround'
+" Plugin 'Valloric/YouCompleteMe'  (需vim7.4,暂时不安装)
+" plugin from http://vim-scripts.org/vim/scripts.html
+Plugin 'bufexplorer.zip'
+Plugin 'javacomplete'
 " ...
 
-filetype plugin indent on     " required!
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+" To ignore plugin indent changes, instead use:
+"filetype plugin on
 "
 " Brief help
-" :BundleList          - list configured bundles
-" :BundleInstall(!)    - install (update) bundles
-" :BundleSearch(!) foo - search (or refresh cache first) for foo
-" :BundleClean(!)      - confirm (or auto-approve) removal of unused bundles
+" :PluginList          - list configured plugins
+" :PluginInstall(!)    - install (update) plugins
+" :PluginSearch(!) foo - search (or refresh cache first) for foo
+" :PluginClean(!)      - confirm (or auto-approve) removal of unused plugins
 "
 " see :h vundle for more details or wiki for FAQ
-" NOTE: comments after Bundle commands are not allowed.
+" Put your non-Plugin stuff after this line
 
 
 let g:html_indent_inctags = "html,body,head,tbody"
