@@ -9,7 +9,7 @@
 
 		cd ~/ && git clone git://github.com/BaoShenglin/Vim.git
 
-3. rename it
+3. Rename it
 
 		mv Vim ~/.vim
 
