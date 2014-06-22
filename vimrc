@@ -28,6 +28,7 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
 Plugin 'majutsushi/tagbar'
 Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'
 Plugin 'bling/vim-airline'
 Plugin 'tpope/vim-commentary'
 Plugin 'terryma/vim-multiple-cursors'
@@ -504,11 +505,12 @@ let Tlist_Use_Right_Window = 1      " 在右侧窗口中显示taglist窗口
 
 
 """""""""""""""""""""""""""""" 
-" ultisnips
+" configure for UltiSnips plugin
 """""""""""""""""""""""""""""" 
-let g:UltiSnipsUsePythonVersion = 2
-let g:UltiSnipsJumpForwardTrigger="<c-j>"   " 下一处
-let g:UltiSnipsJumpBackwardTrigger="<c-k>"  " 上一处
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-j>"
+let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+let g:UltiSnipsSnippetDirectories=["UltiSnips"]
 
 """""""""""""""""""""""""""""" 
 " clang_complete (需要可用的clang)

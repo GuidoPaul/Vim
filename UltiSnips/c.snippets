@@ -1,3 +1,23 @@
+priority 0
+
+###########################################################################
+#                         Uesr TextMate Snippets                          #
+###########################################################################
+
 snippet ff "freopen..."
 freopen("in.txt", "r", stdin);
 endsnippet
+
+snippet main "main() (main)"
+int main(int argc, char *argv[]) {
+	${VISUAL}${0}
+	return 0;
+}
+endsnippet
+
+snippet for "for loop (for)"
+for (${2:i} = ${3:0}; $2 < ${1:count}; ${4:++$2}) {
+	${VISUAL}${0}
+}
+endsnippet
+
