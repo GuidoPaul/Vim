@@ -4,9 +4,9 @@ You can refer to this link for more information: [Pathogen]( https://github.com/
 and [Vundle]( https://github.com/gmarik/vundle  )
 
 # Preparation:
-if you don't have vim.
+if you don't have vim, choose one between vim-gnome and vim-gtk. For example:
 	
-	sudo apt-get install vim
+	sudo apt-get install vim-gnome
 
 If you have used the vim.
 

@@ -236,9 +236,9 @@ set foldlevelstart=99       " 打开文件是默认不折叠代码
 nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
 " 用空格键来开关折叠
 
-" 按F5编译运行 C、C++、Java、sh、python、html、go、mkd
-:autocmd BufRead,BufNewFile *.dot map <F5> :w<CR>:!dot -Tjpg -o %<.jpg % && eog %<.jpg  <CR><CR> && exec "redr!"
-map <F5> :call CompileRunGcc()<CR>
+" 按go编译运行 C、C++、Java、sh、python、html、go、mkd
+:autocmd BufRead,BufNewFile *.dot nmap go :w<CR>:!dot -Tjpg -o %<.jpg % && eog %<.jpg  <CR><CR> && exec "redr!"
+nmap go :call CompileRunGcc()<CR>
 func! CompileRunGcc()
 	exec "w"
 	if &filetype == 'c'
@@ -254,7 +254,7 @@ func! CompileRunGcc()
 		:!time bash %
 	elseif &filetype == 'python'
 		exec "!time python2.7 %"
-    elseif &filetype == 'html'
+    elseif &filetype == 'html' || &filetype == 'xhtml'
 		exec "!firefox % &"
     elseif &filetype == 'go'
 "        exec "!go build %<"
@@ -460,8 +460,8 @@ nmap <silent> <F3> :TagbarToggle <CR>
 nmap <silent> <leader>ta :TagbarToggle <CR>
 " leader 相当于反斜杠
 " silent 命令行不显示
-"打开vim时自动打开tagbar
-"autocmd VimEnter * nested :call tagbar#autoopen(1) 
+" 打开java和C++文件时自动打开tagbar
+" autocmd FileType java,cpp nested :TagbarOpen
 " 在源代码目录生成tags文件 Ctrl-] Ctrl-t
 "map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>  
 nmap cc :!ctags -R <CR><CR>
