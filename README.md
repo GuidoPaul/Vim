@@ -15,7 +15,8 @@ If you have used the vim.
 
 # Install with:
 
-	git clone git@github.com:GuidoPaul/Vim.git ~/.vim
+	git clone https://github.com/GuidoPaul/Vim.git ~/.vim
+	git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 	ln -s ~/.vim/vimrc ~/.vimrc
 
 # Install plugins:
