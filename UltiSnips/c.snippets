@@ -8,6 +8,10 @@ snippet ff "freopen..."
 freopen("in.txt", "r", stdin);
 endsnippet
 
+snippet scanf "scanf .. (scanf)"
+scanf("${1:%s}"${1/([^%]|%%)*(%.)?.*/(?2:, :\);)/}$2${1/([^%]|%%)*(%.)?.*/(?2:\);)/}
+endsnippet
+
 snippet main "main() (main)"
 int main(int argc, char *argv[]) {
 	${VISUAL}${0}

@@ -73,6 +73,7 @@ syntax on
 set shortmess=atI   " 启动时不显示援助乌干达儿童的提示  
 set cursorline      " 高亮光标所在行 
 set cursorcolumn    " 高亮光标所在列
+syntax enable
 if has("gui_running")
 	colorscheme ron
 endif
@@ -211,8 +212,8 @@ map <C-l> <C-w>l
 vmap <C-c> "+y
 " 插入模式下粘贴
 imap <C-v> <Esc>"*pa
-" 普通模式下粘贴
-map <C-v> "*pa<Esc>
+" 普通模式下粘贴(覆盖列编辑)
+" map <C-v> "*pa<Esc>
 " 输入模式下回到行首行尾
 imap <C-a> <Esc>^
 imap <C-e> <Esc>$
