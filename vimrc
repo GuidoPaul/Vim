@@ -80,12 +80,12 @@ endif
 " 设置字体和大小，有“\”
 set guifont=YaHei\ Consolas\ Hybrid\ 12.5    
 " set guifont=Inconsolata\ 13
-set fenc=utf-8
+set fileencodings=utf-8,gb2312,gbk
 set termencoding=utf-8
-set fileencodings=utf-8,chinese
+set fileformats=unix
 set encoding=utf-8 "if not set, the powerline plugins won't work
 if has("win32") || has("win64")
-    set fileencoding=chinese
+    set fileencoding=gbk
 endif
 
 set vb t_vb=	     " Silence please
@@ -223,6 +223,8 @@ set selection=exclusive
 set selectmode=mouse,key
 " 去空行、行首、行尾
 nnoremap <F9> :g/^\s*$/d<CR> 
+" 去除^M符号
+nnoremap mm :%s/\r\+$//e<CR>
 " 比较文件  
 nnoremap <C-F2> :vert diffsplit 
 """"""""""""""""""""""""""""""
