@@ -71,7 +71,7 @@ syntax on
 "" The utility configuration
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set shortmess=atI   " 启动时不显示援助乌干达儿童的提示  
-set cursorline      " 高亮光标所在行 
+set cursorline      " 高亮光标所在行
 set cursorcolumn    " 高亮光标所在列
 syntax enable
 if has("gui_running")
@@ -193,7 +193,6 @@ autocmd BufNewFile * normal G
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" Keyboard command
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"set pastetoggle=<C-H>
 
 " 缩小vim
 map! <C-Z> <Esc>zzi
@@ -208,6 +207,8 @@ map <C-h> <C-w>h
 map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
+" 修改粘贴模式
+set pastetoggle=<F11>
 " 选中状态下 Ctrl+c 复制
 vmap <C-c> "+y
 " 插入模式下粘贴
