@@ -92,6 +92,7 @@ set vb t_vb=	     " Silence please
 set autoread         
 set autowrite
 set autoindent       " always set autoindenting on
+" set smartindent
 set copyindent       " copy the previous indentation on autoindenting
 set shiftwidth=4     " number of spaces to use for autoindenting
 set tabstop=4        " a tab is four spaces
@@ -162,22 +163,23 @@ func SetTitle()
 "    elseif &filetype == 'mkd'
 "        call setline(1,"<head><meta charset=\"UTF-8\"></head>")
 	else 
-		call setline(1, "/*************************************************************************") 
-		call append(line("."), "	> File Name: ".expand("%")) 
-		call append(line(".")+1, "	> Author: Bslin") 
-		call append(line(".")+2, "	> Mail: Baoshenglin1994@gmail.com") 
-		call append(line(".")+3, "	> Created Time: ".strftime("%c")) 
-		call append(line(".")+4, " ************************************************************************/") 
-		call append(line(".")+5, "")
+		call setline(1, "/*") 
+		call append(line("."), " * File:   ".expand("%")) 
+		call append(line(".")+1, " * Author: Bslin") 
+		call append(line(".")+2, " * Mail:   Baoshenglin1994@gmail.com") 
+		call append(line(".")+3, " *") 
+		call append(line(".")+4, " * Created on ".strftime("%c")) 
+		call append(line(".")+5, " */") 
+		call append(line(".")+6, "")
 	endif
 	if &filetype == 'cpp'
-		call append(line(".")+6, "#include <cstdio>")
-		call append(line(".")+7, "using namespace std;")
-		call append(line(".")+8, "")
+		call append(line(".")+7, "#include <cstdio>")
+		call append(line(".")+8, "using namespace std;")
+		call append(line(".")+9, "")
 	endif
 	if &filetype == 'c'
-		call append(line(".")+6, "#include <stdio.h>")
-		call append(line(".")+7, "")
+		call append(line(".")+7, "#include <stdio.h>")
+		call append(line(".")+8, "")
 	endif
 "	if &filetype == 'java'
 "		call append(line(".")+6,"public class ".expand("%"))
@@ -208,7 +210,7 @@ map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
 " 修改粘贴模式
-set pastetoggle=<F11>
+set pastetoggle=<C-p>
 " 选中状态下 Ctrl+c 复制
 vmap <C-c> "+y
 " 插入模式下粘贴
@@ -515,7 +517,29 @@ let g:airline_right_sep=''
 """""""""""""""""""""""""""""" 
 " configure for surround plugin
 """""""""""""""""""""""""""""" 
-" w代表word, W代表WORD(被空格分开的连续的字符窜），p代表paragraph
+" 1.change
+"      Text         Command      New Text
+" ---------------   -------    -----------
+" \"Hello |world!"   cs"'       'Hello world!'
+" \"Hello |world!"   cs"<q>     <q>Hello world!</q>
+"  (123+4|56)/2      cs)]       [123+456]/2
+"  (123+4|56)/2      cs)[       [ 123+456  ]/2
+"  <div>foo|</div>   cst<p>     <p>foo</p>
+"  fo|o!             csw'       'foo'!
+"  fo|o!             csW'       'foo!'
+" 2.add
+"      Text         Command       New Text
+" ---------------   -------      -----------
+"  Hello w|orld!     ysiw)        Hello (world)!
+"  Hello w|orld!     csw)         Hello (world)!
+"  fo|o              ysiwt<html>  <html>foo</html>
+"  foo quu|x baz     yss"         \"foo quux baz"
+"  foo quu|x baz     ySS"         "
+"                                     foo quux baz
+"                                 "
+" 3.delete
+" ds
+"
 " Normal mode
 " -----------
 " ds  - delete a surrounding
@@ -537,11 +561,6 @@ let g:airline_right_sep=''
 " <CTRL-s><CTRL-s> - in insert mode, add a new line + surrounding + indent
 " <CTRL-g>s - same as <CTRL-s>
 " <CTRL-g>S - same as <CTRL-s><CTRL-s>
-
-" CTRL-si[ ci( ci< ci{ 删除一对 [], (), <>, 或{} 中的所有字符并进入插入模式
-" ci” ci’ ci` 删除一对引号字符 ”  ‘ 或 ` 中所有字符并进入插入模式
-" cit 删除一对 HTML/XML 的标签内部的所有字符并进入插入模式
-
 
 
 

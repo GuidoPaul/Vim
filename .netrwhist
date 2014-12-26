@@ -1,9 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =7
-let g:netrw_dirhist_1='/home/guido/bin'
-let g:netrw_dirhist_2='/home/guido/.vim/UltiSnips'
-let g:netrw_dirhist_3='/home/guido/.vimperator'
-let g:netrw_dirhist_4='/home/guido/Github/blog/css'
-let g:netrw_dirhist_5='/home/guido/Github/blog/_sass'
-let g:netrw_dirhist_6='/home/guido/Github/GuidoPaul.github.io/font'
-let g:netrw_dirhist_7='/home/guido/.vim'
