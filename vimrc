@@ -210,7 +210,7 @@ map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
 " 修改粘贴模式
-set pastetoggle=<C-p>
+set pastetoggle=<C-q>
 " 选中状态下 Ctrl+c 复制
 vmap <C-c> "+y
 " 插入模式下粘贴
