@@ -174,17 +174,23 @@ func SetTitle()
 	endif
 	if &filetype == 'cpp'
 		call append(line(".")+7, "#include <cstdio>")
-		call append(line(".")+8, "using namespace std;")
-		call append(line(".")+9, "")
+		call append(line(".")+8, "#include <iostream>")
+		call append(line(".")+9, "using namespace std;")
+		call append(line(".")+10, "")
 	endif
 	if &filetype == 'c'
 		call append(line(".")+7, "#include <stdio.h>")
 		call append(line(".")+8, "")
 	endif
-"	if &filetype == 'java'
-"		call append(line(".")+6,"public class ".expand("%"))
-"		call append(line(".")+7,"")
-"	endif
+	if expand("%:e") == 'h'
+		call append(line(".")+7, "#ifndef _".toupper(expand("%:r"))."_H")
+		call append(line(".")+8, "#define _".toupper(expand("%:r"))."_H")
+		call append(line(".")+9, "#endif")
+	endif
+	if &filetype == 'java'
+		call append(line(".")+7,"public class ".expand("%:r"))
+		call append(line(".")+8,"")
+	endif
 	" 新建文件后，自动定位到文件末尾
 endfunc 
 autocmd BufNewFile * normal G
@@ -210,7 +216,7 @@ map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
 " 修改粘贴模式
-set pastetoggle=<C-q>
+" set pastetoggle=<C-p>
 " 选中状态下 Ctrl+c 复制
 vmap <C-c> "+y
 " 插入模式下粘贴

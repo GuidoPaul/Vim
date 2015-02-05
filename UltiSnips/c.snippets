@@ -16,6 +16,9 @@ endsnippet
 
 snippet main "main() (main)"
 int main(int argc, char *argv[]) {
+#ifndef ONLINE_JUDGE
+	freopen("in", "r", stdin);
+#endif
 	${VISUAL}${0}
 	return 0;
 }
