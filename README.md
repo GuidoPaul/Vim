@@ -35,3 +35,8 @@ you need install clang、libclang1 and libclang-dev (root)
 ### 2. javacomplete
 You can refer to this link for more information : [javacomplete](https://github.com/vim-scripts/javacomplete)
 
+### 3. tagbar
+Please download Exuberant Ctags from ctags.sourceforge.net and install it
+in a directory in your $PATH or set g:tagbar_ctags_bin.
+
+    apt-get install ctags
