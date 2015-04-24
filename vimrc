@@ -55,7 +55,9 @@ filetype plugin indent on    " required
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 
-
+" pathogen need
+execute pathogen#infect()   
+syntax on
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -65,6 +67,7 @@ filetype plugin indent on    " required
 set history=700
 
 " Enable filetype plugins
+filetype on
 filetype plugin on
 filetype indent on
 
@@ -326,7 +329,6 @@ au BufRead,BufNewFile *.{md,mdown,mkd,mkdn,markdown,mdwn}   set filetype=mkd
 au BufRead,BufNewFile *.{go}   set filetype=go
 au BufRead,BufNewFile *.{js}   set filetype=javascript
 
-
 """"""""""""""""""""""""""""""
 " => Status line
 """"""""""""""""""""""""""""""
@@ -384,7 +386,7 @@ nmap md :!~/.vim/markdown.pl % > %.html <CR><CR>
 nmap fi :!firefox % & <CR><CR>
 
 " Press 'go' to run C、C++、Java、sh、python、html、go、mkd file
-:autocmd BufRead,BufNewFile *.dot nmap go :w<CR>:!dot -Tjpg -o %<.jpg % && eog %<.jpg  <CR><CR> && exec "redr!"
+autocmd BufRead,BufNewFile *.dot nmap go :w<CR>:!dot -Tjpg -o %<.jpg % && eog %<.jpg  <CR><CR> && exec "redr!"
 nmap go :call CompileRunGcc()<CR>
 func! CompileRunGcc()
 	exec "w"
@@ -588,7 +590,6 @@ func SetTitle()
 		call append(line(".")+5, " */")
 		call append(line(".")+6, "")
 	endif
-
 	if &filetype == 'c'
 		call append(line(".")+7, "#include <stdio.h>")
 		call append(line(".")+8, "")
@@ -615,13 +616,6 @@ autocmd BufNewFile * normal G
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Plugin configuration
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-"""""""""""""""""""""""""""""" 
-" => Load pathogen paths
-""""""""""""""""""""""""""""""
-" pathogen need
-execute pathogen#infect()   
-
 
 """""""""""""""""""""""""""""" 
 " => auto-pairs plugin
@@ -839,7 +833,4 @@ let g:airline_theme="luna"
 " <CTRL-s><CTRL-s> - in insert mode, add a new line + surrounding + indent
 " <CTRL-g>s - same as <CTRL-s>
 " <CTRL-g>S - same as <CTRL-s><CTRL-s>
-
-
-
 
