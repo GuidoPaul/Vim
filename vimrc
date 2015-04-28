@@ -2,6 +2,8 @@
 " Author: GuidoPaul
 "
 
+" Let Vundle manage Vbundle {{{
+"
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
@@ -20,10 +22,10 @@ Plugin 'gmarik/Vundle.vim'
 
 " plugin on GitHub repo
 Plugin 'jiangmiao/auto-pairs'
-Plugin 'Rip-Rip/clang_complete'
+" Plugin 'Rip-Rip/clang_complete'
 Plugin 'kien/ctrlp.vim'
 Plugin 'Yggdroot/indentLine'
-Plugin 'Shougo/neocomplcache.vim'
+" Plugin 'Shougo/neocomplcache.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
 Plugin 'majutsushi/tagbar'
@@ -33,7 +35,7 @@ Plugin 'tpope/vim-commentary'
 Plugin 'terryma/vim-multiple-cursors'
 Plugin 'honza/vim-snippets'
 Plugin 'tpope/vim-surround'
-"Plugin 'Valloric/YouCompleteMe'  (need vim7.4)
+Plugin 'Valloric/YouCompleteMe'
 
 " plugin from http://vim-scripts.org/vim/scripts.html
 Plugin 'bufexplorer.zip'
@@ -54,15 +56,12 @@ filetype plugin indent on    " required
 "
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
-
-" pathogen need
-execute pathogen#infect()   
-syntax on
+"
+" }}}
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => General
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" General {{{
+"
 " Sets how many lines of history VIM has to remember
 set history=700
 
@@ -70,6 +69,9 @@ set history=700
 filetype on
 filetype plugin on
 filetype indent on
+
+" Enable syntax hightlighting
+syntax on
 
 " Set to auto read when a file is changed from the outside
 set autoread
@@ -85,11 +87,12 @@ nmap <leader>w :w!<cr>
 " :W sudo saves the file 
 " (useful for handling the permission-denied error
 command W w !sudo tee % > /dev/null
+"
+" }}}
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => VIM user interface
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" VIM user interface {{{
+"
 " Set 7 lines to the cursor - when moving vertically using j/k
 set scrolloff=7
 
@@ -172,19 +175,26 @@ set novisualbell
 set t_vb=
 set tm=500
 
-" Code fold
+" Save when losing focus
+autocmd FocusLost * :silent! wall
+
+" Resize splits when the window is resized
+autocmd VimResized * :wincmd =
+
+" Code fold {{{
 set foldenable
-set foldmethod=indent
-set foldcolumn=0
-setlocal foldlevel=3
-set foldlevelstart=99
+set foldnestmax=3
+set foldmethod=syntax
+" set foldlevelstart=99
 " Press space to activate code fold
 nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
+" }}}
+"
+" }}}
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Colors and Fonts
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Colors and Fonts {{{
+"
 " Enable syntax highlighting
 syntax enable 
 
@@ -198,35 +208,49 @@ set background=dark
 " Set extra options when running in GUI mode
 if has("gui_running")
 	colorscheme ron
-    set guioptions-=T
-    set guioptions-=e
+    set guioptions-=T       " no toolbar
     set guioptions-=m
+    set go-=r               " no right scrollbar
+    set go-=l               " no left scrollbar
+    set go-=b               " no bottom scrollbar
+    set go-=L               " no scrollbar even if split
+    set go-=L               " no scrollbar even if split
+    set go-=L               " no scrollbar even if split
+    set go-=R               " no scrollbar even if split
     set t_Co=256
     set guitablabel=%M\ %t
 endif
 
 set guifont=YaHei\ Consolas\ Hybrid\ 12.5
 " set guifont=Inconsolata\ 13
+" set guifont=Inconsolata-dz\ for\ Powerline:h12
+" set guifont=Consolas\ for\ Powerline:h12
 
-" Set utf8 as standard encoding and en_US as the standard language
-set encoding=utf8
+" Encoding {{{
+set encoding=utf-8 nobomb           " Vim inside encoding (buffer, register...)
+set fileencoding=utf-8 nobomb       " New file encoding 
+" Auto file encoding detection order
+set fileencodings=ucs-bom,utf-8,gb2312,gbk,gb18030,big5,euc-jp,euc-kr,latin1 
+" }}}
 
 " Use Unix as the standard file type
 set ffs=unix,dos,mac
+"
+" }}}
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Files, backups and undo
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Files, backups and undo {{{
+"
 " Turn backup off, since most stuff is in SVN, git et.c anyway...
 set nobackup
 set nowb
 set noswapfile
+"
+" }}}
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Text, tab and indent related
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Text, tab and indent related {{{
+"
 " Use spaces instead of tabs
 set expandtab
 
@@ -250,20 +274,21 @@ set fillchars=vert:\ ,stl:\ ,stlnc:\
 " Linebreak on 500 characters
 set lbr
 set tw=500
+" }}}
 
 
-""""""""""""""""""""""""""""""
-" => Visual mode related
-""""""""""""""""""""""""""""""
+" Visual mode related {{{
+"
 " Visual mode pressing * or # searches for the current selection
 " Super useful! From an idea by Michael Naumann
 vnoremap <silent> * :call VisualSelection('f', '')<CR>
 vnoremap <silent> # :call VisualSelection('b', '')<CR>
+"
+" }}}
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Moving around, tabs, windows and buffers
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Moving around, tabs, windows and buffers {{{
+"
 " Treat long lines as break lines (useful when moving around in them)
 map j gj
 map k gk
@@ -329,19 +354,28 @@ au BufRead,BufNewFile *.{md,mdown,mkd,mkdn,markdown,mdwn}   set filetype=mkd
 au BufRead,BufNewFile *.{go}   set filetype=go
 au BufRead,BufNewFile *.{js}   set filetype=javascript
 
-""""""""""""""""""""""""""""""
-" => Status line
-""""""""""""""""""""""""""""""
+" Vim fold method {{{
+augroup ft_vim
+    au!
+    au FileType vim setlocal foldmethod=marker
+augroup END
+" }}}
+
+" Status line {{{
 " Always show the status line
 set laststatus=2
 
 " Format the status line
-set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l
+if has('statusline')
+    set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l
+endif
+" }}}
+"
+" }}}
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Editing mappings
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Editing mappings {{{
+"
 " Remap VIM 0 to first non-blank character
 map 0 ^
 
@@ -377,7 +411,7 @@ imap <C-v> <Esc>"*pa
 " map <C-v> "*pa<Esc>
 
 " Change stick mode
-set pastetoggle=<C-p>
+set pastetoggle=<C-q>
 
 " Markdown to HTML
 nmap md :!~/.vim/markdown.pl % > %.html <CR><CR>
@@ -435,12 +469,13 @@ func! DeleteTrailingWS()
 endfunc
 autocmd BufWrite *.py :call DeleteTrailingWS()
 autocmd BufWrite *.coffee :call DeleteTrailingWS()
+"
+" }}}
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Ack searching and cope displaying
-"    requires ack.vim - it's much better than vimgrep/grep
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Ack searching and cope displaying {{{
+"    requires ack.vim - it's much better than vimgrep/grep 
+"
 " When you press gv you Ack after the selected text
 vnoremap <silent> gv :call VisualSelection('gv', '')<CR>
 
@@ -465,11 +500,11 @@ map <leader>cc :botright cope<cr>
 map <leader>co ggVGy:tabnew<cr>:set syntax=qf<cr>pgg
 map <leader>n :cn<cr>
 map <leader>p :cp<cr>
+" }}}
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Spell checking
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Spell checking {{{
+"
 " Pressing ,ss will toggle and untoggle spell checking
 map <leader>ss :setlocal spell!<cr>
 
@@ -478,11 +513,11 @@ map <leader>sn ]s
 map <leader>sp [s
 map <leader>sa zg
 map <leader>s? z=
+" }}}
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Misc
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Misc {{{
+"
 " Remove the Windows ^M - when the encodings gets messed up
 noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 " nnoremap mm :%s/\r\+$//e<CR>
@@ -502,11 +537,12 @@ map <leader>x :e ~/buffer.md<cr>
 
 " Toggle paste mode on and off
 map <leader>pp :setlocal paste!<cr>
+"
+" }}}
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Helper functions
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Helper functions {{{
+"
 function! CmdLine(str)
     exe "menu Foo.Bar :" . a:str
     emenu Foo.Bar
@@ -563,10 +599,12 @@ function! <SID>BufcloseCloseIt()
      execute("bdelete! ".l:currentBufNum)
    endif
 endfunction
+"
+" }}}
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Initialize the new file title
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Initialize the new file title {{{
+"
 " Create a Shell, Python, C, C++, CH, or Java file
 autocmd BufNewFile *.cpp,*.[ch],*.sh,*.java,*.py exec ":call SetTitle()"
 func SetTitle()
@@ -611,33 +649,34 @@ func SetTitle()
 	endif
 endfunc
 autocmd BufNewFile * normal G
+"
+" }}}
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Plugin configuration
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Plugin configuration {{{
+"
+" Youcompleteme {{{
+let g:ycm_global_ycm_extra_conf='/home/guido/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
+let g:ycm_confirm_extra_conf=0
+let g:ycm_key_list_select_completion=['<c-n>', '<Down>']
+let g:ycm_key_list_previous_completion=['<c-p>', '<Up>']
+" }}}
 
-"""""""""""""""""""""""""""""" 
-" => auto-pairs plugin
-""""""""""""""""""""""""""""""
+" auto-pairs {{{
+" }}}
 
-
-"""""""""""""""""""""""""""""" 
-" => bufexplorer plugin
-""""""""""""""""""""""""""""""
+" bufexplorer {{{
 let g:bufExplorerDefaultHelp=0
 let g:bufExplorerShowRelativePath=1
 let g:bufExplorerFindActive=1
 let g:bufExplorerSortBy='mru'        " Sort by most recently used.
 nmap <leader>bf :BufExplorer<cr>
+"}}}
 
-
-"""""""""""""""""""""""""""""" 
-" => clang_complete plugin
-"""""""""""""""""""""""""""""" 
+" clang_complete {{{
 " need install clang libclang1 libclang-dev
 let g:clang_complete_copen=1       "open quickfix window on error
-" let g:clang_periodic_quickfix=1  "periodically(周期性) update the quickfix window
+" let g:clang_periodic_quickfix=1  "periodically update the quickfix window
 let g:clang_snippets=1
 let g:clang_close_preview=1        "close automatically after a completion
 let g:clang_use_library=1
@@ -647,11 +686,9 @@ let s:clang_library_path='/Applications/Xcode.app/Contents/Developer/Toolchains/
 if isdirectory(s:clang_library_path)
 	let g:clang_library_path=s:clang_library_path
 endif
+" }}}
 
-
-"""""""""""""""""""""""""""""" 
-" => ctrlp plugin
-"""""""""""""""""""""""""""""" 
+" ctrlp {{{
 let g:ctrlp_working_path_mode = 0
 
 let g:ctrlp_map = '<c-f>'
@@ -660,32 +697,27 @@ let g:ctrlp_open_multiple_files = 'v'
 
 let g:ctrlp_max_height = 20
 let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/]\.(git)$',
+  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
   \ 'file': '\v\.(log|jpg|png|jpeg|DS_Store|coffee)$',
+  \ 'link': 'some_bad_symbolic_links',
   \ }
+"}}}
 
-
-"""""""""""""""""""""""""""""" 
-" => indentline plugin
-"""""""""""""""""""""""""""""" 
+" indentline {{{
 let g:indentLine_color_term = 239
 let g:indentLine_color_gui = '#09AA08'
 " let g:indentLine_color_gui = '#A4E57E'
 let g:indentLine_char = '│'
+" }}}
 
-
-"""""""""""""""""""""""""""""" 
-" => javacomplete plugin
-"""""""""""""""""""""""""""""" 
+" javacomplete {{{
 autocmd Filetype java set omnifunc=javacomplete#Complete
 autocmd FileType java,javascript,jsp inoremap <buffer> . .<C-X><C-O><C-P><Down>
 " autocmd FileType java setlocal completefunc=javacomplete#CompleteParamsInfo
 " autocmd FileType java inoremap <buffer> . .<C-X><C-O><C-P>
+" }}}
 
-
-"""""""""""""""""""""""""""""" 
-" => neocomplcache plugin
-"""""""""""""""""""""""""""""" 
+" neocomplcache {{{
 let g:neocomplcache_enable_at_startup = 1
 "<C-h>, <BS>: close popup and delete backword char.
 inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
@@ -711,11 +743,9 @@ let g:neocomplcache_force_omni_patterns.objcpp =
 let g:clang_complete_auto = 0
 let g:clang_auto_select = 0
 "let g:clang_use_library = 1
+" }}}
 
-
-"""""""""""""""""""""""""""""" 
-" => nerdtree plugin
-""""""""""""""""""""""""""""""
+" nerdtree {{{
 let NERDChristmasTree=1
 let NERDTreeMinimalUI=1
 let NERDTreeWinSize=25
@@ -723,21 +753,17 @@ let NERDTreeIgnore = ['\.pyc$']
 map <Leader>nt :NERDTreeToggle<CR> 
 autocmd vimenter * if !argc() | NERDTree | endif
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+" }}}
 
-
-"""""""""""""""""""""""""""""" 
-" => syntastic plugin
-"""""""""""""""""""""""""""""" 
+" syntastic {{{
 let g:syntastic_check_on_open = 1
 let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '⚠'
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_loc_list_height = 5
+" }}}
 
-
-"""""""""""""""""""""""""""""" 
-" => tagbar plugin
-"""""""""""""""""""""""""""""" 
+" tagbar {{{
 let g:tagbar_left = 0
 let g:tagbar_ctags_bin = '/usr/bin/ctags'
 let g:tagbar_width = 30
@@ -746,47 +772,35 @@ nmap <silent> <leader>ta :TagbarToggle <CR>
 " autocmd FileType java,cpp nested :TagbarOpen
 "map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>  
 nmap cc :!ctags -R <CR><CR>
+" }}}
 
-
-"""""""""""""""""""""""""""""" 
-" => ultisnips plugin
-"""""""""""""""""""""""""""""" 
+" ultisnips {{{
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-j>"
 let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 let g:UltiSnipsSnippetDirectories=["UltiSnips"]
+" }}}
 
-
-"""""""""""""""""""""""""""""" 
-" => vim-airline plugin
-"""""""""""""""""""""""""""""" 
+" vim-airline {{{
 " let g:airline#extensions#tabline#enabled = 1
 " let g:airline_powerline_fonts=1
-let g:airline_theme="luna"
+" let g:airline_theme="luna"
+" }}}
 
-
-"""""""""""""""""""""""""""""" 
-" => vim-commentary
-"""""""""""""""""""""""""""""" 
+" vim-commentary {{{
 " '\\\' or 'gcc':  Comment a line in normal mode
 " 'gc': Comment a line in Visual mode
 " 'gcap': Comment a Paragraph
+" }}}
 
-
-"""""""""""""""""""""""""""""" 
-" => multiple-cursors
-"""""""""""""""""""""""""""""" 
+" multiple-cursors {{{
 " 'Ctrl-n':     select
+" }}}
 
+" vim-snippets {{{
+" }}}
 
-"""""""""""""""""""""""""""""" 
-" => vim-snippets plugin
-"""""""""""""""""""""""""""""" 
-
-
-"""""""""""""""""""""""""""""" 
-" => surround plugin
-"""""""""""""""""""""""""""""" 
+" surround {{{
 " 1.change
 "      Text         Command      New Text
 " ---------------   -------    -----------
@@ -833,4 +847,6 @@ let g:airline_theme="luna"
 " <CTRL-s><CTRL-s> - in insert mode, add a new line + surrounding + indent
 " <CTRL-g>s - same as <CTRL-s>
 " <CTRL-g>S - same as <CTRL-s><CTRL-s>
-
+" }}}
+"
+" }}}
