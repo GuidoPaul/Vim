@@ -164,7 +164,7 @@ set cursorline
 set cursorcolumn
 
 " Vim's initial popup menu settings
-set completeopt=longest,menuone,preview
+set completeopt=longest,menuone
 
 " Text key word
 set iskeyword+=_,$,@,%,#,-
@@ -185,7 +185,7 @@ autocmd VimResized * :wincmd =
 set foldenable
 set foldnestmax=3
 set foldmethod=syntax
-" set foldlevelstart=99
+set foldlevelstart=99
 " Press space to activate code fold
 nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
 " }}}
@@ -208,15 +208,16 @@ set background=dark
 " Set extra options when running in GUI mode
 if has("gui_running")
 	colorscheme ron
-    set guioptions-=T       " no toolbar
-    set guioptions-=m
-    set go-=r               " no right scrollbar
-    set go-=l               " no left scrollbar
-    set go-=b               " no bottom scrollbar
-    set go-=L               " no scrollbar even if split
-    set go-=L               " no scrollbar even if split
-    set go-=L               " no scrollbar even if split
-    set go-=R               " no scrollbar even if split
+    set guioptions=""
+    " set guioptions-=T       " no toolbar
+    " set guioptions-=m
+    " set go-=r               " no right scrollbar
+    " set go-=l               " no left scrollbar
+    " set go-=b               " no bottom scrollbar
+    " set go-=L               " no scrollbar even if split
+    " set go-=L               " no scrollbar even if split
+    " set go-=L               " no scrollbar even if split
+    " set go-=R               " no scrollbar even if split
     set t_Co=256
     set guitablabel=%M\ %t
 endif
@@ -335,7 +336,8 @@ map <leader>cd :cd %:p:h<cr>:pwd<cr>
 " Specify the behavior when switching between buffers 
 try
   set switchbuf=useopen,usetab,newtab
-  set stal=2
+  " set showtabline=2
+  set showtabline=0
 catch
 endtry
 
