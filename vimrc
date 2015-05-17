@@ -164,7 +164,7 @@ set cursorline
 set cursorcolumn
 
 " Vim's initial popup menu settings
-set completeopt=longest,menuone
+set completeopt=longest,menuone,preview
 
 " Text key word
 set iskeyword+=_,$,@,%,#,-
@@ -220,16 +220,25 @@ if has("gui_running")
     " set go-=R               " no scrollbar even if split
     set t_Co=256
     set guitablabel=%M\ %t
+    if has("gui_gtk2")
+        set guifont=Consolas\ 13
+    else
+        set guifont=Consolas:h13
+    endif
 endif
 
-set guifont=YaHei\ Consolas\ Hybrid\ 12.5
+" set guifont=Powerline\ Consolas\ 13
+" set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 12
+" set guifont=Literation\ Mono\ Powerline\ 12
+" set guifont=YaHei\ Consolas\ Hybrid\ 13
 " set guifont=Inconsolata\ 13
-" set guifont=Inconsolata-dz\ for\ Powerline:h12
-" set guifont=Consolas\ for\ Powerline:h12
+
 
 " Encoding {{{
 set encoding=utf-8 nobomb           " Vim inside encoding (buffer, register...)
+" set encoding=utf-8            " Vim inside encoding (buffer, register...)
 set fileencoding=utf-8 nobomb       " New file encoding 
+" set fileencoding=utf-8 " New file encoding 
 " Auto file encoding detection order
 set fileencodings=ucs-bom,utf-8,gb2312,gbk,gb18030,big5,euc-jp,euc-kr,latin1 
 " }}}
@@ -413,7 +422,7 @@ imap <C-v> <Esc>"*pa
 " map <C-v> "*pa<Esc>
 
 " Change stick mode
-set pastetoggle=<C-q>
+" set pastetoggle=<C-q>
 
 " Markdown to HTML
 nmap md :!~/.vim/markdown.pl % > %.html <CR><CR>
@@ -657,13 +666,6 @@ autocmd BufNewFile * normal G
 
 " Plugin configuration {{{
 "
-" Youcompleteme {{{
-let g:ycm_global_ycm_extra_conf='/home/guido/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
-let g:ycm_confirm_extra_conf=0
-let g:ycm_key_list_select_completion=['<c-n>', '<Down>']
-let g:ycm_key_list_previous_completion=['<c-p>', '<Up>']
-" }}}
-
 " auto-pairs {{{
 " }}}
 
@@ -763,6 +765,7 @@ let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '⚠'
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_loc_list_height = 5
+" let g:syntastic_ignore_files=[".*\.py$"]
 " }}}
 
 " tagbar {{{
@@ -785,8 +788,7 @@ let g:UltiSnipsSnippetDirectories=["UltiSnips"]
 
 " vim-airline {{{
 " let g:airline#extensions#tabline#enabled = 1
-" let g:airline_powerline_fonts=1
-" let g:airline_theme="luna"
+let g:airline_powerline_fonts=1
 " }}}
 
 " vim-commentary {{{
@@ -852,3 +854,15 @@ let g:UltiSnipsSnippetDirectories=["UltiSnips"]
 " }}}
 "
 " }}}
+
+" Youcompleteme {{{
+nnoremap <leader>df :YcmCompleter GoToDefinitionElseDeclaration<CR>
+nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
+" let g:ycm_global_ycm_extra_conf='~/.ycm_extra_conf.py'
+" Do not ask when starting vim
+let g:ycm_confirm_extra_conf=0
+let g:syntastic_always_populate_loc_list = 1
+let g:ycm_key_list_select_completion=['<c-n>', '<Down>']
+let g:ycm_key_list_previous_completion=['<c-p>', '<Up>']
+" }}}
+

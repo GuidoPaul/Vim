@@ -27,8 +27,9 @@ To install from command line: `vim +PluginInstall +qall`
 
 ## About plugins:
 
-### 1. clang_complete
-you need install clang、libclang1 and libclang-dev (root)
+### 1. YouCompleteMe
+you must read [YouCompleteMe](https://github.com/Valloric/YouCompleteMe) carefully.
+YCM has include clang_complete, so you need install clang、libclang1 and libclang-dev (root)
 				
 	apt-get install clang libclang1 libclang-dev
 
