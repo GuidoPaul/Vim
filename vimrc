@@ -85,7 +85,7 @@ let g:mapleader = ","
 nmap <leader>w :w!<cr>
 
 " :W sudo saves the file 
-" (useful for handling the permission-denied error
+" (useful for handling the permission-denied error)
 command W w !sudo tee % > /dev/null
 "
 " }}}
@@ -128,7 +128,7 @@ set whichwrap+=<,>,h,l
 
 " In many terminal emulators the mouse works just fine, thus enable it.
 if has('mouse')
-  set mouse=a
+    set mouse=a
 endif
 
 " Ignore case when searching
@@ -397,10 +397,10 @@ vmap <M-j> :m'>+<cr>`<my`>mzgv`yo`z
 vmap <M-k> :m'<-2<cr>`>my`<mzgv`yo`z
 
 if has("mac") || has("macunix")
-  nmap <D-j> <M-j>
-  nmap <D-k> <M-k>
-  vmap <D-j> <M-j>
-  vmap <D-k> <M-k>
+    nmap <D-j> <M-j>
+    nmap <D-k> <M-k>
+    vmap <D-j> <M-j>
+    vmap <D-k> <M-k>
 endif
 
 " Change tab to 4 spaces
@@ -445,13 +445,13 @@ func! CompileRunGcc()
 		exec "!javac %" 
 		exec "!time java %<"
 	elseif &filetype == 'sh'
-		:!time bash %
+		exec "!time bash %"
 	elseif &filetype == 'python'
 		exec "!time python2.7 %"
     elseif &filetype == 'html' || &filetype == 'xhtml'
 		exec "!firefox % &"
     elseif &filetype == 'go'
-"        exec "!go build %<"
+        " exec \"!go build %<"
 		exec "!time go run %"
     elseif &filetype == 'mkd'
 		exec "!~/.vim/markdown.pl % > %.html &"
@@ -459,8 +459,8 @@ func! CompileRunGcc()
     elseif &filetype == 'asm'
 		exec "!as -o %<.o % && ld -s -o %< %<.o"
 		exec "!time ./%<"
-		" exec "!nasm -f elf % && ld -m elf_i386 -s -o %< %<.o"
-		" exec "!time ./%<"
+		" exec \"!nasm -f elf % && ld -m elf_i386 -s -o %< %<.o"
+		" exec \"!time ./%<"
 	endif
 endfunc
 
@@ -474,9 +474,9 @@ endfunc
 
 " Delete trailing white space on save, useful for Python and CoffeeScript ;)
 func! DeleteTrailingWS()
-  exe "normal mz"
-  %s/\s\+$//ge
-  exe "normal `z"
+    exe "normal mz"
+    %s/\s\+$//ge
+    exe "normal `z"
 endfunc
 autocmd BufWrite *.py :call DeleteTrailingWS()
 autocmd BufWrite *.coffee :call DeleteTrailingWS()
@@ -593,22 +593,22 @@ endfunction
 " Don't close window, when deleting a buffer
 command! Bclose call <SID>BufcloseCloseIt()
 function! <SID>BufcloseCloseIt()
-   let l:currentBufNum = bufnr("%")
-   let l:alternateBufNum = bufnr("#")
+    let l:currentBufNum = bufnr("%")
+    let l:alternateBufNum = bufnr("#")
 
-   if buflisted(l:alternateBufNum)
-     buffer #
-   else
-     bnext
-   endif
+    if buflisted(l:alternateBufNum)
+        buffer #
+    else
+        bnext
+    endif
 
-   if bufnr("%") == l:currentBufNum
-     new
-   endif
+    if bufnr("%") == l:currentBufNum
+        new
+    endif
 
-   if buflisted(l:currentBufNum)
-     execute("bdelete! ".l:currentBufNum)
-   endif
+    if buflisted(l:currentBufNum)
+        execute("bdelete! ".l:currentBufNum)
+    endif
 endfunction
 "
 " }}}
