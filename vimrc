@@ -246,7 +246,7 @@ autocmd BufNewFile * normal G
 " Use spaces instead of tabs
 set expandtab
 
-" Be smart when using tabs ;)
+" Be smart when using tabs
 set smarttab
 
 set shiftwidth=4 " number of spaces to use for autoindenting
@@ -659,10 +659,12 @@ let g:ctrlp_custom_ignore = {
 " }}}
 
 " indentline {{{
+" Vim
 let g:indentLine_color_term = 239
+" GVim
 let g:indentLine_color_gui = '#09AA08'
-" let g:indentLine_color_gui = '#A4E57E'
-let g:indentLine_char = '│'
+" let g:indentLine_char = '⇢'
+let g:indentLine_char = '┊'
 " }}}
 
 " javacomplete {{{
