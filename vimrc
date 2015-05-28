@@ -21,6 +21,7 @@ Plugin 'gmarik/Vundle.vim'
 " original plugin on GitHub repo
 
 " plugin on GitHub repo
+Plugin 'mileszs/ack.vim'
 Plugin 'jiangmiao/auto-pairs'
 " Plugin 'Rip-Rip/clang_complete'
 Plugin 'kien/ctrlp.vim'
@@ -97,12 +98,8 @@ command W w !sudo tee % > /dev/null
 set scrolloff=7
 
 " Avoid garbled characters in Chinese language windows OS
-"   let $LANG='en' 
-"   set langmenu=en
-"   source $VIMRUNTIME/delmenu.vim
-"   source $VIMRUNTIME/menu.vim
 
-" Turn on the WiLd menu
+" Show list instead of just completing
 set wildmenu
 
 " Ignore compiled files
@@ -113,22 +110,28 @@ else
     set wildignore+=.git\*,.hg\*,.svn\*
 endif
 
-"Always show current position
-set number ruler
+" Always show line numbers
+set number
+
+" Always show the status line
+set ruler
+set laststatus=2
 
 " Height of the command bar
 set cmdheight=1
 
-" A buffer becomes hidden when it is abandoned
-set hid
+" Change buffer - without saving
+set hidden
 
 " Configure backspace so it acts as it should act
 set backspace=eol,start,indent
 set whichwrap+=<,>,h,l
 
-" In many terminal emulators the mouse works just fine, thus enable it.
+" Have the mouse enabled all the time
 if has('mouse')
     set mouse=a
+    set selection=exclusive
+    set selectmode=mouse,key
 endif
 
 " Ignore case when searching
@@ -174,21 +177,6 @@ set noerrorbells
 set novisualbell
 set t_vb=
 set tm=500
-
-" Save when losing focus
-autocmd FocusLost * :silent! wall
-
-" Resize splits when the window is resized
-autocmd VimResized * :wincmd =
-
-" Code fold {{{
-set foldenable
-set foldnestmax=3
-set foldmethod=syntax
-set foldlevelstart=99
-" Press space to activate code fold
-nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
-" }}}
 "
 " }}}
 
@@ -209,15 +197,6 @@ set background=dark
 if has("gui_running")
 	colorscheme ron
     set guioptions=""
-    " set guioptions-=T       " no toolbar
-    " set guioptions-=m
-    " set go-=r               " no right scrollbar
-    " set go-=l               " no left scrollbar
-    " set go-=b               " no bottom scrollbar
-    " set go-=L               " no scrollbar even if split
-    " set go-=L               " no scrollbar even if split
-    " set go-=L               " no scrollbar even if split
-    " set go-=R               " no scrollbar even if split
     set t_Co=256
     set guitablabel=%M\ %t
     if has("gui_gtk2")
@@ -227,21 +206,11 @@ if has("gui_running")
     endif
 endif
 
-" set guifont=Powerline\ Consolas\ 13
-" set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 12
-" set guifont=Literation\ Mono\ Powerline\ 12
-" set guifont=YaHei\ Consolas\ Hybrid\ 13
-" set guifont=Inconsolata\ 13
-
-
-" Encoding {{{
 set encoding=utf-8 nobomb           " Vim inside encoding (buffer, register...)
-" set encoding=utf-8            " Vim inside encoding (buffer, register...)
 set fileencoding=utf-8 nobomb       " New file encoding 
-" set fileencoding=utf-8 " New file encoding 
+
 " Auto file encoding detection order
 set fileencodings=ucs-bom,utf-8,gb2312,gbk,gb18030,big5,euc-jp,euc-kr,latin1 
-" }}}
 
 " Use Unix as the standard file type
 set ffs=unix,dos,mac
@@ -255,11 +224,24 @@ set ffs=unix,dos,mac
 set nobackup
 set nowb
 set noswapfile
+
+" Save when losing focus
+autocmd FocusLost * :silent! wall
+
+" set custom file types I've configured
+au BufRead,BufNewFile *.{md,mdown,mkd,mkdn,markdown,mdwn}   set filetype=mkd
+au BufRead,BufNewFile *.{html,htm}  set filetype=html
+au BufRead,BufNewFile *.{go}        set filetype=go
+au BufRead,BufNewFile *.{js}        set filetype=javascript
+
+" Initialize the new file title
+autocmd BufNewFile *.cpp,*.[ch],*.sh,*.java,*.py exec ":call SetTitle()"
+autocmd BufNewFile * normal G
 "
 " }}}
 
 
-" Text, tab and indent related {{{
+" Text, tab, indent and fold related {{{
 "
 " Use spaces instead of tabs
 set expandtab
@@ -275,8 +257,6 @@ set autowrite    " always set autowriteing on
 set autoindent   " always set autoindenting on
 set smartindent  " always set smartindenting on
 set wrap         " wrap lines
-set selection=exclusive
-set selectmode=mouse,key
 
 " fill char the dividing line
 set fillchars=vert:\ ,stl:\ ,stlnc:\
@@ -284,6 +264,24 @@ set fillchars=vert:\ ,stl:\ ,stlnc:\
 " Linebreak on 500 characters
 set lbr
 set tw=500
+
+" Code fold
+set foldenable
+set foldnestmax=3
+set foldmethod=syntax
+set foldlevelstart=99
+" Press space to activate code fold
+nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
+
+" Vim fold
+augroup ft_vim
+    au!
+    au FileType vim setlocal foldmethod=marker
+augroup END
+
+" Resize splits when the window is resized
+autocmd VimResized * :wincmd =
+"
 " }}}
 
 
@@ -302,10 +300,6 @@ vnoremap <silent> # :call VisualSelection('b', '')<CR>
 " Treat long lines as break lines (useful when moving around in them)
 map j gj
 map k gk
-
-" Map <Space> to / (search) and Ctrl-<Space> to ? (backwards search)
-" map <space> /
-" map <c-space> ?
 
 " Disable highlight when <leader><cr> is pressed
 map <silent> <leader><cr> :noh<cr>
@@ -329,12 +323,6 @@ map <leader>tc :tabclose<cr>
 map <leader>tm :tabmove 
 map <leader>t<leader> :tabnext 
 
-" Let 'tl' toggle between this and the last accessed tab
-let g:lasttab = 1
-nmap <Leader>tl :exe "tabn ".g:lasttab<CR>
-au TabLeave * let g:lasttab = tabpagenr()
-
-
 " Opens a new tab with the current buffer's path
 " Super useful when editing files in the same directory
 map <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
@@ -345,8 +333,8 @@ map <leader>cd :cd %:p:h<cr>:pwd<cr>
 " Specify the behavior when switching between buffers 
 try
   set switchbuf=useopen,usetab,newtab
-  " set showtabline=2
-  set showtabline=0
+  set showtabline=2
+  " set showtabline=0
 catch
 endtry
 
@@ -359,28 +347,6 @@ if has("autocmd")
 endif
 " Remember info about open buffers on close
 set viminfo^=%
-
-" set custom file types I've configured
-au BufRead,BufNewFile *.{md,mdown,mkd,mkdn,markdown,mdwn}   set filetype=mkd
-au BufRead,BufNewFile *.{go}   set filetype=go
-au BufRead,BufNewFile *.{js}   set filetype=javascript
-
-" Vim fold method {{{
-augroup ft_vim
-    au!
-    au FileType vim setlocal foldmethod=marker
-augroup END
-" }}}
-
-" Status line {{{
-" Always show the status line
-set laststatus=2
-
-" Format the status line
-if has('statusline')
-    set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l
-endif
-" }}}
 "
 " }}}
 
@@ -409,108 +375,30 @@ nmap tt :%s/\t/    /g<CR>
 " Copy the full text
 map <C-A> ggVG$"+y
 
-" Indent the full text
-map <F12> gg=G
-
 " Copy the selected text
 vmap <C-c> "+y
 
 " Stick in insert mode
 imap <C-v> <Esc>"*pa
 
-" Stick in normal mode
-" map <C-v> "*pa<Esc>
-
-" Change stick mode
-" set pastetoggle=<C-q>
-
-" Markdown to HTML
-nmap md :!~/.vim/markdown.pl % > %.html <CR><CR>
-
 " Open in firefox
 nmap fi :!firefox % & <CR><CR>
 
-" Press 'go' to run C、C++、Java、sh、python、html、go、mkd file
-autocmd BufRead,BufNewFile *.dot nmap go :w<CR>:!dot -Tjpg -o %<.jpg % && eog %<.jpg  <CR><CR> && exec "redr!"
-nmap go :call CompileRunGcc()<CR>
-func! CompileRunGcc()
-	exec "w"
-	if &filetype == 'c'
-		exec "!gcc % -o %<"
-		exec "!time ./%<"
-	elseif &filetype == 'cpp'
-		exec "!g++ % -o %<"
-		exec "!time ./%<"
-	elseif &filetype == 'java' 
-		exec "!javac %" 
-		exec "!time java %<"
-	elseif &filetype == 'sh'
-		exec "!time bash %"
-	elseif &filetype == 'python'
-		exec "!time python2.7 %"
-    elseif &filetype == 'html' || &filetype == 'xhtml'
-		exec "!firefox % &"
-    elseif &filetype == 'go'
-        " exec \"!go build %<"
-		exec "!time go run %"
-    elseif &filetype == 'mkd'
-		exec "!~/.vim/markdown.pl % > %.html &"
-		exec "!firefox %.html &"
-    elseif &filetype == 'asm'
-		exec "!as -o %<.o % && ld -s -o %< %<.o"
-		exec "!time ./%<"
-		" exec \"!nasm -f elf % && ld -m elf_i386 -s -o %< %<.o"
-		" exec \"!time ./%<"
-	endif
-endfunc
+" Compile and run C, C++ and so on
+nmap go :call CompileAndRun()<cr>
 
-" Press 'F8' to debug C, C++ file
-map <F8> :call Rungdb()<CR>
-func! Rungdb()
-	exec "w"
-	exec "!g++ % -g -o %<"
-	exec "!gdb ./%<"
-endfunc
+" Debug C, C++ by gdb
+nmap <leader>db :call Rungdb()<cr>
 
 " Delete trailing white space on save, useful for Python and CoffeeScript ;)
-func! DeleteTrailingWS()
-    exe "normal mz"
-    %s/\s\+$//ge
-    exe "normal `z"
-endfunc
 autocmd BufWrite *.py :call DeleteTrailingWS()
 autocmd BufWrite *.coffee :call DeleteTrailingWS()
-"
-" }}}
 
-
-" Ack searching and cope displaying {{{
-"    requires ack.vim - it's much better than vimgrep/grep 
+" Tidying your whitespace and blank line
+nmap _$ :call Preserve("%s/\\s\\+$//e")<CR>
+nmap _= :call Preserve("normal gg=G")<CR>
+nmap <leader>bl :call Preserve("g/^\s*$/d")<CR>
 "
-" When you press gv you Ack after the selected text
-vnoremap <silent> gv :call VisualSelection('gv', '')<CR>
-
-" Open Ack and put the cursor in the right position
-map <leader>g :Ack 
-
-" When you press <leader>r you can search and replace the selected text
-vnoremap <silent> <leader>r :call VisualSelection('replace', '')<CR>
-
-" Do :help cope if you are unsure what cope is. It's super useful!
-"
-" When you search with Ack, display your results in cope by doing:
-"   <leader>cc
-"
-" To go to the next search result do:
-"   <leader>n
-"
-" To go to the previous search results do:
-"   <leader>p
-"
-map <leader>cc :botright cope<cr>
-map <leader>co ggVGy:tabnew<cr>:set syntax=qf<cr>pgg
-map <leader>n :cn<cr>
-map <leader>p :cp<cr>
 " }}}
 
 
@@ -530,15 +418,11 @@ map <leader>s? z=
 " Misc {{{
 "
 " Remove the Windows ^M - when the encodings gets messed up
-noremap <Leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
-" nnoremap mm :%s/\r\+$//e<CR>
+noremap <leader>m mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
 
 " Quickly to begin, end of line in insert mode
 imap <C-a> <Esc>^
 imap <C-e> <Esc>$
-
-" Remove the blank line
-nnoremap <F9> :g/^\s*$/d<CR>
 
 " Quickly open a buffer for scribble
 map <leader>q :e ~/buffer<cr>
@@ -581,15 +465,6 @@ function! VisualSelection(direction, extra_filter) range
     let @" = l:saved_reg
 endfunction
 
-
-" Returns true if paste mode is enabled
-function! HasPaste()
-    if &paste
-        return 'PASTE MODE  '
-    en
-    return ''
-endfunction
-
 " Don't close window, when deleting a buffer
 command! Bclose call <SID>BufcloseCloseIt()
 function! <SID>BufcloseCloseIt()
@@ -610,62 +485,138 @@ function! <SID>BufcloseCloseIt()
         execute("bdelete! ".l:currentBufNum)
     endif
 endfunction
-"
-" }}}
 
+function! CompileAndRun()
+	exec "w"
+	if &filetype == 'c'
+		exec "!gcc % -o %<"
+		exec "!time ./%<"
+	elseif &filetype == 'cpp'
+		exec "!g++ % -o %<"
+		exec "!time ./%<"
+	elseif &filetype == 'java' 
+		exec "!javac %" 
+		exec "!time java %<"
+	elseif &filetype == 'sh'
+		exec "!time bash %"
+	elseif &filetype == 'python'
+		exec "!time python2.7 %"
+    elseif &filetype == 'html'
+		exec "!firefox % &"
+    elseif &filetype == 'go'
+		exec "!go build %<"
+		exec "!time go run %"
+    elseif &filetype == 'mkd'
+		exec "!~/.vim/markdown.pl % > %.html &"
+		exec "!firefox %.html &"
+    elseif &filetype == 'asm'
+		exec "!as -o %<.o % && ld -s -o %< %<.o"
+		exec "!time ./%<"
+	endif
+endfunction
 
-" Initialize the new file title {{{
-"
-" Create a Shell, Python, C, C++, CH, or Java file
-autocmd BufNewFile *.cpp,*.[ch],*.sh,*.java,*.py exec ":call SetTitle()"
-func SetTitle()
+function! Rungdb()
+	exec "w"
+	exec "!g++ % -g -o %<"
+	exec "!gdb ./%<"
+endfunction
+
+function! DeleteTrailingWS()
+    exe "normal mz"
+    %s/\s\+$//ge
+    exe "normal `z"
+endfunction
+
+function! Preserve(command)
+    " save last search, and cursor position.
+    let _s=@/
+    let l = line(".")
+    let c = col(".")
+    " Do the business:
+    execute a:command
+    " Clean up: restore previous search history, and cursor position
+    let @/=_s
+    call cursor(l, c)
+endfunction
+
+function SetTitle()
 	if &filetype == 'sh'
-		call setline(1,"\#!/bin/bash")
-		call append(line("."), "")
+		call append(0, "\#!/bin/bash")
+		call append(1, "")
     elseif &filetype == 'python'
-		call setline(1,"#!/usr/bin/env python")
-		call append(line("."),"# -*- coding: utf-8 -*-")
-		call append(line(".")+1,"# Filename: ".expand("%"))
-		call append(line(".")+2, "")
-"    elseif &filetype == 'mkd'
-"        call setline(1,"<head><meta charset=\"UTF-8\"></head>")
+		call append(0, "#!/usr/bin/env python")
+		call append(1, "# -*- coding: utf-8 -*-")
+		call append(2, "# Filename: ".expand("%"))
+		call append(3, "")
+    elseif &filetype == 'mkd'
+		call append(0, "<head><meta charset=\"UTF-8\"></head>")
 	else
-		call setline(1, "/*")
-		call append(line("."), " * File:   ".expand("%"))
-		call append(line(".")+1, " * Author: Bslin")
-		call append(line(".")+2, " * Mail:   Baoshenglin1994@gmail.com")
-		call append(line(".")+3, " *")
-		call append(line(".")+4, " * Created on ".strftime("%c"))
-		call append(line(".")+5, " */")
-		call append(line(".")+6, "")
+		call append(0, "/*")
+		call append(1, " * File:   ".expand("%"))
+		call append(2, " * Author: Bslin")
+		call append(3, " * Mail:   Baoshenglin1994@gmail.com")
+		call append(4, " *")
+		call append(5, " * Created on ".strftime("%c"))
+		call append(6, " */")
+		call append(7, "")
 	endif
 	if &filetype == 'c'
-		call append(line(".")+7, "#include <stdio.h>")
-		call append(line(".")+8, "")
+		call append(8, "#include <stdio.h>")
+		call append(9, "")
 	endif
 	if &filetype == 'cpp'
-		call append(line(".")+7, "#include <cstdio>")
-		call append(line(".")+8, "#include <iostream>")
-		call append(line(".")+9, "using namespace std;")
-		call append(line(".")+10, "")
+		call append(8, "#include <cstdio>")
+		call append(9, "#include <iostream>")
+		call append(10, "using namespace std;")
+		call append(11, "")
 	endif
 	if expand("%:e") == 'h'
-		call append(line(".")+7, "#ifndef _".toupper(expand("%:r"))."_H")
-		call append(line(".")+8, "#define _".toupper(expand("%:r"))."_H")
-		call append(line(".")+9, "#endif")
+		call append(8, "#ifndef _".toupper(expand("%:r"))."_H")
+		call append(9, "#define _".toupper(expand("%:r"))."_H")
+		call append(10, "#endif")
+		call append(11, "")
 	endif
 	if &filetype == 'java'
-		call append(line(".")+7,"public class ".expand("%:r"))
-		call append(line(".")+8,"")
+		call append(8,"public class ".expand("%:r"))
+		call append(9,"")
 	endif
-endfunc
-autocmd BufNewFile * normal G
+endfunction
 "
 " }}}
 
 
 " Plugin configuration {{{
 "
+" Ack searching and cope displaying {{{
+"    requires ack.vim - it's much better than vimgrep/grep 
+"    requires install ack-grep
+"
+" When you press gv you Ack after the selected text
+vnoremap <silent> gv :call VisualSelection('gv', '')<CR>
+
+" Open Ack and put the cursor in the right position
+map <leader>g :Ack 
+
+" When you press <leader>r you can search and replace the selected text
+vnoremap <silent> <leader>r :call VisualSelection('replace', '')<CR>
+
+" Do :help cope if you are unsure what cope is. It's super useful!
+"
+" When you search with Ack, display your results in cope by doing:
+"   <leader>cc
+"
+" To go to the next search result do:
+"   <leader>n
+"
+" To go to the previous search results do:
+"   <leader>p
+"
+map <leader>cc :botright cope<cr>
+map <leader>co ggVGy:tabnew<cr>:set syntax=qf<cr>pgg
+map <leader>n :cn<cr>
+map <leader>p :cp<cr>
+" }}}
+
 " auto-pairs {{{
 " }}}
 
@@ -675,7 +626,7 @@ let g:bufExplorerShowRelativePath=1
 let g:bufExplorerFindActive=1
 let g:bufExplorerSortBy='mru'        " Sort by most recently used.
 nmap <leader>bf :BufExplorer<cr>
-"}}}
+" }}}
 
 " clang_complete {{{
 " need install clang libclang1 libclang-dev
@@ -705,7 +656,7 @@ let g:ctrlp_custom_ignore = {
   \ 'file': '\v\.(log|jpg|png|jpeg|DS_Store|coffee)$',
   \ 'link': 'some_bad_symbolic_links',
   \ }
-"}}}
+" }}}
 
 " indentline {{{
 let g:indentLine_color_term = 239
@@ -753,8 +704,11 @@ let g:clang_auto_select = 0
 let NERDChristmasTree=1
 let NERDTreeMinimalUI=1
 let NERDTreeWinSize=25
+let NERDTreeShowBookmarks=1
 let NERDTreeIgnore = ['\.pyc$']
 map <Leader>nt :NERDTreeToggle<CR> 
+map <leader>nb :NERDTreeFromBookmark 
+map <leader>nf :NERDTreeFind<cr>
 autocmd vimenter * if !argc() | NERDTree | endif
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 " }}}
@@ -852,8 +806,6 @@ let g:airline_powerline_fonts=1
 " <CTRL-g>s - same as <CTRL-s>
 " <CTRL-g>S - same as <CTRL-s><CTRL-s>
 " }}}
-"
-" }}}
 
 " Youcompleteme {{{
 nnoremap <leader>df :YcmCompleter GoToDefinitionElseDeclaration<CR>
@@ -864,5 +816,7 @@ let g:ycm_confirm_extra_conf=0
 let g:syntastic_always_populate_loc_list = 1
 let g:ycm_key_list_select_completion=['<c-n>', '<Down>']
 let g:ycm_key_list_previous_completion=['<c-p>', '<Up>']
+" }}}
+"
 " }}}
 
