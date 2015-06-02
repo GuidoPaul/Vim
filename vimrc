@@ -729,7 +729,7 @@ let g:tagbar_left = 0
 let g:tagbar_ctags_bin = '/usr/bin/ctags'
 let g:tagbar_width = 30
 nmap <silent> <F3> :TagbarToggle <CR>
-nmap <silent> <leader>ta :TagbarToggle <CR>
+nmap <silent> <leader>tb :TagbarToggle <CR>
 " autocmd FileType java,cpp nested :TagbarOpen
 "map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>  
 nmap cc :!ctags -R <CR><CR>
@@ -754,7 +754,10 @@ let g:airline_powerline_fonts=1
 " }}}
 
 " multiple-cursors {{{
-" 'Ctrl-n':     select
+let g:multi_cursor_next_key='<C-n>'
+let g:multi_cursor_prev_key='<C-p>'
+let g:multi_cursor_skip_key='<C-x>'
+let g:multi_cursor_quit_key='<Esc>'
 " }}}
 
 " vim-snippets {{{
