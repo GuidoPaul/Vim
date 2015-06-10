@@ -23,23 +23,25 @@ Plugin 'gmarik/Vundle.vim'
 " plugin on GitHub repo
 Plugin 'mileszs/ack.vim'
 Plugin 'jiangmiao/auto-pairs'
-" Plugin 'Rip-Rip/clang_complete'
 Plugin 'kien/ctrlp.vim'
 Plugin 'Yggdroot/indentLine'
-" Plugin 'Shougo/neocomplcache.vim'
+Plugin 'fholgado/minibufexpl.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
 Plugin 'majutsushi/tagbar'
 Plugin 'SirVer/ultisnips'
 Plugin 'bling/vim-airline'
 Plugin 'tpope/vim-commentary'
+Plugin 'plasticboy/vim-markdown'
 Plugin 'terryma/vim-multiple-cursors'
 Plugin 'honza/vim-snippets'
 Plugin 'tpope/vim-surround'
 Plugin 'Valloric/YouCompleteMe'
+"" color scheme
+Plugin 'tomasr/molokai'
+Plugin 'altercation/vim-colors-solarized'
 
 " plugin from http://vim-scripts.org/vim/scripts.html
-Plugin 'bufexplorer.zip'
 Plugin 'javacomplete'
 " ...
 
@@ -97,8 +99,6 @@ command W w !sudo tee % > /dev/null
 " Set 7 lines to the cursor - when moving vertically using j/k
 set scrolloff=7
 
-" Avoid garbled characters in Chinese language windows OS
-
 " Show list instead of just completing
 set wildmenu
 
@@ -134,23 +134,10 @@ if has('mouse')
     set selectmode=mouse,key
 endif
 
-" Ignore case when searching
-set ignorecase
-
-" When searching try to be smart about cases 
-set smartcase
-
-" Highlight search results
-set hlsearch
-
-" Makes search act like search in modern browsers
-set incsearch
-
-" Don't redraw while executing macros (good performance config)
-set lazyredraw
-
-" For regular expressions turn magic on
-set magic
+set ignorecase " Ignore case when searching
+set smartcase  " When searching try to be smart about cases 
+set hlsearch   " Highlight search results
+set incsearch  " Makes search act like search in modern browsers
 
 " Show matching brackets when text indicator is over them
 set showmatch 
@@ -158,6 +145,12 @@ set matchpairs+=<:>
 
 " How many tenths of a second to blink when matching brackets
 set mat=2
+
+" Don't redraw while executing macros (good performance config)
+set lazyredraw
+
+" For regular expressions turn magic on
+set magic
 
 " Turn off Bram's message when it starts up
 set shortmess=atI
@@ -186,16 +179,19 @@ set tm=500
 " Enable syntax highlighting
 syntax enable 
 
+set background=dark
+
 try
     colorscheme desert
+	" colorscheme ron
 catch
 endtry
 
-set background=dark
-
 " Set extra options when running in GUI mode
 if has("gui_running")
-	colorscheme ron
+	colorscheme molokai
+    " colorscheme solarized
+	" colorscheme ron
     set guioptions=""
     set t_Co=256
     set guitablabel=%M\ %t
@@ -220,12 +216,12 @@ set ffs=unix,dos,mac
 
 " Files, backups and undo {{{
 "
-" Turn backup off, since most stuff is in SVN, git et.c anyway...
+" turn backup off, since most stuff is in SVN, git et.c anyway...
 set nobackup
 set nowb
 set noswapfile
 
-" Save when losing focus
+" save when losing focus
 autocmd FocusLost * :silent! wall
 
 " set custom file types I've configured
@@ -234,9 +230,20 @@ au BufRead,BufNewFile *.{html,htm}  set filetype=html
 au BufRead,BufNewFile *.{go}        set filetype=go
 au BufRead,BufNewFile *.{js}        set filetype=javascript
 
-" Initialize the new file title
+" initialize the new file title
 autocmd BufNewFile *.cpp,*.[ch],*.sh,*.java,*.py exec ":call SetTitle()"
 autocmd BufNewFile * normal G
+
+" set session options
+set sessionoptions="blank,buffers,folds,globals,help,localoptions,options,resize,sesdir,slash,tabpages,unix,winpos,winsize"
+
+" save undo history
+set undodir=~/.undo_history/
+set undofile
+
+" save and resume session
+map <silent> <leader>ss :wa!<cr>:mksession! my.vim<cr>:wviminfo! my.viminfo<cr>
+map <silent> <leader>rs :source my.vim<cr>:rviminfo my.viminfo<cr>
 "
 " }}}
 
@@ -256,7 +263,7 @@ set shiftround   " use multiple of shiftwidth when indenting with '<' and '>'
 set autowrite    " always set autowriteing on
 set autoindent   " always set autoindenting on
 set smartindent  " always set smartindenting on
-set wrap         " wrap lines
+set nowrap       " no wrap lines
 
 " fill char the dividing line
 set fillchars=vert:\ ,stl:\ ,stlnc:\
@@ -333,8 +340,8 @@ map <leader>cd :cd %:p:h<cr>:pwd<cr>
 " Specify the behavior when switching between buffers 
 try
   set switchbuf=useopen,usetab,newtab
-  set showtabline=2
-  " set showtabline=0
+  " set showtabline=2
+  set showtabline=0
 catch
 endtry
 
@@ -405,13 +412,13 @@ nmap <leader>bl :call Preserve("g/^\s*$/d")<CR>
 " Spell checking {{{
 "
 " Pressing ,ss will toggle and untoggle spell checking
-map <leader>ss :setlocal spell!<cr>
+map <leader><leader>ss :setlocal spell!<cr>
 
 " Shortcuts using <leader>
-map <leader>sn ]s
-map <leader>sp [s
-map <leader>sa zg
-map <leader>s? z=
+map <leader><leader>sn ]s
+map <leader><leader>sp [s
+map <leader><leader>sa zg
+map <leader><leader>s? z=
 " }}}
 
 
@@ -507,8 +514,7 @@ function! CompileAndRun()
 		exec "!go build %<"
 		exec "!time go run %"
     elseif &filetype == 'mkd'
-		exec "!~/.vim/markdown.pl % > %.html &"
-		exec "!firefox %.html &"
+		exec "!pandoc % --latex-engine=pdflatex -o %<.pdf"
     elseif &filetype == 'asm'
 		exec "!as -o %<.o % && ld -s -o %< %<.o"
 		exec "!time ./%<"
@@ -564,7 +570,7 @@ function SetTitle()
 		call append(8, "#include <stdio.h>")
 		call append(9, "")
 	endif
-	if &filetype == 'cpp'
+	if &filetype == 'cpp' && expand("%:e") == 'cpp'
 		call append(8, "#include <cstdio>")
 		call append(9, "#include <iostream>")
 		call append(10, "using namespace std;")
@@ -573,8 +579,8 @@ function SetTitle()
 	if expand("%:e") == 'h'
 		call append(8, "#ifndef _".toupper(expand("%:r"))."_H")
 		call append(9, "#define _".toupper(expand("%:r"))."_H")
-		call append(10, "#endif")
-		call append(11, "")
+		call append(10, "")
+		call append(11, "#endif")
 	endif
 	if &filetype == 'java'
 		call append(8,"public class ".expand("%:r"))
@@ -587,9 +593,9 @@ endfunction
 
 " Plugin configuration {{{
 "
-" Ack searching and cope displaying {{{
-"    requires ack.vim - it's much better than vimgrep/grep 
-"    requires install ack-grep
+" ack.vim {{{
+"   Ack searching and cope displaying
+"   requires ack.vim - it's much better than vimgrep/grep
 "
 " When you press gv you Ack after the selected text
 vnoremap <silent> gv :call VisualSelection('gv', '')<CR>
@@ -620,30 +626,7 @@ map <leader>p :cp<cr>
 " auto-pairs {{{
 " }}}
 
-" bufexplorer {{{
-let g:bufExplorerDefaultHelp=0
-let g:bufExplorerShowRelativePath=1
-let g:bufExplorerFindActive=1
-let g:bufExplorerSortBy='mru'        " Sort by most recently used.
-nmap <leader>bf :BufExplorer<cr>
-" }}}
-
-" clang_complete {{{
-" need install clang libclang1 libclang-dev
-let g:clang_complete_copen=1       "open quickfix window on error
-" let g:clang_periodic_quickfix=1  "periodically update the quickfix window
-let g:clang_snippets=1
-let g:clang_close_preview=1        "close automatically after a completion
-let g:clang_use_library=1
-let g:clang_user_options='-stdlib=libc++ -std=c++11 -IIncludePath'  
-
-let s:clang_library_path='/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/'
-if isdirectory(s:clang_library_path)
-	let g:clang_library_path=s:clang_library_path
-endif
-" }}}
-
-" ctrlp {{{
+" ctrlp.vim {{{
 let g:ctrlp_working_path_mode = 0
 
 let g:ctrlp_map = '<c-f>'
@@ -658,13 +641,13 @@ let g:ctrlp_custom_ignore = {
   \ }
 " }}}
 
-" indentline {{{
+" indentLine {{{
 " Vim
 let g:indentLine_color_term = 239
 " GVim
 let g:indentLine_color_gui = '#09AA08'
-" let g:indentLine_char = '⇢'
 let g:indentLine_char = '┊'
+" let g:indentLine_char = '⇢'
 " }}}
 
 " javacomplete {{{
@@ -674,32 +657,12 @@ autocmd FileType java,javascript,jsp inoremap <buffer> . .<C-X><C-O><C-P><Down>
 " autocmd FileType java inoremap <buffer> . .<C-X><C-O><C-P>
 " }}}
 
-" neocomplcache {{{
-let g:neocomplcache_enable_at_startup = 1
-"<C-h>, <BS>: close popup and delete backword char.
-inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
-inoremap <expr><C-Y> neocomplcache#close_popup()
-inoremap <expr><C-e> neocomplcache#cancel_popup()
-" inoremap <expr><TAB> pumvisible() ? "\<C-N>" : "\<TAB>"
-inoremap <expr><Enter> pumvisible() ? "\<C-Y>" : "\<Enter>"
-
-" :help neocomplcache-faq
-if !exists('g:neocomplcache_force_omni_patterns')
-  let g:neocomplcache_force_omni_patterns = {}
-endif
-let g:neocomplcache_force_overwrite_completefunc = 1
-let g:neocomplcache_force_omni_patterns.c =
-      \ '[^.[:digit:] *\t]\%(\.\|->\)'
-let g:neocomplcache_force_omni_patterns.cpp =
-      \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-let g:neocomplcache_force_omni_patterns.objc =
-      \ '[^.[:digit:] *\t]\%(\.\|->\)'
-let g:neocomplcache_force_omni_patterns.objcpp =
-      \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-let g:clang_complete_auto = 0
-let g:clang_auto_select = 0
-"let g:clang_use_library = 1
+" minibufexplorer.vim {{{
+" toggle minibufexplorer
+map <Leader>bl :MBEToggle<cr>
+" buffer manage
+map <Tab>   :MBEbn<cr>
+map <S-Tab> :MBEbp<cr>
 " }}}
 
 " nerdtree {{{
@@ -707,6 +670,7 @@ let NERDChristmasTree=1
 let NERDTreeMinimalUI=1
 let NERDTreeWinSize=25
 let NERDTreeShowBookmarks=1
+let NERDTreeShowHidden=1
 let NERDTreeIgnore = ['\.pyc$']
 map <Leader>nt :NERDTreeToggle<CR> 
 map <leader>nb :NERDTreeFromBookmark 
@@ -731,7 +695,7 @@ let g:tagbar_width = 30
 nmap <silent> <F3> :TagbarToggle <CR>
 nmap <silent> <leader>tb :TagbarToggle <CR>
 " autocmd FileType java,cpp nested :TagbarOpen
-"map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>  
+" map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>  
 nmap cc :!ctags -R <CR><CR>
 " }}}
 
@@ -753,6 +717,13 @@ let g:airline_powerline_fonts=1
 " 'gcap': Comment a Paragraph
 " }}}
 
+" vim-markdown {{{
+let g:vim_markdown_folding_disabled=1
+let g:vim_markdown_no_default_key_mappings=1
+let g:vim_markdown_math=1
+let g:vim_markdown_frontmatter=1
+" }}}
+
 " multiple-cursors {{{
 let g:multi_cursor_next_key='<C-n>'
 let g:multi_cursor_prev_key='<C-p>'
@@ -763,7 +734,7 @@ let g:multi_cursor_quit_key='<Esc>'
 " vim-snippets {{{
 " }}}
 
-" surround {{{
+" vim-surround {{{
 " 1.change
 "      Text         Command      New Text
 " ---------------   -------    -----------
@@ -812,7 +783,7 @@ let g:multi_cursor_quit_key='<Esc>'
 " <CTRL-g>S - same as <CTRL-s><CTRL-s>
 " }}}
 
-" Youcompleteme {{{
+" YouCompleteMe {{{
 nnoremap <leader>df :YcmCompleter GoToDefinitionElseDeclaration<CR>
 nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
 " let g:ycm_global_ycm_extra_conf='~/.ycm_extra_conf.py'
@@ -821,6 +792,7 @@ let g:ycm_confirm_extra_conf=0
 let g:syntastic_always_populate_loc_list = 1
 let g:ycm_key_list_select_completion=['<c-n>', '<Down>']
 let g:ycm_key_list_previous_completion=['<c-p>', '<Up>']
+let g:ycm_complete_in_comments=1
 " }}}
 "
 " }}}

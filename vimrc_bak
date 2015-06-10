@@ -337,15 +337,16 @@ nmap fi :!firefox % & <CR><CR>
 " configure for bufexplorer plugin
 """"""""""""""""""""""""""""""
 " \bf 打开BufExplorer
-nmap <leader>bf :BufExplorer<cr>
 let g:bufExplorerDefaultHelp=0       " Do not show default help.
 let g:bufExplorerShowRelativePath=1  " Show relative paths.
+let g:bufExplorerFindActive=1
 let g:bufExplorerSortBy='mru'        " Sort by most recently used.
 let g:bufExplorerSplitRight=1        " Split right.
 let g:bufExplorerSplitVertical=1     " Split vertically.
 let g:bufExplorerUseCurrentWindow=1  " Open in new window.
 " let g:bufExplorerSplitVertSize = 30  " Split width
 autocmd BufWinEnter \[Buf\ List\] setl nonumber 
+nmap <leader>bf :BufExplorer<cr>
 
 
 """""""""""""""""""""""""""""" 
@@ -353,7 +354,7 @@ autocmd BufWinEnter \[Buf\ List\] setl nonumber
 """""""""""""""""""""""""""""" 
 " need install clang libclang1 libclang-dev
 let g:clang_complete_copen=1       "open quickfix window on error
-" let g:clang_periodic_quickfix=1  "periodically(周期性) update the quickfix window
+" let g:clang_periodic_quickfix=1  "periodically update the quickfix window
 let g:clang_snippets=1
 let g:clang_close_preview=1        "close automatically after a completion
 let g:clang_use_library=1
