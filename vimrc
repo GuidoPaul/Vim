@@ -36,6 +36,7 @@ Plugin 'tpope/vim-commentary'
 Plugin 'junegunn/vim-easy-align'
 Plugin 'Lokaltog/vim-easymotion'
 Plugin 'terryma/vim-expand-region'
+Plugin 'suan/vim-instant-markdown'
 Plugin 'pangloss/vim-javascript'
 Plugin 'plasticboy/vim-markdown'
 Plugin 'terryma/vim-multiple-cursors'
@@ -197,17 +198,21 @@ endtry
 
 " Set extra options when running in GUI mode
 if has("gui_running")
-    " colorscheme solarized
-	colorscheme molokai
+    colorscheme solarized
+	" colorscheme molokai
 	" colorscheme ron
     set guioptions=""
     set t_Co=256
     set guitablabel=%M\ %t
     if has("gui_gtk2")
         set guifont=Consolas\ 13.5
+        set guifontwide=YaHei\ Consolas\ Hybrid\ 12
     else
         set guifont=Consolas:h13.5
+        set guifontwide=YaHei\ Consolas\ Hybrid:h12
     endif
+    set lines=26
+    set columns=80
 endif
 
 set encoding=utf-8 nobomb           " Vim inside encoding (buffer, register...)
@@ -518,7 +523,7 @@ function! CompileAndRun()
 		exec "!go build %<"
 		exec "!time go run %"
     elseif &filetype == 'mkd'
-		exec "!pandoc % --latex-engine=pdflatex -o %<.pdf"
+		exec "!pandoc --latex-engine=xelatex % -o %<.pdf -V mainfont='YaHei Consolas Hybrid'"
     elseif &filetype == 'asm'
 		exec "!as -o %<.o % && ld -s -o %< %<.o"
 		exec "!time ./%<"
