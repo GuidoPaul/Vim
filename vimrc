@@ -24,6 +24,7 @@ Plugin 'gmarik/Vundle.vim'
 Plugin 'mileszs/ack.vim'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'kien/ctrlp.vim'
+Plugin 'sjl/gundo.vim'
 Plugin 'Yggdroot/indentLine'
 Plugin 'fholgado/minibufexpl.vim'
 Plugin 'scrooloose/nerdtree'
@@ -32,14 +33,21 @@ Plugin 'majutsushi/tagbar'
 Plugin 'SirVer/ultisnips'
 Plugin 'bling/vim-airline'
 Plugin 'tpope/vim-commentary'
+Plugin 'junegunn/vim-easy-align'
+Plugin 'Lokaltog/vim-easymotion'
+Plugin 'terryma/vim-expand-region'
+Plugin 'pangloss/vim-javascript'
 Plugin 'plasticboy/vim-markdown'
 Plugin 'terryma/vim-multiple-cursors'
+Plugin 'kshenoy/vim-signature'
 Plugin 'honza/vim-snippets'
 Plugin 'tpope/vim-surround'
+Plugin 'bronson/vim-trailing-whitespace'
 Plugin 'Valloric/YouCompleteMe'
 "" color scheme
 Plugin 'tomasr/molokai'
 Plugin 'altercation/vim-colors-solarized'
+Plugin 'kien/rainbow_parentheses.vim'
 
 " plugin from http://vim-scripts.org/vim/scripts.html
 Plugin 'javacomplete'
@@ -87,7 +95,7 @@ let g:mapleader = ","
 " Fast saving
 nmap <leader>w :w!<cr>
 
-" :W sudo saves the file 
+" :W sudo saves the file
 " (useful for handling the permission-denied error)
 command W w !sudo tee % > /dev/null
 "
@@ -105,9 +113,9 @@ set wildmenu
 " Ignore compiled files
 set wildignore=*.o,*~,*.pyc
 if has("win16") || has("win32")
-    set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store
+    set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store,*\\tmp\\*,*.swp,*.zip,*.exe
 else
-    set wildignore+=.git\*,.hg\*,.svn\*
+    set wildignore+=.git\*,.hg\*,.svn\*,*/tmp/*,*.so,*.swp,*.zip
 endif
 
 " Always show line numbers
@@ -135,12 +143,12 @@ if has('mouse')
 endif
 
 set ignorecase " Ignore case when searching
-set smartcase  " When searching try to be smart about cases 
+set smartcase  " When searching try to be smart about cases
 set hlsearch   " Highlight search results
 set incsearch  " Makes search act like search in modern browsers
 
 " Show matching brackets when text indicator is over them
-set showmatch 
+set showmatch
 set matchpairs+=<:>
 
 " How many tenths of a second to blink when matching brackets
@@ -177,7 +185,7 @@ set tm=500
 " Colors and Fonts {{{
 "
 " Enable syntax highlighting
-syntax enable 
+syntax enable
 
 set background=dark
 
@@ -189,24 +197,24 @@ endtry
 
 " Set extra options when running in GUI mode
 if has("gui_running")
-	colorscheme molokai
     " colorscheme solarized
+	colorscheme molokai
 	" colorscheme ron
     set guioptions=""
     set t_Co=256
     set guitablabel=%M\ %t
     if has("gui_gtk2")
-        set guifont=Consolas\ 13
+        set guifont=Consolas\ 13.5
     else
-        set guifont=Consolas:h13
+        set guifont=Consolas:h13.5
     endif
 endif
 
 set encoding=utf-8 nobomb           " Vim inside encoding (buffer, register...)
-set fileencoding=utf-8 nobomb       " New file encoding 
+set fileencoding=utf-8 nobomb       " New file encoding
 
 " Auto file encoding detection order
-set fileencodings=ucs-bom,utf-8,gb2312,gbk,gb18030,big5,euc-jp,euc-kr,latin1 
+set fileencodings=ucs-bom,utf-8,gb2312,gbk,gb18030,big5,euc-jp,euc-kr,latin1
 
 " Use Unix as the standard file type
 set ffs=unix,dos,mac
@@ -236,10 +244,6 @@ autocmd BufNewFile * normal G
 
 " set session options
 set sessionoptions="blank,buffers,folds,globals,help,localoptions,options,resize,sesdir,slash,tabpages,unix,winpos,winsize"
-
-" save undo history
-set undodir=~/.undo_history/
-set undofile
 
 " save and resume session
 map <silent> <leader>ss :wa!<cr>:mksession! my.vim<cr>:wviminfo! my.viminfo<cr>
@@ -327,8 +331,8 @@ map <leader>ba :1,1000 bd!<cr>
 map <leader>tn :tabnew<cr>
 map <leader>to :tabonly<cr>
 map <leader>tc :tabclose<cr>
-map <leader>tm :tabmove 
-map <leader>t<leader> :tabnext 
+map <leader>tm :tabmove
+map <leader>t<leader> :tabnext
 
 " Opens a new tab with the current buffer's path
 " Super useful when editing files in the same directory
@@ -337,7 +341,7 @@ map <leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
 " Switch CWD to the directory of the open buffer
 map <leader>cd :cd %:p:h<cr>:pwd<cr>
 
-" Specify the behavior when switching between buffers 
+" Specify the behavior when switching between buffers
 try
   set switchbuf=useopen,usetab,newtab
   " set showtabline=2
@@ -449,7 +453,7 @@ function! CmdLine(str)
     exe "menu Foo.Bar :" . a:str
     emenu Foo.Bar
     unmenu Foo
-endfunction 
+endfunction
 
 function! VisualSelection(direction, extra_filter) range
     let l:saved_reg = @"
@@ -501,8 +505,8 @@ function! CompileAndRun()
 	elseif &filetype == 'cpp'
 		exec "!g++ % -o %<"
 		exec "!time ./%<"
-	elseif &filetype == 'java' 
-		exec "!javac %" 
+	elseif &filetype == 'java'
+		exec "!javac %"
 		exec "!time java %<"
 	elseif &filetype == 'sh'
 		exec "!time bash %"
@@ -587,6 +591,15 @@ function SetTitle()
 		call append(9,"")
 	endif
 endfunction
+
+function! ToggleErrors()
+    let old_last_winnr = winnr('$')
+    lclose
+    if old_last_winnr == winnr('$')
+        " Nothing was closed, open syntastic error location panel
+        Errors
+    endif
+endfunction
 "
 " }}}
 
@@ -601,7 +614,7 @@ endfunction
 vnoremap <silent> gv :call VisualSelection('gv', '')<CR>
 
 " Open Ack and put the cursor in the right position
-map <leader>g :Ack 
+map <leader>g :Ack
 
 " When you press <leader>r you can search and replace the selected text
 vnoremap <silent> <leader>r :call VisualSelection('replace', '')<CR>
@@ -627,18 +640,27 @@ map <leader>p :cp<cr>
 " }}}
 
 " ctrlp.vim {{{
-let g:ctrlp_working_path_mode = 0
-
-let g:ctrlp_map = '<c-f>'
-map <c-b> :CtrlPBuffer<cr>
-let g:ctrlp_open_multiple_files = 'v'
-
-let g:ctrlp_max_height = 20
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+" map <c-b> :CtrlPBuffer<cr>
+" map <c-f> :CtrlPMRU<cr>
 let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+  \ 'dir':  '\v[\/]\.(git|hg|svn|rvm)$',
   \ 'file': '\v\.(log|jpg|png|jpeg|DS_Store|coffee)$',
   \ 'link': 'some_bad_symbolic_links',
   \ }
+let g:ctrlp_working_path_mode = 0
+let g:ctrlp_match_window_bottom=1
+let g:ctrlp_max_height = 15
+let g:ctrlp_match_window_reversed=0
+let g:ctrlp_mruf_max=500
+let g:ctrlp_follow_symlinks=1
+" }}}
+
+" gundo.vim {{{
+let g:gundo_width = 40
+let g:gundo_preview_height = 15
+nnoremap <leader>h :GundoToggle<CR>
 " }}}
 
 " indentLine {{{
@@ -659,7 +681,7 @@ autocmd FileType java,javascript,jsp inoremap <buffer> . .<C-X><C-O><C-P><Down>
 
 " minibufexplorer.vim {{{
 " toggle minibufexplorer
-map <Leader>bl :MBEToggle<cr>
+map <leader>bl :MBEToggle<cr>
 " buffer manage
 map <Tab>   :MBEbn<cr>
 map <S-Tab> :MBEbp<cr>
@@ -672,31 +694,67 @@ let NERDTreeWinSize=25
 let NERDTreeShowBookmarks=1
 let NERDTreeShowHidden=1
 let NERDTreeIgnore = ['\.pyc$']
-map <Leader>nt :NERDTreeToggle<CR> 
-map <leader>nb :NERDTreeFromBookmark 
+map <Leader>nt :NERDTreeToggle<CR>
+map <leader>nb :NERDTreeFromBookmark
 map <leader>nf :NERDTreeFind<cr>
 autocmd vimenter * if !argc() | NERDTree | endif
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 " }}}
 
+" rainbow_parentheses.vim {{{
+let g:rbpt_colorpairs = [
+    \ ['brown',       'RoyalBlue3'],
+    \ ['Darkblue',    'SeaGreen3'],
+    \ ['darkgray',    'DarkOrchid3'],
+    \ ['darkgreen',   'firebrick3'],
+    \ ['darkcyan',    'RoyalBlue3'],
+    \ ['darkred',     'SeaGreen3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['brown',       'firebrick3'],
+    \ ['gray',        'RoyalBlue3'],
+    \ ['black',       'SeaGreen3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['Darkblue',    'firebrick3'],
+    \ ['darkgreen',   'RoyalBlue3'],
+    \ ['darkcyan',    'SeaGreen3'],
+    \ ['darkred',     'DarkOrchid3'],
+    \ ['red',         'firebrick3'],
+    \ ]
+let g:rbpt_max = 16
+let g:rbpt_loadcmd_toggle = 0
+au VimEnter * RainbowParenthesesToggle
+au Syntax   * RainbowParenthesesLoadRound
+au Syntax   * RainbowParenthesesLoadSquare
+au Syntax   * RainbowParenthesesLoadBraces
+" }}}
+
 " syntastic {{{
 let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq=0
 let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '⚠'
-let g:syntastic_auto_loc_list = 1
+let g:syntastic_enable_highlighting=1
+
+" pep8    code: http://pep8.readthedocs.org/en/latest/intro.html#error-codes
+" pylint codes: http://pylint-messages.wikidot.com/all-codes
+let g:syntastic_python_checkers=['pyflakes', 'pep8']
+let g:syntastic_python_pep8_args='--ignore=E501,E225'
+
+let g:syntastic_javascript_checkers = ['jsl', 'jshint']
+let g:syntastic_html_checkers=['tidy', 'jshint']
+
+" to see error location list
+let g:syntastic_always_populate_loc_list = 0
+let g:syntastic_auto_loc_list = 0
 let g:syntastic_loc_list_height = 5
-" let g:syntastic_ignore_files=[".*\.py$"]
+nnoremap <Leader>s :call ToggleErrors()<cr>
 " }}}
 
 " tagbar {{{
-let g:tagbar_left = 0
-let g:tagbar_ctags_bin = '/usr/bin/ctags'
-let g:tagbar_width = 30
-nmap <silent> <F3> :TagbarToggle <CR>
+nmap <silent> <F9> :TagbarToggle <CR>
 nmap <silent> <leader>tb :TagbarToggle <CR>
-" autocmd FileType java,cpp nested :TagbarOpen
-" map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>  
-nmap cc :!ctags -R <CR><CR>
+let g:tagbar_autofocus = 1
+let g:tagbar_width = 30
 " }}}
 
 " ultisnips {{{
@@ -707,14 +765,37 @@ let g:UltiSnipsSnippetDirectories=["UltiSnips"]
 " }}}
 
 " vim-airline {{{
-" let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts=1
+" let g:airline#extensions#tabline#enabled = 1
 " }}}
 
 " vim-commentary {{{
 " '\\\' or 'gcc':  Comment a line in normal mode
 " 'gc': Comment a line in Visual mode
 " 'gcap': Comment a Paragraph
+" }}}
+
+" vim-easy-align {{{
+vmap <Enter> <Plug>(EasyAlign)
+nmap <Leader>a <Plug>(EasyAlign)
+" '*', '-', 'nums'      " align key words
+" <Enter>               " align left
+" <Enter><Enter>        " align right
+" <Enter><Enter><Enter> " align center
+" }}}
+
+" vim-easymotion {{{
+let g:EasyMotion_smartcase = 1
+map <Leader><leader>h <Plug>(easymotion-linebackward)
+map <Leader><Leader>j <Plug>(easymotion-j)
+map <Leader><Leader>k <Plug>(easymotion-k)
+map <Leader><leader>l <Plug>(easymotion-lineforward)
+map <Leader><leader>. <Plug>(easymotion-repeat)
+" }}}
+
+" vim-expand-region {{{
+map K <Plug>(expand_region_expand)
+map J <Plug>(expand_region_shrink)
 " }}}
 
 " vim-markdown {{{
@@ -729,6 +810,15 @@ let g:multi_cursor_next_key='<C-n>'
 let g:multi_cursor_prev_key='<C-p>'
 let g:multi_cursor_skip_key='<C-x>'
 let g:multi_cursor_quit_key='<Esc>'
+" }}}
+
+" vim-signature {{{
+" m[a-zA-Z] " Toggle mark and display it in the leftmost column
+" '[a-zA-Z] " Jump to mark
+" '.        " Place the last changed
+" ''        " Place the last location
+" m/        " Open location list and display marks from current buffer
+" m<space>  " Remove all markers
 " }}}
 
 " vim-snippets {{{
@@ -781,6 +871,10 @@ let g:multi_cursor_quit_key='<Esc>'
 " <CTRL-s><CTRL-s> - in insert mode, add a new line + surrounding + indent
 " <CTRL-g>s - same as <CTRL-s>
 " <CTRL-g>S - same as <CTRL-s><CTRL-s>
+" }}}
+
+" vim-trailing-whitespace {{{
+map <leader><space> :FixWhitespace<cr>
 " }}}
 
 " YouCompleteMe {{{
