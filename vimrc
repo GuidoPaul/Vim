@@ -32,6 +32,7 @@ Plugin 'scrooloose/syntastic'
 Plugin 'majutsushi/tagbar'
 Plugin 'SirVer/ultisnips'
 Plugin 'bling/vim-airline'
+Plugin 'rhysd/vim-clang-format'
 Plugin 'tpope/vim-commentary'
 Plugin 'junegunn/vim-easy-align'
 Plugin 'Lokaltog/vim-easymotion'
@@ -121,6 +122,7 @@ endif
 
 " Always show line numbers
 set number
+set relativenumber
 
 " Always show the status line
 set ruler
@@ -165,6 +167,7 @@ set magic
 set shortmess=atI
 
 " Highlight the current line and column in every window
+set colorcolumn=80
 set cursorline
 set cursorcolumn
 
@@ -191,8 +194,10 @@ syntax enable
 set background=dark
 
 try
-    colorscheme desert
-	" colorscheme ron
+    " colorscheme desert
+	colorscheme ron
+	" colorscheme molokai
+    " colorscheme solarized
 catch
 endtry
 
@@ -272,7 +277,8 @@ set shiftround   " use multiple of shiftwidth when indenting with '<' and '>'
 set autowrite    " always set autowriteing on
 set autoindent   " always set autoindenting on
 set smartindent  " always set smartindenting on
-set nowrap       " no wrap lines
+" set nowrap     " no wrap lines
+set wrap         " wrap lines
 
 " fill char the dividing line
 set fillchars=vert:\ ,stl:\ ,stlnc:\
@@ -389,7 +395,7 @@ endif
 nmap tt :%s/\t/    /g<CR>
 
 " Copy the full text
-map <C-A> ggVG$"+y
+map <C-A> ggvG$"+y
 
 " Copy the selected text
 vmap <C-c> "+y
@@ -540,6 +546,7 @@ function! DeleteTrailingWS()
     exe "normal mz"
     %s/\s\+$//ge
     exe "normal `z"
+    exe "normal mz"
 endfunction
 
 function! Preserve(command)
@@ -686,7 +693,7 @@ autocmd FileType java,javascript,jsp inoremap <buffer> . .<C-X><C-O><C-P><Down>
 
 " minibufexplorer.vim {{{
 " toggle minibufexplorer
-map <leader>bl :MBEToggle<cr>
+" map <leader>bl :MBEToggle<cr>
 " buffer manage
 map <Tab>   :MBEbn<cr>
 map <S-Tab> :MBEbp<cr>
@@ -774,6 +781,18 @@ let g:airline_powerline_fonts=1
 " let g:airline#extensions#tabline#enabled = 1
 " }}}
 
+" vim-clang-format {{{
+" sudo ln -s /usr/bin/clang-format-3.4 /usr/bin/clang-format
+let g:clang_format#style_options = {
+    \ "AccessModifierOffset" : -4,
+    \ "AllowShortIfStatementsOnASingleLine" : "true",
+    \ "AlwaysBreakTemplateDeclarations" : "true",
+    \ "Standard" : "C++11"}
+" map to <Leader>cf in C++ code
+autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :ClangFormat<CR>
+autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>
+" }}}
+
 " vim-commentary {{{
 " '\\\' or 'gcc':  Comment a line in normal mode
 " 'gc': Comment a line in Visual mode
@@ -799,8 +818,8 @@ map <Leader><leader>. <Plug>(easymotion-repeat)
 " }}}
 
 " vim-expand-region {{{
-map K <Plug>(expand_region_expand)
-map J <Plug>(expand_region_shrink)
+map v <Plug>(expand_region_expand)
+map V <Plug>(expand_region_shrink)
 " }}}
 
 " vim-markdown {{{
