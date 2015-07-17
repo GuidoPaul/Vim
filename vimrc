@@ -26,12 +26,14 @@ Plugin 'jiangmiao/auto-pairs'
 Plugin 'kien/ctrlp.vim'
 Plugin 'sjl/gundo.vim'
 Plugin 'Yggdroot/indentLine'
-Plugin 'fholgado/minibufexpl.vim'
+" Plugin 'fholgado/minibufexpl.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
 Plugin 'majutsushi/tagbar'
 Plugin 'SirVer/ultisnips'
 Plugin 'bling/vim-airline'
+" Plugin 'bling/vim-bufferline'
+Plugin 'ap/vim-buftabline'
 Plugin 'rhysd/vim-clang-format'
 Plugin 'tpope/vim-commentary'
 Plugin 'junegunn/vim-easy-align'
@@ -91,8 +93,8 @@ set autoread
 
 " With a map leader it's possible to do extra key combinations
 " like <leader>w saves the current file
-let mapleader = ","
-let g:mapleader = ","
+let mapleader = ";"
+let g:mapleader = ";"
 
 " Fast saving
 nmap <leader>w :w!<cr>
@@ -192,6 +194,7 @@ set tm=500
 syntax enable
 
 set background=dark
+set t_Co=256
 
 try
     " colorscheme desert
@@ -695,8 +698,8 @@ autocmd FileType java,javascript,jsp inoremap <buffer> . .<C-X><C-O><C-P><Down>
 " toggle minibufexplorer
 " map <leader>bl :MBEToggle<cr>
 " buffer manage
-map <Tab>   :MBEbn<cr>
-map <S-Tab> :MBEbp<cr>
+" map <Tab>   :MBEbn<cr>
+" map <S-Tab> :MBEbp<cr>
 " }}}
 
 " nerdtree {{{
@@ -778,7 +781,16 @@ let g:UltiSnipsSnippetDirectories=["UltiSnips"]
 
 " vim-airline {{{
 let g:airline_powerline_fonts=1
-" let g:airline#extensions#tabline#enabled = 1
+" let g:airline#extensions#tabline#enabled=1
+" }}}
+
+" vim-buftabline {{{
+nnoremap <Tab>   :bnext<CR>
+nnoremap <S-Tab> :bprev<CR>
+let g:buftabline_show       = 1
+let g:buftabline_numbers    = 1
+let g:buftabline_indicators = 1
+let g:buftabline_separators = 1
 " }}}
 
 " vim-clang-format {{{
@@ -818,8 +830,8 @@ map <Leader><leader>. <Plug>(easymotion-repeat)
 " }}}
 
 " vim-expand-region {{{
-map v <Plug>(expand_region_expand)
-map V <Plug>(expand_region_shrink)
+map K <Plug>(expand_region_expand)
+map L <Plug>(expand_region_shrink)
 " }}}
 
 " vim-markdown {{{
@@ -907,7 +919,7 @@ nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
 " let g:ycm_global_ycm_extra_conf='~/.ycm_extra_conf.py'
 " Do not ask when starting vim
 let g:ycm_confirm_extra_conf=0
-let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_always_populate_loc_list=1
 let g:ycm_key_list_select_completion=['<c-n>', '<Down>']
 let g:ycm_key_list_previous_completion=['<c-p>', '<Up>']
 let g:ycm_complete_in_comments=1
