@@ -22,9 +22,11 @@ Plugin 'gmarik/Vundle.vim'
 
 " plugin on GitHub repo
 Plugin 'mileszs/ack.vim'
-Plugin 'jiangmiao/auto-pairs'
+" Plugin 'jiangmiao/auto-pairs'
 Plugin 'kien/ctrlp.vim'
+Plugin 'Raimondi/delimitMate'
 Plugin 'sjl/gundo.vim'
+Plugin 'PotatoesMaster/i3-vim-syntax'
 Plugin 'Yggdroot/indentLine'
 " Plugin 'fholgado/minibufexpl.vim'
 Plugin 'scrooloose/nerdtree'
@@ -32,26 +34,32 @@ Plugin 'scrooloose/syntastic'
 Plugin 'majutsushi/tagbar'
 Plugin 'SirVer/ultisnips'
 Plugin 'bling/vim-airline'
-" Plugin 'bling/vim-bufferline'
 Plugin 'ap/vim-buftabline'
 Plugin 'rhysd/vim-clang-format'
-Plugin 'tpope/vim-commentary'
 Plugin 'junegunn/vim-easy-align'
-Plugin 'Lokaltog/vim-easymotion'
+Plugin 'easymotion/vim-easymotion'
+Plugin 'tommcdo/vim-exchange'
 Plugin 'terryma/vim-expand-region'
 Plugin 'suan/vim-instant-markdown'
 Plugin 'pangloss/vim-javascript'
 Plugin 'plasticboy/vim-markdown'
 Plugin 'terryma/vim-multiple-cursors'
+" Plugin 'thinca/vim-quickrun'
 Plugin 'kshenoy/vim-signature'
 Plugin 'honza/vim-snippets'
-Plugin 'tpope/vim-surround'
 Plugin 'bronson/vim-trailing-whitespace'
 Plugin 'Valloric/YouCompleteMe'
-"" color scheme
+
+" tpope's awesome vim plugins
+Plugin 'tpope/vim-commentary'
+Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-repeat'
+
+" color scheme
 Plugin 'tomasr/molokai'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'kien/rainbow_parentheses.vim'
+Plugin 'nelstrom/vim-blackboard'
 
 " plugin from http://vim-scripts.org/vim/scripts.html
 Plugin 'javacomplete'
@@ -197,16 +205,15 @@ set background=dark
 set t_Co=256
 
 try
-    " colorscheme desert
-	colorscheme ron
-	" colorscheme molokai
-    " colorscheme solarized
+    colorscheme desert
+	" colorscheme ron
 catch
 endtry
 
 " Set extra options when running in GUI mode
 if has("gui_running")
-    colorscheme solarized
+	colorscheme blackboard
+    " colorscheme solarized
 	" colorscheme molokai
 	" colorscheme ron
     set guioptions=""
@@ -382,8 +389,8 @@ set viminfo^=%
 map 0 ^
 
 " Move a line of text using ALT+[jk] or Comamnd+[jk] on mac
-nmap <M-j> mz:m+<cr>`z
 nmap <M-k> mz:m-2<cr>`z
+nmap <M-j> mz:m+<cr>`z
 vmap <M-j> :m'>+<cr>`<my`>mzgv`yo`z
 vmap <M-k> :m'<-2<cr>`>my`<mzgv`yo`z
 
@@ -525,7 +532,8 @@ function! CompileAndRun()
 	elseif &filetype == 'sh'
 		exec "!time bash %"
 	elseif &filetype == 'python'
-		exec "!time python2.7 %"
+		" exec \"!time python2.7 %"
+		exec "!time python %"
     elseif &filetype == 'html'
 		exec "!firefox % &"
     elseif &filetype == 'go'
@@ -672,6 +680,11 @@ let g:ctrlp_mruf_max=500
 let g:ctrlp_follow_symlinks=1
 " }}}
 
+" delimitMate {{{
+" Provides insert mode auto-completion for quotes, parens, brackets, etc
+" Especially the pointed brackets
+" }}}
+
 " gundo.vim {{{
 let g:gundo_width = 40
 let g:gundo_preview_height = 15
@@ -773,9 +786,9 @@ let g:tagbar_width = 30
 " }}}
 
 " ultisnips {{{
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-j>"
-let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+let g:UltiSnipsExpandTrigger="<leader><tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 let g:UltiSnipsSnippetDirectories=["UltiSnips"]
 " }}}
 
@@ -800,12 +813,13 @@ let g:clang_format#style_options = {
     \ "AllowShortIfStatementsOnASingleLine" : "true",
     \ "AlwaysBreakTemplateDeclarations" : "true",
     \ "Standard" : "C++11"}
-" map to <Leader>cf in C++ code
-autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :ClangFormat<CR>
-autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>
+" map to <Leader>f in C++ code
+autocmd FileType c,cpp,objc nnoremap <buffer><Leader>f :ClangFormat<CR>
+autocmd FileType c,cpp,objc vnoremap <buffer><Leader>f :ClangFormat<CR>
 " }}}
 
 " vim-commentary {{{
+autocmd FileType cmake setlocal commentstring=#\ %s
 " '\\\' or 'gcc':  Comment a line in normal mode
 " 'gc': Comment a line in Visual mode
 " 'gcap': Comment a Paragraph
@@ -821,7 +835,25 @@ nmap <Leader>a <Plug>(EasyAlign)
 " }}}
 
 " vim-easymotion {{{
+let g:EasyMotion_startofline = 0 " keep cursor column when JK motion"
 let g:EasyMotion_smartcase = 1
+map  / <Plug>(easymotion-sn)
+omap / <Plug>(easymotion-tn)
+nmap s <Plug>(easymotion-s2)
+nmap t <Plug>(easymotion-t2)
+map  n <Plug>(easymotion-next)
+map  N <Plug>(easymotion-prev)
+map <Leader><leader>h <Plug>(easymotion-linebackward)
+map <Leader><Leader>j <Plug>(easymotion-j)
+map <Leader><Leader>k <Plug>(easymotion-k)
+map <Leader><leader>l <Plug>(easymotion-lineforward)
+map <Leader><leader>. <Plug>(easymotion-repeat)
+" }}}
+
+" vim-exchange {{{
+" cxx - Use the current line
+" X   - Use in Visual mode.
+" cxc - Clear any {motion} pending for exchange
 map <Leader><leader>h <Plug>(easymotion-linebackward)
 map <Leader><Leader>j <Plug>(easymotion-j)
 map <Leader><Leader>k <Plug>(easymotion-k)
@@ -830,8 +862,8 @@ map <Leader><leader>. <Plug>(easymotion-repeat)
 " }}}
 
 " vim-expand-region {{{
-map K <Plug>(expand_region_expand)
-map L <Plug>(expand_region_shrink)
+map v <Plug>(expand_region_expand)
+map V <Plug>(expand_region_shrink)
 " }}}
 
 " vim-markdown {{{
@@ -846,6 +878,16 @@ let g:multi_cursor_next_key='<C-n>'
 let g:multi_cursor_prev_key='<C-p>'
 let g:multi_cursor_skip_key='<C-x>'
 let g:multi_cursor_quit_key='<Esc>'
+" }}}
+
+" vim-quickrun {{{
+" let g:quickrun_config = {
+" \   \"_" : {
+" \       \"outputter" : \"message",
+" \   },
+" \}
+" let g:quickrun_no_default_key_mappings = 1
+" nmap <Leader>r <Plug>(quickrun)
 " }}}
 
 " vim-signature {{{
@@ -915,14 +957,21 @@ map <leader><space> :FixWhitespace<cr>
 
 " YouCompleteMe {{{
 nnoremap <leader>df :YcmCompleter GoToDefinitionElseDeclaration<CR>
-nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
+nnoremap <F5> :YcmDiags<CR>
+" nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
 " let g:ycm_global_ycm_extra_conf='~/.ycm_extra_conf.py'
 " Do not ask when starting vim
 let g:ycm_confirm_extra_conf=0
-let g:syntastic_always_populate_loc_list=1
-let g:ycm_key_list_select_completion=['<c-n>', '<Down>']
-let g:ycm_key_list_previous_completion=['<c-p>', '<Up>']
 let g:ycm_complete_in_comments=1
+let g:syntastic_always_populate_loc_list=1
+let g:ycm_min_num_of_chars_for_completion=1
+let g:ycm_cache_omnifunc=0
+let g:ycm_seed_identifiers_with_syntax=1
+set completeopt-=preview
+inoremap <leader>, <C-x><C-o>
+" let g:ycm_collect_identifiers_from_tags_files=1
+" let g:ycm_key_list_select_completion=['<c-n>', '<Down>']
+" let g:ycm_key_list_previous_completion=['<c-p>', '<Up>']
 " }}}
 "
 " }}}
