@@ -268,6 +268,12 @@ set sessionoptions="blank,buffers,folds,globals,help,localoptions,options,resize
 " save and resume session
 map <silent> <leader>ss :wa!<cr>:mksession! my.vim<cr>:wviminfo! my.viminfo<cr>
 map <silent> <leader>rs :source my.vim<cr>:rviminfo my.viminfo<cr>
+
+" undo
+set undodir=~/.vim/undodir
+set undofile
+set undolevels=1000  " maximum number of changes that can be undone
+set undoreload=10000 " maximum number lines to save for undo on a buffer reload
 "
 " }}}
 
@@ -524,7 +530,8 @@ function! CompileAndRun()
 		exec "!gcc % -o %<"
 		exec "!time ./%<"
 	elseif &filetype == 'cpp'
-		exec "!g++ % -o %<"
+		" exec \"!g++ % -o %<"
+		exec "!g++ % -g -Wall -o %<"
 		exec "!time ./%<"
 	elseif &filetype == 'java'
 		exec "!javac %"
@@ -549,8 +556,10 @@ endfunction
 
 function! Rungdb()
 	exec "w"
-	exec "!g++ % -g -o %<"
-	exec "!gdb ./%<"
+	" exec \"!g++ % -g -Wall -o %<"
+	exec "Pyclewn"
+	exec "Cmapkeys"
+	"exec \"!gdb ./%<"
 endfunction
 
 function! DeleteTrailingWS()
@@ -598,8 +607,8 @@ function SetTitle()
 		call append(9, "")
 	endif
 	if &filetype == 'cpp' && expand("%:e") == 'cpp'
-		call append(8, "#include <cstdio>")
-		call append(9, "#include <iostream>")
+		call append(8, "#include <iostream>")
+		call append(9, "")
 		call append(10, "using namespace std;")
 		call append(11, "")
 	endif
@@ -607,7 +616,7 @@ function SetTitle()
 		call append(8, "#ifndef _".toupper(expand("%:r"))."_H")
 		call append(9, "#define _".toupper(expand("%:r"))."_H")
 		call append(10, "")
-		call append(11, "#endif")
+		call append(11, "#endif /* defined(_".toupper(expand("%:r"))."_H) */")
 	endif
 	if &filetype == 'java'
 		call append(8,"public class ".expand("%:r"))
@@ -854,11 +863,6 @@ map <Leader><leader>. <Plug>(easymotion-repeat)
 " cxx - Use the current line
 " X   - Use in Visual mode.
 " cxc - Clear any {motion} pending for exchange
-map <Leader><leader>h <Plug>(easymotion-linebackward)
-map <Leader><Leader>j <Plug>(easymotion-j)
-map <Leader><Leader>k <Plug>(easymotion-k)
-map <Leader><leader>l <Plug>(easymotion-lineforward)
-map <Leader><leader>. <Plug>(easymotion-repeat)
 " }}}
 
 " vim-expand-region {{{
@@ -975,4 +979,5 @@ inoremap <leader>, <C-x><C-o>
 " }}}
 "
 " }}}
+
 
