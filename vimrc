@@ -26,8 +26,8 @@ Plugin 'mileszs/ack.vim'
 Plugin 'kien/ctrlp.vim'
 Plugin 'Raimondi/delimitMate'
 Plugin 'sjl/gundo.vim'
-Plugin 'PotatoesMaster/i3-vim-syntax'
 Plugin 'Yggdroot/indentLine'
+Plugin 'PotatoesMaster/i3-vim-syntax'
 " Plugin 'fholgado/minibufexpl.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
@@ -56,10 +56,11 @@ Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-repeat'
 
 " color scheme
+Plugin 'zenorocha/dracula-theme', {'rtp': 'vim/'}
 Plugin 'tomasr/molokai'
-Plugin 'altercation/vim-colors-solarized'
 Plugin 'kien/rainbow_parentheses.vim'
 Plugin 'nelstrom/vim-blackboard'
+Plugin 'altercation/vim-colors-solarized'
 
 " plugin from http://vim-scripts.org/vim/scripts.html
 Plugin 'javacomplete'
@@ -205,16 +206,21 @@ set background=dark
 set t_Co=256
 
 try
+    " colorscheme solarized
     colorscheme desert
+	" colorscheme molokai
+	" colorscheme blackboard
 	" colorscheme ron
 catch
 endtry
 
 " Set extra options when running in GUI mode
 if has("gui_running")
-	colorscheme blackboard
-    " colorscheme solarized
+    colorscheme solarized
 	" colorscheme molokai
+    " colorscheme dracula
+    " colorscheme desert
+	" colorscheme blackboard
 	" colorscheme ron
     set guioptions=""
     set t_Co=256
@@ -242,7 +248,7 @@ set ffs=unix,dos,mac
 " }}}
 
 
-" Files, backups and undo {{{
+" Files, backups, session and undo {{{
 "
 " turn backup off, since most stuff is in SVN, git et.c anyway...
 set nobackup
@@ -266,8 +272,11 @@ autocmd BufNewFile * normal G
 set sessionoptions="blank,buffers,folds,globals,help,localoptions,options,resize,sesdir,slash,tabpages,unix,winpos,winsize"
 
 " save and resume session
-map <silent> <leader>ss :wa!<cr>:mksession! my.vim<cr>:wviminfo! my.viminfo<cr>
-map <silent> <leader>rs :source my.vim<cr>:rviminfo my.viminfo<cr>
+map <silent> <leader>ss :wa!<cr>:mksession! Session.vim<cr>
+map <silent> <leader>rs :NERDTreeToggle<cr>:source Session.vim<cr>
+" map <silent> <leader>ss :wa!<cr>:mksession! Session.vim<cr>:wviminfo! Session.viminfo<cr>
+" map <silent> <leader>rs :NERDTreeToggle<cr>:source Session.vim<cr>:rviminfo Session.viminfo<cr>
+" map <silent> <leader>rs :source Session.vim<cr>:rviminfo Session.viminfo<cr>
 
 " undo
 set undodir=~/.vim/undodir
@@ -309,12 +318,12 @@ set foldnestmax=3
 set foldmethod=syntax
 set foldlevelstart=99
 " Press space to activate code fold
-nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
+nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<cr>
 
 " Vim fold
 augroup ft_vim
-    au!
-    au FileType vim setlocal foldmethod=marker
+au!
+au FileType vim setlocal foldmethod=marker
 augroup END
 
 " Resize splits when the window is resized
@@ -327,8 +336,8 @@ autocmd VimResized * :wincmd =
 "
 " Visual mode pressing * or # searches for the current selection
 " Super useful! From an idea by Michael Naumann
-vnoremap <silent> * :call VisualSelection('f', '')<CR>
-vnoremap <silent> # :call VisualSelection('b', '')<CR>
+vnoremap <silent> * :call VisualSelection('f', '')<cr>
+vnoremap <silent> # :call VisualSelection('b', '')<cr>
 "
 " }}}
 
@@ -347,6 +356,10 @@ map <C-h> <C-w>h
 map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
+nmap w= :resize   +3<cr>
+nmap w- :resize   -3<cr>
+nmap w, :vertical resize -5<cr>
+nmap w. :vertical resize +5<cr>
 
 " Close the current buffer
 map <leader>bd :Bclose<cr>
@@ -370,18 +383,18 @@ map <leader>cd :cd %:p:h<cr>:pwd<cr>
 
 " Specify the behavior when switching between buffers
 try
-  set switchbuf=useopen,usetab,newtab
-  " set showtabline=2
-  set showtabline=0
+set switchbuf=useopen,usetab,newtab
+" set showtabline=2
+set showtabline=0
 catch
 endtry
 
 " Return to last edit position when opening files (You want this!)
 if has("autocmd")
-    autocmd BufReadPost *
-		\ if line("'\"") > 0 && line("'\"") <= line("$") |
-		\   exe "normal g`\"" |
-		\ endif
+autocmd BufReadPost *
+    \ if line("'\"") > 0 && line("'\"") <= line("$") |
+    \   exe "normal g`\"" |
+    \ endif
 endif
 " Remember info about open buffers on close
 set viminfo^=%
@@ -401,14 +414,14 @@ vmap <M-j> :m'>+<cr>`<my`>mzgv`yo`z
 vmap <M-k> :m'<-2<cr>`>my`<mzgv`yo`z
 
 if has("mac") || has("macunix")
-    nmap <D-j> <M-j>
-    nmap <D-k> <M-k>
-    vmap <D-j> <M-j>
-    vmap <D-k> <M-k>
+nmap <D-j> <M-j>
+nmap <D-k> <M-k>
+vmap <D-j> <M-j>
+vmap <D-k> <M-k>
 endif
 
 " Change tab to 4 spaces
-nmap tt :%s/\t/    /g<CR>
+nmap tt :%s/\t/    /g<cr>
 
 " Copy the full text
 map <C-A> ggvG$"+y
@@ -420,7 +433,7 @@ vmap <C-c> "+y
 imap <C-v> <Esc>"*pa
 
 " Open in firefox
-nmap fi :!firefox % & <CR><CR>
+nmap fi :!firefox % & <cr><cr>
 
 " Compile and run C, C++ and so on
 nmap go :call CompileAndRun()<cr>
@@ -433,9 +446,9 @@ autocmd BufWrite *.py :call DeleteTrailingWS()
 autocmd BufWrite *.coffee :call DeleteTrailingWS()
 
 " Tidying your whitespace and blank line
-nmap _$ :call Preserve("%s/\\s\\+$//e")<CR>
-nmap _= :call Preserve("normal gg=G")<CR>
-nmap <leader>bl :call Preserve("g/^\s*$/d")<CR>
+nmap _$ :call Preserve("%s/\\s\\+$//e")<cr>
+nmap _= :call Preserve("normal gg=G")<cr>
+nmap <leader>bl :call Preserve("g/^\s*$/d")<cr>
 "
 " }}}
 
@@ -477,160 +490,160 @@ map <leader>pp :setlocal paste!<cr>
 " Helper functions {{{
 "
 function! CmdLine(str)
-    exe "menu Foo.Bar :" . a:str
-    emenu Foo.Bar
-    unmenu Foo
+exe "menu Foo.Bar :" . a:str
+emenu Foo.Bar
+unmenu Foo
 endfunction
 
 function! VisualSelection(direction, extra_filter) range
-    let l:saved_reg = @"
-    execute "normal! vgvy"
+let l:saved_reg = @"
+execute "normal! vgvy"
 
-    let l:pattern = escape(@", '\\/.*$^~[]')
-    let l:pattern = substitute(l:pattern, "\n$", "", "")
+let l:pattern = escape(@", '\\/.*$^~[]')
+let l:pattern = substitute(l:pattern, "\n$", "", "")
 
-    if a:direction == 'b'
-        execute "normal ?" . l:pattern . "^M"
-    elseif a:direction == 'gv'
-        call CmdLine("Ack \"" . l:pattern . "\" " )
-    elseif a:direction == 'replace'
-        call CmdLine("%s" . '/'. l:pattern . '/')
-    elseif a:direction == 'f'
-        execute "normal /" . l:pattern . "^M"
-    endif
+if a:direction == 'b'
+    execute "normal ?" . l:pattern . "^M"
+elseif a:direction == 'gv'
+    call CmdLine("Ack \"" . l:pattern . "\" " )
+elseif a:direction == 'replace'
+    call CmdLine("%s" . '/'. l:pattern . '/')
+elseif a:direction == 'f'
+    execute "normal /" . l:pattern . "^M"
+endif
 
-    let @/ = l:pattern
-    let @" = l:saved_reg
+let @/ = l:pattern
+let @" = l:saved_reg
 endfunction
 
 " Don't close window, when deleting a buffer
 command! Bclose call <SID>BufcloseCloseIt()
 function! <SID>BufcloseCloseIt()
-    let l:currentBufNum = bufnr("%")
-    let l:alternateBufNum = bufnr("#")
+let l:currentBufNum = bufnr("%")
+let l:alternateBufNum = bufnr("#")
 
-    if buflisted(l:alternateBufNum)
-        buffer #
-    else
-        bnext
-    endif
+if buflisted(l:alternateBufNum)
+    buffer #
+else
+    bnext
+endif
 
-    if bufnr("%") == l:currentBufNum
-        new
-    endif
+if bufnr("%") == l:currentBufNum
+    new
+endif
 
-    if buflisted(l:currentBufNum)
-        execute("bdelete! ".l:currentBufNum)
-    endif
+if buflisted(l:currentBufNum)
+    execute("bdelete! ".l:currentBufNum)
+endif
 endfunction
 
 function! CompileAndRun()
-	exec "w"
-	if &filetype == 'c'
-		exec "!gcc % -o %<"
-		exec "!time ./%<"
-	elseif &filetype == 'cpp'
-		" exec \"!g++ % -o %<"
-		exec "!g++ % -g -Wall -o %<"
-		exec "!time ./%<"
-	elseif &filetype == 'java'
-		exec "!javac %"
-		exec "!time java %<"
-	elseif &filetype == 'sh'
-		exec "!time bash %"
-	elseif &filetype == 'python'
-		" exec \"!time python2.7 %"
-		exec "!time python %"
-    elseif &filetype == 'html'
-		exec "!firefox % &"
-    elseif &filetype == 'go'
-		exec "!go build %<"
-		exec "!time go run %"
-    elseif &filetype == 'mkd'
-		exec "!pandoc --latex-engine=xelatex % -o %<.pdf -V mainfont='YaHei Consolas Hybrid'"
-    elseif &filetype == 'asm'
-		exec "!as -o %<.o % && ld -s -o %< %<.o"
-		exec "!time ./%<"
-	endif
+exec "w"
+if &filetype == 'c'
+    exec "!gcc % -o %<"
+    exec "!time ./%<"
+elseif &filetype == 'cpp'
+    " exec \"!g++ % -o %<"
+    exec "!g++ % -g -Wall -o %<"
+    exec "!time ./%<"
+elseif &filetype == 'java'
+    exec "!javac %"
+    exec "!time java %<"
+elseif &filetype == 'sh'
+    exec "!time bash %"
+elseif &filetype == 'python'
+    " exec \"!time python2.7 %"
+    exec "!time python %"
+elseif &filetype == 'html'
+    exec "!firefox % &"
+elseif &filetype == 'go'
+    exec "!go build %<"
+    exec "!time go run %"
+elseif &filetype == 'mkd'
+    exec "!pandoc --latex-engine=xelatex % -o %<.pdf -V mainfont='YaHei Consolas Hybrid'"
+elseif &filetype == 'asm'
+    exec "!as -o %<.o % && ld -s -o %< %<.o"
+    exec "!time ./%<"
+endif
 endfunction
 
 function! Rungdb()
-	exec "w"
-	" exec \"!g++ % -g -Wall -o %<"
-	exec "Pyclewn"
-	exec "Cmapkeys"
-	"exec \"!gdb ./%<"
+exec "w"
+" exec \"!g++ % -g -Wall -o %<"
+exec "Pyclewn"
+exec "Cmapkeys"
+"exec \"!gdb ./%<"
 endfunction
 
 function! DeleteTrailingWS()
-    exe "normal mz"
-    %s/\s\+$//ge
-    exe "normal `z"
-    exe "normal mz"
+exe "normal mz"
+%s/\s\+$//ge
+exe "normal `z"
+exe "normal mz"
 endfunction
 
 function! Preserve(command)
-    " save last search, and cursor position.
-    let _s=@/
-    let l = line(".")
-    let c = col(".")
-    " Do the business:
-    execute a:command
-    " Clean up: restore previous search history, and cursor position
-    let @/=_s
-    call cursor(l, c)
+" save last search, and cursor position.
+let _s=@/
+let l = line(".")
+let c = col(".")
+" Do the business:
+execute a:command
+" Clean up: restore previous search history, and cursor position
+let @/=_s
+call cursor(l, c)
 endfunction
 
 function SetTitle()
-	if &filetype == 'sh'
-		call append(0, "\#!/bin/bash")
-		call append(1, "")
-    elseif &filetype == 'python'
-		call append(0, "#!/usr/bin/env python")
-		call append(1, "# -*- coding: utf-8 -*-")
-		call append(2, "# Filename: ".expand("%"))
-		call append(3, "")
-    elseif &filetype == 'mkd'
-		call append(0, "<head><meta charset=\"UTF-8\"></head>")
-	else
-		call append(0, "/*")
-		call append(1, " * File:   ".expand("%"))
-		call append(2, " * Author: Bslin")
-		call append(3, " * Mail:   Baoshenglin1994@gmail.com")
-		call append(4, " *")
-		call append(5, " * Created on ".strftime("%c"))
-		call append(6, " */")
-		call append(7, "")
-	endif
-	if &filetype == 'c'
-		call append(8, "#include <stdio.h>")
-		call append(9, "")
-	endif
-	if &filetype == 'cpp' && expand("%:e") == 'cpp'
-		call append(8, "#include <iostream>")
-		call append(9, "")
-		call append(10, "using namespace std;")
-		call append(11, "")
-	endif
-	if expand("%:e") == 'h'
-		call append(8, "#ifndef _".toupper(expand("%:r"))."_H")
-		call append(9, "#define _".toupper(expand("%:r"))."_H")
-		call append(10, "")
-		call append(11, "#endif /* defined(_".toupper(expand("%:r"))."_H) */")
-	endif
-	if &filetype == 'java'
-		call append(8,"public class ".expand("%:r"))
-		call append(9,"")
-	endif
+if &filetype == 'sh'
+    call append(0, "\#!/bin/bash")
+    call append(1, "")
+elseif &filetype == 'python'
+    call append(0, "#!/usr/bin/env python")
+    call append(1, "# -*- coding: utf-8 -*-")
+    call append(2, "# Filename: ".expand("%"))
+    call append(3, "")
+elseif &filetype == 'mkd'
+    call append(0, "<head><meta charset=\"UTF-8\"></head>")
+else
+    call append(0, "/*")
+    call append(1, " * File:   ".expand("%"))
+    call append(2, " * Author: Bslin")
+    call append(3, " * Mail:   Baoshenglin1994@gmail.com")
+    call append(4, " *")
+    call append(5, " * Created on ".strftime("%c"))
+    call append(6, " */")
+    call append(7, "")
+endif
+if &filetype == 'c'
+    call append(8, "#include <stdio.h>")
+    call append(9, "")
+endif
+if &filetype == 'cpp' && expand("%:e") == 'cpp'
+    call append(8, "#include <bits/stdc++.h>")
+    call append(9, "")
+    call append(10, "using namespace std;")
+    call append(11, "")
+endif
+if expand("%:e") == 'h'
+    call append(8, "#ifndef _".toupper(expand("%:r"))."_H")
+    call append(9, "#define _".toupper(expand("%:r"))."_H")
+    call append(10, "")
+    call append(11, "#endif /* defined(_".toupper(expand("%:r"))."_H) */")
+endif
+if &filetype == 'java'
+    call append(8,"public class ".expand("%:r"))
+    call append(9,"")
+endif
 endfunction
 
 function! ToggleErrors()
-    let old_last_winnr = winnr('$')
-    lclose
-    if old_last_winnr == winnr('$')
-        " Nothing was closed, open syntastic error location panel
-        Errors
-    endif
+let old_last_winnr = winnr('$')
+lclose
+if old_last_winnr == winnr('$')
+    " Nothing was closed, open syntastic error location panel
+    Errors
+endif
 endfunction
 "
 " }}}
@@ -643,13 +656,13 @@ endfunction
 "   requires ack.vim - it's much better than vimgrep/grep
 "
 " When you press gv you Ack after the selected text
-vnoremap <silent> gv :call VisualSelection('gv', '')<CR>
+vnoremap <silent> gv :call VisualSelection('gv', '')<cr>
 
 " Open Ack and put the cursor in the right position
 map <leader>g :Ack
 
 " When you press <leader>r you can search and replace the selected text
-vnoremap <silent> <leader>r :call VisualSelection('replace', '')<CR>
+vnoremap <silent> <leader>r :call VisualSelection('replace', '')<cr>
 
 " Do :help cope if you are unsure what cope is. It's super useful!
 "
@@ -677,10 +690,10 @@ let g:ctrlp_cmd = 'CtrlP'
 " map <c-b> :CtrlPBuffer<cr>
 " map <c-f> :CtrlPMRU<cr>
 let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/]\.(git|hg|svn|rvm)$',
-  \ 'file': '\v\.(log|jpg|png|jpeg|DS_Store|coffee)$',
-  \ 'link': 'some_bad_symbolic_links',
-  \ }
+\ 'dir':  '\v[\/]\.(git|hg|svn|rvm)$',
+\ 'file': '\v\.(log|jpg|png|jpeg|DS_Store|coffee)$',
+\ 'link': 'some_bad_symbolic_links',
+\ }
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_match_window_bottom=1
 let g:ctrlp_max_height = 15
@@ -691,13 +704,19 @@ let g:ctrlp_follow_symlinks=1
 
 " delimitMate {{{
 " Provides insert mode auto-completion for quotes, parens, brackets, etc
-" Especially the pointed brackets
+" Especially the pointed brackets (oh my god)
+au FileType python let b:delimitMate_nesting_quotes = ['"']
+au FileType c,cpp,objc let b:delimitMate_jump_expansion = 1
+au FileType c,cpp,objc let b:delimitMate_expand_cr = 2
+au FileType c,cpp,objc let b:delimitMate_expand_space = 1
+" au FileType c,cpp,objc let b:delimitMate_matchpairs = "(:),[:],{:},<:>"
+au FileType c,cpp,objc let b:delimitMate_matchpairs = "(:),[:],{:}"
 " }}}
 
 " gundo.vim {{{
 let g:gundo_width = 40
 let g:gundo_preview_height = 15
-nnoremap <leader>h :GundoToggle<CR>
+nnoremap <leader>h :GundoToggle<cr>
 " }}}
 
 " indentLine {{{
@@ -731,7 +750,7 @@ let NERDTreeWinSize=25
 let NERDTreeShowBookmarks=1
 let NERDTreeShowHidden=1
 let NERDTreeIgnore = ['\.pyc$']
-map <Leader>nt :NERDTreeToggle<CR>
+map <Leader>nt :NERDTreeToggle<cr>
 map <leader>nb :NERDTreeFromBookmark
 map <leader>nf :NERDTreeFind<cr>
 autocmd vimenter * if !argc() | NERDTree | endif
@@ -740,23 +759,23 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 
 " rainbow_parentheses.vim {{{
 let g:rbpt_colorpairs = [
-    \ ['brown',       'RoyalBlue3'],
-    \ ['Darkblue',    'SeaGreen3'],
-    \ ['darkgray',    'DarkOrchid3'],
-    \ ['darkgreen',   'firebrick3'],
-    \ ['darkcyan',    'RoyalBlue3'],
-    \ ['darkred',     'SeaGreen3'],
-    \ ['darkmagenta', 'DarkOrchid3'],
-    \ ['brown',       'firebrick3'],
-    \ ['gray',        'RoyalBlue3'],
-    \ ['black',       'SeaGreen3'],
-    \ ['darkmagenta', 'DarkOrchid3'],
-    \ ['Darkblue',    'firebrick3'],
-    \ ['darkgreen',   'RoyalBlue3'],
-    \ ['darkcyan',    'SeaGreen3'],
-    \ ['darkred',     'DarkOrchid3'],
-    \ ['red',         'firebrick3'],
-    \ ]
+\ ['brown',       'RoyalBlue3'],
+\ ['Darkblue',    'SeaGreen3'],
+\ ['darkgray',    'DarkOrchid3'],
+\ ['darkgreen',   'firebrick3'],
+\ ['darkcyan',    'RoyalBlue3'],
+\ ['darkred',     'SeaGreen3'],
+\ ['darkmagenta', 'DarkOrchid3'],
+\ ['brown',       'firebrick3'],
+\ ['gray',        'RoyalBlue3'],
+\ ['black',       'SeaGreen3'],
+\ ['darkmagenta', 'DarkOrchid3'],
+\ ['Darkblue',    'firebrick3'],
+\ ['darkgreen',   'RoyalBlue3'],
+\ ['darkcyan',    'SeaGreen3'],
+\ ['darkred',     'DarkOrchid3'],
+\ ['red',         'firebrick3'],
+\ ]
 let g:rbpt_max = 16
 let g:rbpt_loadcmd_toggle = 0
 au VimEnter * RainbowParenthesesToggle
@@ -788,8 +807,8 @@ nnoremap <Leader>s :call ToggleErrors()<cr>
 " }}}
 
 " tagbar {{{
-nmap <silent> <F9> :TagbarToggle <CR>
-nmap <silent> <leader>tb :TagbarToggle <CR>
+nmap <silent> <F9> :TagbarToggle <cr>
+nmap <silent> <leader>tb :TagbarToggle <cr>
 let g:tagbar_autofocus = 1
 let g:tagbar_width = 30
 " }}}
@@ -807,8 +826,8 @@ let g:airline_powerline_fonts=1
 " }}}
 
 " vim-buftabline {{{
-nnoremap <Tab>   :bnext<CR>
-nnoremap <S-Tab> :bprev<CR>
+nnoremap <Tab>   :bnext<cr>
+nnoremap <S-Tab> :bprev<cr>
 let g:buftabline_show       = 1
 let g:buftabline_numbers    = 1
 let g:buftabline_indicators = 1
@@ -823,8 +842,8 @@ let g:clang_format#style_options = {
     \ "AlwaysBreakTemplateDeclarations" : "true",
     \ "Standard" : "C++11"}
 " map to <Leader>f in C++ code
-autocmd FileType c,cpp,objc nnoremap <buffer><Leader>f :ClangFormat<CR>
-autocmd FileType c,cpp,objc vnoremap <buffer><Leader>f :ClangFormat<CR>
+autocmd FileType c,cpp,objc nnoremap <buffer><Leader>f :ClangFormat<cr>
+autocmd FileType c,cpp,objc vnoremap <buffer><Leader>f :ClangFormat<cr>
 " }}}
 
 " vim-commentary {{{
@@ -960,9 +979,9 @@ map <leader><space> :FixWhitespace<cr>
 " }}}
 
 " YouCompleteMe {{{
-nnoremap <leader>df :YcmCompleter GoToDefinitionElseDeclaration<CR>
-nnoremap <F5> :YcmDiags<CR>
-" nnoremap <F5> :YcmForceCompileAndDiagnostics<CR>
+nnoremap <leader>df :YcmCompleter GoToDefinitionElseDeclaration<cr>
+nnoremap <F5> :YcmDiags<cr>
+" nnoremap <F5> :YcmForceCompileAndDiagnostics<cr>
 " let g:ycm_global_ycm_extra_conf='~/.ycm_extra_conf.py'
 " Do not ask when starting vim
 let g:ycm_confirm_extra_conf=0
@@ -979,5 +998,4 @@ inoremap <leader>, <C-x><C-o>
 " }}}
 "
 " }}}
-
 
