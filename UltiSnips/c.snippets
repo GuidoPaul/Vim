@@ -24,25 +24,11 @@ int main(int, char *[]) {
 }
 endsnippet
 
-############################
-# Header statement
-############################
-# snippet inc "#include local header (inc)"
-# #include "${0}"
-# endsnippet
-#
-# snippet Inc "#include <> (Inc)"
-# #include <${0}>
-# endsnippet
-
-############################
-# Structure statement
-############################
 ## Iteration
+# for
 snippet for "for loop (for)"
 for (${2:i} = ${3:0}; $2 < ${1:count}; ${4:++$2}) {
 	${VISUAL}${0}
 }
 endsnippet
-##
 

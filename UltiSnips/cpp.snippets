@@ -4,6 +4,13 @@ priority 0
 #                         Uesr TextMate Snippets                          #
 ###########################################################################
 
+
+## Preprocessor
+# #include <...>
+snippet inc
+#include <${1:iostream}>
+endsnippet
+
 ## Input/Output
 snippet cout
 cout << ${1} << endl;
@@ -31,4 +38,9 @@ public:
 private:
 	${0:/* data */}
 };
+endsnippet
+
+## Debug
+snippet out
+#define out(x) (std::cout << std::boolalpha << #x << ": " << (x) << " [" << __FILE__ << "] [" << __FUNCTION__ << "] [" << __LINE__ << "]" << std::endl)
 endsnippet
