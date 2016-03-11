@@ -567,7 +567,9 @@ elseif &filetype == 'go'
     exec "!go build %"
     exec "!time ./%<"
 elseif &filetype == 'mkd'
-    exec "!pandoc --latex-engine=xelatex % -o %<.pdf -V mainfont='YaHei Consolas Hybrid'"
+    " exec \"!pandoc --latex-engine=xelatex % -o %<.pdf -V mainfont='YaHei Consolas Hybrid'"
+    exec "!tocmd_local -f %"
+    exec "!firefox preview/%.html"
 elseif &filetype == 'asm'
     exec "!as -o %<.o % && ld -s -o %< %<.o"
     exec "!time ./%<"
