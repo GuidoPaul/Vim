@@ -40,6 +40,7 @@ Plugin 'junegunn/vim-easy-align'
 Plugin 'easymotion/vim-easymotion'
 Plugin 'tommcdo/vim-exchange'
 Plugin 'terryma/vim-expand-region'
+Plugin 'fatih/vim-go'
 Plugin 'suan/vim-instant-markdown'
 Plugin 'pangloss/vim-javascript'
 Plugin 'plasticboy/vim-markdown'
@@ -259,10 +260,10 @@ set noswapfile
 autocmd FocusLost * :silent! wall
 
 " set custom file types I've configured
-au BufRead,BufNewFile *.{md,mdown,mkd,mkdn,markdown,mdwn}   set filetype=mkd
-au BufRead,BufNewFile *.{html,htm}  set filetype=html
-au BufRead,BufNewFile *.{go}        set filetype=go
-au BufRead,BufNewFile *.{js}        set filetype=javascript
+autocmd BufRead,BufNewFile *.{md,mdown,mkd,mkdn,markdown,mdwn}   set filetype=mkd
+autocmd BufRead,BufNewFile *.{html,htm}  set filetype=html
+autocmd BufRead,BufNewFile *.{go}        set filetype=go
+autocmd BufRead,BufNewFile *.{js}        set filetype=javascript
 
 " initialize the new file title
 autocmd BufNewFile *.cpp,*.[ch],*.sh,*.java,*.py exec ":call SetTitle()"
@@ -322,8 +323,8 @@ nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<cr>
 
 " Vim fold
 augroup ft_vim
-au!
-au FileType vim setlocal foldmethod=marker
+autocmd!
+autocmd FileType vim setlocal foldmethod=marker
 augroup END
 
 " Resize splits when the window is resized
@@ -360,6 +361,10 @@ nmap w= :resize   +3<cr>
 nmap w- :resize   -3<cr>
 nmap w, :vertical resize -5<cr>
 nmap w. :vertical resize +5<cr>
+
+" Set new window position
+set splitright
+set splitbelow
 
 " Close the current buffer
 map <leader>bd :Bclose<cr>
@@ -557,8 +562,10 @@ elseif &filetype == 'python'
 elseif &filetype == 'html'
     exec "!firefox % &"
 elseif &filetype == 'go'
-    exec "!go build %<"
-    exec "!time go run %"
+    " exec \"!go build %<"
+    " exec \"!time go run %"
+    exec "!go build %"
+    exec "!time ./%<"
 elseif &filetype == 'mkd'
     exec "!pandoc --latex-engine=xelatex % -o %<.pdf -V mainfont='YaHei Consolas Hybrid'"
 elseif &filetype == 'asm'
@@ -705,12 +712,12 @@ let g:ctrlp_follow_symlinks=1
 " delimitMate {{{
 " Provides insert mode auto-completion for quotes, parens, brackets, etc
 " Especially the pointed brackets (oh my god)
-au FileType python let b:delimitMate_nesting_quotes = ['"']
-au FileType c,cpp,objc let b:delimitMate_jump_expansion = 1
-au FileType c,cpp,objc let b:delimitMate_expand_cr = 2
-au FileType c,cpp,objc let b:delimitMate_expand_space = 1
-" au FileType c,cpp,objc let b:delimitMate_matchpairs = "(:),[:],{:},<:>"
-au FileType c,cpp,objc let b:delimitMate_matchpairs = "(:),[:],{:}"
+autocmd FileType python let b:delimitMate_nesting_quotes = ['"']
+autocmd FileType c,cpp,objc let b:delimitMate_jump_expansion = 1
+autocmd FileType c,cpp,objc let b:delimitMate_expand_cr = 2
+autocmd FileType c,cpp,objc let b:delimitMate_expand_space = 1
+" autocmd FileType c,cpp,objc let b:delimitMate_matchpairs = "(:),[:],{:},<:>"
+autocmd FileType c,cpp,objc let b:delimitMate_matchpairs = "(:),[:],{:}"
 " }}}
 
 " gundo.vim {{{
@@ -778,10 +785,10 @@ let g:rbpt_colorpairs = [
 \ ]
 let g:rbpt_max = 16
 let g:rbpt_loadcmd_toggle = 0
-au VimEnter * RainbowParenthesesToggle
-au Syntax   * RainbowParenthesesLoadRound
-au Syntax   * RainbowParenthesesLoadSquare
-au Syntax   * RainbowParenthesesLoadBraces
+autocmd VimEnter * RainbowParenthesesToggle
+autocmd Syntax   * RainbowParenthesesLoadRound
+autocmd Syntax   * RainbowParenthesesLoadSquare
+autocmd Syntax   * RainbowParenthesesLoadBraces
 " }}}
 
 " syntastic {{{
@@ -887,6 +894,24 @@ map <Leader><leader>. <Plug>(easymotion-repeat)
 " vim-expand-region {{{
 map v <Plug>(expand_region_expand)
 map V <Plug>(expand_region_shrink)
+" }}}
+
+" vim-go {{{
+autocmd FileType go nnoremap <buffer>go :GoRun<cr>
+autocmd FileType go nmap <Leader>f :GoFmt<cr>
+autocmd FileType go nmap <Leader>i :GoImports<cr>
+" autocmd FileType go nmap s (go-implements)
+" autocmd FileType go nmap i (go-info)
+" autocmd FileType go nmap gd (go-doc)
+" autocmd FileType go nmap gv (go-doc-vertical)
+" autocmd FileType go nmap r (go-run)
+" autocmd FileType go nmap b (go-build)
+" autocmd FileType go nmap t (go-test)
+" autocmd FileType go nmap c (go-coverage)
+" autocmd FileType go nmap ds (go-def-split)
+" autocmd FileType go nmap dv (go-def-vertical)
+" autocmd FileType go nmap dt (go-def-tab)
+" autocmd FileType go nmap e (go-rename)
 " }}}
 
 " vim-markdown {{{
