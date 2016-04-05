@@ -14,7 +14,7 @@ call vundle#begin()
 "call vundle#begin('~/some/path/here')
 
 " let Vundle manage Vundle, required
-Plugin 'gmarik/Vundle.vim'
+Plugin 'VundleVim/Vundle.vim'
 
 " My plugin here:
 " Keep Plugin commands between vundle#begin/end.
@@ -33,8 +33,8 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
 Plugin 'majutsushi/tagbar'
 Plugin 'SirVer/ultisnips'
-Plugin 'bling/vim-airline'
-Plugin 'ap/vim-buftabline'
+Plugin 'vim-airline/vim-airline'
+" Plugin 'ap/vim-buftabline'
 Plugin 'rhysd/vim-clang-format'
 Plugin 'junegunn/vim-easy-align'
 Plugin 'easymotion/vim-easymotion'
@@ -568,7 +568,7 @@ elseif &filetype == 'go'
     exec "!time ./%<"
 elseif &filetype == 'mkd'
     " exec \"!pandoc --latex-engine=xelatex % -o %<.pdf -V mainfont='YaHei Consolas Hybrid'"
-    exec "!tocmd_local -f %"
+    exec "!tocmd_conf -f %"
     exec "!firefox preview/%.html"
 elseif &filetype == 'asm'
     exec "!as -o %<.o % && ld -s -o %< %<.o"
@@ -831,7 +831,9 @@ let g:UltiSnipsSnippetDirectories=["UltiSnips"]
 
 " vim-airline {{{
 let g:airline_powerline_fonts=1
-" let g:airline#extensions#tabline#enabled=1
+let g:airline#extensions#tabline#enabled=1
+nnoremap <Tab>   :bnext<cr>
+nnoremap <S-Tab> :bprev<cr>
 " }}}
 
 " vim-buftabline {{{
