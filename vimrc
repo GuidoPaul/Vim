@@ -217,8 +217,8 @@ endtry
 
 " Set extra options when running in GUI mode
 if has("gui_running")
-    colorscheme solarized
-	" colorscheme molokai
+    " colorscheme solarized
+	colorscheme molokai
     " colorscheme dracula
     " colorscheme desert
 	" colorscheme blackboard
@@ -568,8 +568,8 @@ elseif &filetype == 'go'
     exec "!time ./%<"
 elseif &filetype == 'mkd'
     " exec \"!pandoc --latex-engine=xelatex % -o %<.pdf -V mainfont='YaHei Consolas Hybrid'"
-    exec "!tocmd_conf -f %"
-    exec "!firefox preview/%.html"
+    exec "!tocmd_local -f %"
+    exec "!google-chrome-stable preview/%.html"
 elseif &filetype == 'asm'
     exec "!as -o %<.o % && ld -s -o %< %<.o"
     exec "!time ./%<"
