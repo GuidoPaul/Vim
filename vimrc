@@ -39,7 +39,7 @@ Plugin 'rhysd/vim-clang-format'
 Plugin 'junegunn/vim-easy-align'
 Plugin 'easymotion/vim-easymotion'
 Plugin 'tommcdo/vim-exchange'
-Plugin 'terryma/vim-expand-region'
+" Plugin 'terryma/vim-expand-region'
 Plugin 'fatih/vim-go'
 Plugin 'suan/vim-instant-markdown'
 Plugin 'pangloss/vim-javascript'
@@ -221,8 +221,6 @@ if has("gui_running")
 	colorscheme molokai
     " colorscheme dracula
     " colorscheme desert
-	" colorscheme blackboard
-	" colorscheme ron
     set guioptions=""
     set t_Co=256
     set guitablabel=%M\ %t
@@ -569,7 +567,7 @@ elseif &filetype == 'go'
 elseif &filetype == 'mkd'
     " exec \"!pandoc --latex-engine=xelatex % -o %<.pdf -V mainfont='YaHei Consolas Hybrid'"
     exec "!tocmd_local -f %"
-    exec "!google-chrome-stable preview/%.html"
+    " exec "!google-chrome-stable preview/%.html"
 elseif &filetype == 'asm'
     exec "!as -o %<.o % && ld -s -o %< %<.o"
     exec "!time ./%<"
@@ -896,8 +894,8 @@ map <Leader><leader>. <Plug>(easymotion-repeat)
 " }}}
 
 " vim-expand-region {{{
-map v <Plug>(expand_region_expand)
-map V <Plug>(expand_region_shrink)
+" map v <Plug>(expand_region_expand)
+" map V <Plug>(expand_region_shrink)
 " }}}
 
 " vim-go {{{
@@ -1013,12 +1011,12 @@ nnoremap <F5> :YcmDiags<cr>
 " nnoremap <F5> :YcmForceCompileAndDiagnostics<cr>
 " let g:ycm_global_ycm_extra_conf='~/.ycm_extra_conf.py'
 " Do not ask when starting vim
-let g:ycm_confirm_extra_conf=0
-let g:ycm_complete_in_comments=1
-let g:syntastic_always_populate_loc_list=1
-let g:ycm_min_num_of_chars_for_completion=1
-let g:ycm_cache_omnifunc=0
-let g:ycm_seed_identifiers_with_syntax=1
+let g:ycm_confirm_extra_conf              = 0
+let g:ycm_complete_in_comments            = 1
+let g:syntastic_always_populate_loc_list  = 1
+let g:ycm_min_num_of_chars_for_completion = 1
+let g:ycm_cache_omnifunc                  = 0
+let g:ycm_seed_identifiers_with_syntax    = 1
 set completeopt-=preview
 inoremap <leader>, <C-x><C-o>
 " let g:ycm_collect_identifiers_from_tags_files=1
