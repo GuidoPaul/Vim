@@ -75,6 +75,9 @@ let g:mapleader = ";"
 " Fast saving
 nmap <leader>w :w!<cr>
 
+" Fast quit
+nmap <leader>q :q!<cr>
+
 " :W sudo saves the file
 " (useful for handling the permission-denied error)
 command W w !sudo tee % > /dev/null
@@ -690,6 +693,8 @@ let g:indentLine_color_term = 239
 let g:indentLine_color_gui = '#09AA08'
 let g:indentLine_char = '┊'
 " let g:indentLine_char = '⇢'
+" let g:indentLine_concealcursor = ''
+" let g:indentLine_conceallevel = 2
 " }}}
 
 " javacomplete {{{
