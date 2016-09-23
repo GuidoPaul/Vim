@@ -934,7 +934,7 @@ map <leader><space> :FixWhitespace<cr>
 nnoremap <leader>df :YcmCompleter GoToDefinitionElseDeclaration<cr>
 nnoremap <F5> :YcmDiags<cr>
 " nnoremap <F5> :YcmForceCompileAndDiagnostics<cr>
-" let g:ycm_global_ycm_extra_conf='~/.ycm_extra_conf.py'
+let g:ycm_global_ycm_extra_conf='~/Code/.ycm_extra_conf.py'
 " Do not ask when starting vim
 let g:ycm_confirm_extra_conf              = 0
 let g:ycm_complete_in_comments            = 1
