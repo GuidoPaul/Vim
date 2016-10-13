@@ -202,13 +202,15 @@ if has("gui_running")
     set guioptions=""
     set t_Co=256
     set guitablabel=%M\ %t
-    if has("gui_gtk2")
-        set guifont=Consolas\ 13.5
-        set guifontwide=YaHei\ Consolas\ Hybrid\ 12
-    else
-        set guifont=Consolas:h13.5
-        set guifontwide=YaHei\ Consolas\ Hybrid:h12
-    endif
+    " if has("gui_gtk2")
+    "     set guifont=Consolas\ 13.5
+    "     set guifontwide=YaHei\ Consolas\ Hybrid\ 12
+    " else
+    "     set guifont=Consolas:h13.5
+    "     set guifontwide=YaHei\ Consolas\ Hybrid:h12
+    " endif
+    set guifont=Consolas\ 13.5
+    set guifontwide=YaHei\ Consolas\ Hybrid\ 12
 endif
 
 " Set utf8 as standard encoding and en_US as the standard language
