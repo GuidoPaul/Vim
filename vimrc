@@ -9,6 +9,7 @@ set nocompatible              " be iMproved, required
 call plug#begin('~/.vim/plugged')
 
 Plug 'mileszs/ack.vim'
+Plug 'vim-scripts/BufOnly.vim'
 Plug 'kien/ctrlp.vim'
 Plug 'Raimondi/delimitMate'
 Plug 'sjl/gundo.vim'
@@ -19,6 +20,7 @@ Plug 'scrooloose/syntastic'
 Plug 'majutsushi/tagbar'
 Plug 'SirVer/ultisnips'
 Plug 'vim-airline/vim-airline'
+Plug 'tell-k/vim-autopep8'
 Plug 'rhysd/vim-clang-format'
 Plug 'junegunn/vim-easy-align'
 Plug 'easymotion/vim-easymotion'
@@ -33,6 +35,8 @@ Plug 'kshenoy/vim-signature'
 Plug 'honza/vim-snippets'
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'Valloric/YouCompleteMe'
+
+Plug 'mindriot101/vim-yapf'
 
 " tpope's awesome vim plugins
 Plug 'tpope/vim-commentary'
@@ -329,7 +333,7 @@ map <C-l> <C-w>l
 " Close the current buffer
 map <leader>bd :Bclose<cr>
 
-" Close all the buffers
+" Close all buffers
 map <leader>ba :1,1000 bd!<cr>
 
 nnoremap <Tab>   :bnext<cr>
@@ -526,6 +530,8 @@ function! CompileAndRun()
         exec "!time bash %"
     elseif &filetype == 'python'
         exec "!time python %"
+    elseif &filetype == 'matlab'
+        exec "!time runmatlab.sh %"
     elseif &filetype == 'html'
         exec "!firefox % &"
     elseif &filetype == 'go'
@@ -655,6 +661,11 @@ map <leader>n :cn<cr>
 
 " To go to the previous search result
 map <leader>p :cp<cr>
+" }}}
+
+" BufOnly.vim {{{
+" Close all buffers but this one
+map <leader>bo :Bufonly<cr>
 " }}}
 
 " ctrlp.vim {{{
@@ -788,6 +799,11 @@ let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 nnoremap <Tab>   :bnext<cr>
 nnoremap <S-Tab> :bprev<cr>
+" }}}
+
+" vim-autopep8 {{{
+" default key is F8
+let g:autopep8_disable_show_diff = 1
 " }}}
 
 " vim-clang-format {{{
@@ -948,3 +964,6 @@ inoremap <leader>, <C-x><C-o>
 " }}}
 "
 " }}}
+
+let g:yapf_style = "pep8"       " 设置主题为'pep8' or 'google'
+nnoremap <leader>y :call Yapf()<cr>   " 设置格式化快捷键为 ',y'
