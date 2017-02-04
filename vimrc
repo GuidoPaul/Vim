@@ -20,8 +20,7 @@ Plug 'scrooloose/syntastic'
 Plug 'majutsushi/tagbar'
 Plug 'SirVer/ultisnips'
 Plug 'vim-airline/vim-airline'
-Plug 'tell-k/vim-autopep8'
-Plug 'rhysd/vim-clang-format'
+Plug 'rhysd/vim-clang-format'  " want to delete
 Plug 'junegunn/vim-easy-align'
 Plug 'easymotion/vim-easymotion'
 Plug 'tommcdo/vim-exchange'
@@ -36,7 +35,10 @@ Plug 'honza/vim-snippets'
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'Valloric/YouCompleteMe'
 
-Plug 'mindriot101/vim-yapf'
+" google plugins
+Plug 'google/vim-maktaba'
+Plug 'google/vim-codefmt'
+Plug 'google/vim-glaive'
 
 " tpope's awesome vim plugins
 Plug 'tpope/vim-commentary'
@@ -51,10 +53,12 @@ Plug 'nelstrom/vim-blackboard'
 Plug 'altercation/vim-colors-solarized'
 
 " plugin from http://vim-scripts.org/vim/scripts.html
-Plug 'javacomplete'
+Plug 'javacomplete' " want to delete
 " ...
 
 call plug#end()
+" google plugins end, should after the 'call plug#end()'
+call glaive#Install()
 "
 " }}}
 
@@ -710,13 +714,6 @@ let g:indentLine_char = '┊'
 " let g:indentLine_conceallevel = 2
 " }}}
 
-" javacomplete {{{
-autocmd Filetype java set omnifunc=javacomplete#Complete
-autocmd FileType java,javascript,jsp inoremap <buffer> . .<C-X><C-O><C-P><Down>
-" autocmd FileType java setlocal completefunc=javacomplete#CompleteParamsInfo
-" autocmd FileType java inoremap <buffer> . .<C-X><C-O><C-P>
-" }}}
-
 " nerdtree {{{
 let NERDChristmasTree=1
 let NERDTreeMinimalUI=1
@@ -729,33 +726,6 @@ map <leader>nb :NERDTreeFromBookmark
 map <leader>nf :NERDTreeFind<cr>
 autocmd vimenter * if !argc() | NERDTree | endif
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
-" }}}
-
-" rainbow_parentheses.vim {{{
-let g:rbpt_colorpairs = [
-\ ['brown',       'RoyalBlue3'],
-\ ['Darkblue',    'SeaGreen3'],
-\ ['darkgray',    'DarkOrchid3'],
-\ ['darkgreen',   'firebrick3'],
-\ ['darkcyan',    'RoyalBlue3'],
-\ ['darkred',     'SeaGreen3'],
-\ ['darkmagenta', 'DarkOrchid3'],
-\ ['brown',       'firebrick3'],
-\ ['gray',        'RoyalBlue3'],
-\ ['black',       'SeaGreen3'],
-\ ['darkmagenta', 'DarkOrchid3'],
-\ ['Darkblue',    'firebrick3'],
-\ ['darkgreen',   'RoyalBlue3'],
-\ ['darkcyan',    'SeaGreen3'],
-\ ['darkred',     'DarkOrchid3'],
-\ ['red',         'firebrick3'],
-\ ]
-let g:rbpt_max = 16
-let g:rbpt_loadcmd_toggle = 0
-autocmd VimEnter * RainbowParenthesesToggle
-autocmd Syntax   * RainbowParenthesesLoadRound
-autocmd Syntax   * RainbowParenthesesLoadSquare
-autocmd Syntax   * RainbowParenthesesLoadBraces
 " }}}
 
 " syntastic {{{
@@ -801,11 +771,6 @@ nnoremap <Tab>   :bnext<cr>
 nnoremap <S-Tab> :bprev<cr>
 " }}}
 
-" vim-autopep8 {{{
-" default key is F8
-let g:autopep8_disable_show_diff = 1
-" }}}
-
 " vim-clang-format {{{
 let g:clang_format#style_options = {
     \ "AccessModifierOffset" : -4,
@@ -816,13 +781,6 @@ let g:clang_format#style_options = {
 " map to <Leader>f in C++ code
 autocmd FileType c,cpp,objc nnoremap <buffer><Leader>f :ClangFormat<cr>
 autocmd FileType c,cpp,objc vnoremap <buffer><Leader>f :ClangFormat<cr>
-" }}}
-
-" vim-commentary {{{
-autocmd FileType cmake setlocal commentstring=#\ %s
-" '\\\' or 'gcc':  Comment a line in normal mode
-" 'gc': Comment a line in Visual mode
-" 'gcap': Comment a Paragraph
 " }}}
 
 " vim-easy-align {{{
@@ -895,6 +853,46 @@ let g:multi_cursor_quit_key='<Esc>'
 " m<space>  " Remove all markers
 " }}}
 
+" vim-trailing-whitespace {{{
+map <leader><space> :FixWhitespace<cr>
+" }}}
+
+" YouCompleteMe {{{
+nnoremap <leader>df :YcmCompleter GoToDefinitionElseDeclaration<cr>
+nnoremap <F5> :YcmDiags<cr>
+" nnoremap <F5> :YcmForceCompileAndDiagnostics<cr>
+let g:ycm_global_ycm_extra_conf='~/Code/.ycm_extra_conf.py'
+" Do not ask when starting vim
+let g:ycm_confirm_extra_conf              = 0
+let g:ycm_complete_in_comments            = 1
+let g:syntastic_always_populate_loc_list  = 1
+let g:ycm_min_num_of_chars_for_completion = 1
+let g:ycm_cache_omnifunc                  = 0
+let g:ycm_seed_identifiers_with_syntax    = 1
+inoremap <leader>, <C-x><C-o>
+" }}}
+
+" vim-codefmt {{{
+augroup autoformat_settings
+  autocmd FileType bzl AutoFormatBuffer buildifier
+  autocmd FileType c,cpp,proto,javascript AutoFormatBuffer clang-format
+  autocmd FileType dart AutoFormatBuffer dartfmt
+  autocmd FileType go AutoFormatBuffer gofmt
+  autocmd FileType gn AutoFormatBuffer gn
+  autocmd FileType html,css,json AutoFormatBuffer js-beautify
+  autocmd FileType java AutoFormatBuffer google-java-format
+  autocmd FileType python AutoFormatBuffer yapf
+  " Alternative: autocmd FileType python AutoFormatBuffer autopep8
+augroup END
+" }}}
+
+" vim-commentary {{{
+autocmd FileType cmake setlocal commentstring=#\ %s
+" '\\\' or 'gcc':  Comment a line in normal mode
+" 'gc': Comment a line in Visual mode
+" 'gcap': Comment a Paragraph
+" }}}
+
 " vim-surround {{{
 " 1.change
 "      Text         Command      New Text
@@ -944,26 +942,39 @@ let g:multi_cursor_quit_key='<Esc>'
 " <CTRL-g>S - same as <CTRL-s><CTRL-s>
 " }}}
 
-" vim-trailing-whitespace {{{
-map <leader><space> :FixWhitespace<cr>
+" rainbow_parentheses.vim {{{
+let g:rbpt_colorpairs = [
+\ ['brown',       'RoyalBlue3'],
+\ ['Darkblue',    'SeaGreen3'],
+\ ['darkgray',    'DarkOrchid3'],
+\ ['darkgreen',   'firebrick3'],
+\ ['darkcyan',    'RoyalBlue3'],
+\ ['darkred',     'SeaGreen3'],
+\ ['darkmagenta', 'DarkOrchid3'],
+\ ['brown',       'firebrick3'],
+\ ['gray',        'RoyalBlue3'],
+\ ['black',       'SeaGreen3'],
+\ ['darkmagenta', 'DarkOrchid3'],
+\ ['Darkblue',    'firebrick3'],
+\ ['darkgreen',   'RoyalBlue3'],
+\ ['darkcyan',    'SeaGreen3'],
+\ ['darkred',     'DarkOrchid3'],
+\ ['red',         'firebrick3'],
+\ ]
+let g:rbpt_max = 16
+let g:rbpt_loadcmd_toggle = 0
+autocmd VimEnter * RainbowParenthesesToggle
+autocmd Syntax   * RainbowParenthesesLoadRound
+autocmd Syntax   * RainbowParenthesesLoadSquare
+autocmd Syntax   * RainbowParenthesesLoadBraces
 " }}}
 
-" YouCompleteMe {{{
-nnoremap <leader>df :YcmCompleter GoToDefinitionElseDeclaration<cr>
-nnoremap <F5> :YcmDiags<cr>
-" nnoremap <F5> :YcmForceCompileAndDiagnostics<cr>
-let g:ycm_global_ycm_extra_conf='~/Code/.ycm_extra_conf.py'
-" Do not ask when starting vim
-let g:ycm_confirm_extra_conf              = 0
-let g:ycm_complete_in_comments            = 1
-let g:syntastic_always_populate_loc_list  = 1
-let g:ycm_min_num_of_chars_for_completion = 1
-let g:ycm_cache_omnifunc                  = 0
-let g:ycm_seed_identifiers_with_syntax    = 1
-inoremap <leader>, <C-x><C-o>
+" javacomplete {{{
+autocmd Filetype java set omnifunc=javacomplete#Complete
+autocmd FileType java,javascript,jsp inoremap <buffer> . .<C-X><C-O><C-P><Down>
+" autocmd FileType java setlocal completefunc=javacomplete#CompleteParamsInfo
+" autocmd FileType java inoremap <buffer> . .<C-X><C-O><C-P>
 " }}}
+
 "
 " }}}
-
-let g:yapf_style = "pep8"       " 设置主题为'pep8' or 'google'
-nnoremap <leader>y :call Yapf()<cr>   " 设置格式化快捷键为 ',y'
