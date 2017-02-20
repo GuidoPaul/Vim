@@ -14,6 +14,7 @@ Plug 'kien/ctrlp.vim'
 Plug 'Raimondi/delimitMate'
 Plug 'sjl/gundo.vim'
 Plug 'Yggdroot/indentLine'
+Plug 'davidhalter/jedi-vim'
 Plug 'PotatoesMaster/i3-vim-syntax'
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/syntastic'
@@ -738,7 +739,7 @@ let g:syntastic_enable_highlighting=1
 " pep8    code: http://pep8.readthedocs.org/en/latest/intro.html#error-codes
 " pylint codes: http://pylint-messages.wikidot.com/all-codes
 let g:syntastic_python_checkers=['pyflakes', 'pep8']
-let g:syntastic_python_pep8_args='--ignore=E501,E225'
+let g:syntastic_python_pep8_args='--ignore=E501,E225,E129'
 
 let g:syntastic_javascript_checkers = ['jsl', 'jshint']
 let g:syntastic_html_checkers=['tidy', 'jshint']
@@ -978,3 +979,4 @@ autocmd FileType java,javascript,jsp inoremap <buffer> . .<C-X><C-O><C-P><Down>
 
 "
 " }}}
+
