@@ -26,7 +26,9 @@ Plug 'junegunn/vim-easy-align'
 Plug 'easymotion/vim-easymotion'
 Plug 'tommcdo/vim-exchange'
 Plug 'terryma/vim-expand-region'
+Plug 'fatih/vim-go'
 Plug 'suan/vim-instant-markdown'
+Plug 'pangloss/vim-javascript'
 Plug 'plasticboy/vim-markdown'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'kshenoy/vim-signature'
@@ -46,7 +48,14 @@ Plug 'tpope/vim-repeat'
 
 " color scheme
 Plug 'crusoexia/vim-dracula'
+Plug 'tomasr/molokai'
 Plug 'kien/rainbow_parentheses.vim'
+Plug 'nelstrom/vim-blackboard'
+Plug 'altercation/vim-colors-solarized'
+
+" plugin from http://vim-scripts.org/vim/scripts.html
+Plug 'javacomplete' " want to delete
+" ...
 
 call plug#end()
 " google plugins end, should after the 'call plug#end()'
@@ -183,7 +192,11 @@ set background=dark
 set t_Co=256
 
 try
+    " colorscheme solarized
     colorscheme desert
+    " colorscheme molokai
+    " colorscheme blackboard
+    " colorscheme ron
 catch
 endtry
 
@@ -191,6 +204,10 @@ endtry
 if has("gui_running")
     color dracula
     let g:dracula_italic = 1
+    " colorscheme solarized
+    " colorscheme molokai
+    " colorscheme dracula
+    " colorscheme desert
     set guioptions=""
     set t_Co=256
     set guitablabel=%M\ %t
@@ -803,6 +820,17 @@ map <leader>v <Plug>(expand_region_expand)
 map <leader>V <Plug>(expand_region_shrink)
 " }}}
 
+" vim-go {{{
+autocmd FileType go nnoremap <buffer>go :GoRun<cr>
+autocmd FileType go nmap <Leader>f :GoFmt<cr>
+autocmd FileType go nmap <Leader>i :GoImports<cr>
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_structs = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_build_constraints = 1
+" }}}
+
 " vim-markdown {{{
 let g:vim_markdown_folding_disabled=1
 let g:vim_markdown_no_default_key_mappings=1
@@ -848,7 +876,7 @@ inoremap <leader>, <C-x><C-o>
 " vim-codefmt {{{
 augroup autoformat_settings
   autocmd FileType bzl AutoFormatBuffer buildifier
-  " autocmd FileType c,cpp,proto,javascript AutoFormatBuffer clang-format
+  autocmd FileType c,cpp,proto,javascript AutoFormatBuffer clang-format
   autocmd FileType dart AutoFormatBuffer dartfmt
   autocmd FileType go AutoFormatBuffer gofmt
   autocmd FileType gn AutoFormatBuffer gn
@@ -940,6 +968,13 @@ autocmd VimEnter * RainbowParenthesesToggle
 autocmd Syntax   * RainbowParenthesesLoadRound
 autocmd Syntax   * RainbowParenthesesLoadSquare
 autocmd Syntax   * RainbowParenthesesLoadBraces
+" }}}
+
+" javacomplete {{{
+autocmd Filetype java set omnifunc=javacomplete#Complete
+autocmd FileType java,javascript,jsp inoremap <buffer> . .<C-X><C-O><C-P><Down>
+" autocmd FileType java setlocal completefunc=javacomplete#CompleteParamsInfo
+" autocmd FileType java inoremap <buffer> . .<C-X><C-O><C-P>
 " }}}
 
 "
