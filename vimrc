@@ -527,8 +527,8 @@ function! CompileAndRun()
         exec "!time ./%<"
     elseif &filetype == 'markdown'
         " exec \"!pandoc --latex-engine=xelatex % -o %<.pdf -V mainfont='YaHei Consolas Hybrid'"
-        exec "!tocmd_local -f %"
-        " exec \"!google-chrome-stable preview/%.html"
+        exec "!tocmd_conf -f %"
+        exec "!chromium preview/%.html"
     elseif &filetype == 'asm'
         exec "!as -o %<.o % && ld -s -o %< %<.o"
         exec "!time ./%<"
@@ -945,4 +945,3 @@ autocmd Syntax   * RainbowParenthesesLoadBraces
 
 "
 " }}}
-
