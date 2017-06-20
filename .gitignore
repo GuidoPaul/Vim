@@ -1,3 +1,5 @@
 undodir
 spell
 plugged
+autoload/
+bundle/Vundle.vim
