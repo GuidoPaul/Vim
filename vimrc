@@ -528,7 +528,7 @@ function! CompileAndRun()
     elseif &filetype == 'markdown'
         " exec \"!pandoc --latex-engine=xelatex % -o %<.pdf -V mainfont='YaHei Consolas Hybrid'"
         exec "!tocmd_conf -f %"
-        exec "!chromium preview/%.html"
+        exec "!google-chrome-stable preview/%.html"
     elseif &filetype == 'asm'
         exec "!as -o %<.o % && ld -s -o %< %<.o"
         exec "!time ./%<"
@@ -849,12 +849,12 @@ inoremap <leader>, <C-x><C-o>
 " vim-codefmt {{{
 augroup autoformat_settings
   autocmd FileType bzl AutoFormatBuffer buildifier
-  " autocmd FileType c,cpp,proto,javascript AutoFormatBuffer clang-format
+  autocmd FileType c,cpp,proto,javascript AutoFormatBuffer clang-format
   autocmd FileType dart AutoFormatBuffer dartfmt
   autocmd FileType go AutoFormatBuffer gofmt
   autocmd FileType gn AutoFormatBuffer gn
   autocmd FileType html,css,json AutoFormatBuffer js-beautify
-  " autocmd FileType java AutoFormatBuffer google-java-format
+  autocmd FileType java AutoFormatBuffer google-java-format
   autocmd FileType python AutoFormatBuffer yapf
   " Alternative: autocmd FileType python AutoFormatBuffer autopep8
 augroup END
