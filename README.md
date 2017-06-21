@@ -18,14 +18,13 @@ If you have used the vim.
 # Install with:
 
 	$ git clone https://github.com/GuidoPaul/Vim.git ~/.vim
-    $ git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+	$ curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    // $ git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 	$ ln -s ~/.vim/vimrc ~/.vimrc
 
 # Install plugins:
 
-Launch `vim` and run `:PluginInstall`
-
-To install from command line: `vim +PluginInstall +qall`
+Launch `vim` and run `:PlugInstall`
 
 ## About plugins:
 
