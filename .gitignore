@@ -1,4 +1,6 @@
-undodir
+backup
+swap
+undo
 spell
 plugged
 autoload/

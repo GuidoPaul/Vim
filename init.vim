@@ -1,4 +1,4 @@
-" VIM Configuration File
+" Neovim Configuration File
 " Author: GuidoPaul
 "
 
@@ -64,9 +64,6 @@ set history=700
 filetype plugin on
 filetype indent on
 
-" Set to auto read when a file is changed from the outside
-set autoread
-
 " With a map leader it's possible to do extra key combinations
 " like <leader>w saves the current file
 let mapleader = ";"
@@ -118,7 +115,7 @@ set cmdheight=1
 set hidden
 
 " Configure backspace so it acts as it should act
-set backspace=eol,start,indent
+set backspace=indent,eol,start
 set whichwrap+=<,>,h,l
 
 " Have the mouse enabled all the time
@@ -223,9 +220,9 @@ set fileencodings=ucs-bom,utf-8,gb2312,gbk,gb18030,big5,euc-jp,euc-kr,latin1
 " Files, backups, session and undo {{{
 "
 " set local directories
-set backupdir=~/.config/nvim/backups
-set directory=~/.config/nvim/swaps
-set undodir=~/.config/nvim/undodir
+set backupdir=~/.config/nvim/backup
+set directory=~/.config/nvim/swap
+set undodir=~/.config/nvim/undo
 
 " turn backup off, since most stuff is in SVN, git et.c anyway...
 set nobackup
@@ -266,8 +263,9 @@ set shiftwidth=4 " number of spaces to use for autoindenting
 set tabstop=4    " a tab is four spaces
 set copyindent   " copy the previous indentation on autoindenting
 set shiftround   " use multiple of shiftwidth when indenting with '<' and '>'
-set autowrite    " always set autowriteing on
+set autoread     " set to auto read when a file is changed from the outside
 set autoindent   " always set autoindenting on
+set autowrite    " always set autowriteing on
 set smartindent  " always set smartindenting on
 set wrap         " wrap lines
 
