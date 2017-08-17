@@ -1,30 +1,30 @@
-I use pathogen to Manage my `'runtimepath'` with ease and Vundle to management my vim plugins.
-
-You can refer to this link for more information: [Pathogen]( https://github.com/tpope/vim-pathogen  )
-and [Vundle]( https://github.com/gmarik/vundle  )
+I use [vim-plug]( https://github.com/junegunn/vim-plug ) to manage my vim plugins.
 
 # Preparation:
-if you don't have vim, you need to go to install it. For example:
+if you don't have neovim, you need to go to install it. For example:
 
-Install vim-gnome in Debian
+Install `vim-gnome` in Debian.
 
-    $ sudo pacman -S vim gvim
+    $ sudo pacman -S neovim
+    $ sudo pacman -S python-neovim (python support)
+    $ sudo pip install neovim (support UltiSnips and YouCompleteMe)
+    $ sudo pacman -S xclip (support clipboard)
+    // $ sudo pacman -S vim gvim
 
-If you have used the vim.
+If you have used the neovim.
 
-	$ mv ~/.vim ~/.vim_old
-	$ mv ~/.vimrc ~/.vimrc_old
+	$ mv ~/.config/nvim ~/.config/nvim_old
 
 # Install with:
 
-	$ git clone https://github.com/GuidoPaul/Vim.git ~/.vim
-	$ curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+	$ git clone https://github.com/GuidoPaul/Vim.git ~/.config/nvim
+	$ curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     // $ git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-	$ ln -s ~/.vim/vimrc ~/.vimrc
+	// $ ln -s ~/.vim/vimrc ~/.vimrc
 
 # Install plugins:
 
-Launch `vim` and run `:PlugInstall`
+Launch `nvim` and run `:PlugInstall`
 
 ## About plugins:
 
