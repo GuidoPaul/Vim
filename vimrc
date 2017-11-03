@@ -21,6 +21,7 @@ Plug 'scrooloose/syntastic'
 Plug 'majutsushi/tagbar'
 Plug 'SirVer/ultisnips'
 Plug 'vim-airline/vim-airline'
+Plug 'julienr/vim-cellmode'
 Plug 'rhysd/vim-clang-format'
 Plug 'cjrh/vim-conda'
 Plug 'junegunn/vim-easy-align'
@@ -33,7 +34,8 @@ Plug 'terryma/vim-multiple-cursors'
 Plug 'kshenoy/vim-signature'
 Plug 'honza/vim-snippets'
 Plug 'bronson/vim-trailing-whitespace'
-Plug 'Valloric/YouCompleteMe'
+Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer --system-libclang' }
+
 
 " google plugins
 Plug 'google/vim-maktaba'
@@ -64,9 +66,6 @@ set history=700
 " Enable filetype plugins
 filetype plugin on
 filetype indent on
-
-" Set to auto read when a file is changed from the outside
-set autoread
 
 " With a map leader it's possible to do extra key combinations
 " like <leader>w saves the current file
@@ -202,8 +201,8 @@ if has("gui_running")
     "     set guifont=Consolas:h13.5
     "     set guifontwide=YaHei\ Consolas\ Hybrid:h12
     " endif
-    set guifont=Consolas\ 13.5
-    set guifontwide=YaHei\ Consolas\ Hybrid\ 12
+    set guifont=Consolas\ 12
+    set guifontwide=YaHei\ Consolas\ Hybrid\ 11
 endif
 
 " Set utf8 as standard encoding and en_US as the standard language
@@ -243,7 +242,7 @@ map <silent> <leader>ss :wa!<cr>:mksession! Session.vim<cr>
 map <silent> <leader>rs :NERDTreeToggle<cr>:source Session.vim<cr>
 
 " undo
-set undodir=~/.vim/undodir
+set undodir=~/.vim/undo
 set undofile
 set undolevels=1000  " maximum number of changes that can be undone
 set undoreload=10000 " maximum number lines to save for undo on a buffer reload
@@ -264,6 +263,7 @@ set tabstop=4    " a tab is four spaces
 set copyindent   " copy the previous indentation on autoindenting
 set shiftround   " use multiple of shiftwidth when indenting with '<' and '>'
 set autowrite    " always set autowriteing on
+set autoread     " Set to auto read when a file is changed from the outside
 set autoindent   " always set autoindenting on
 set smartindent  " always set smartindenting on
 set wrap         " wrap lines
@@ -757,6 +757,11 @@ nnoremap <Tab>   :bnext<cr>
 nnoremap <S-Tab> :bprev<cr>
 " }}}
 
+" vim-cellmode {{{
+let g:cellmode_default_mappings='0'
+noremap <silent> <C-g> :call RunTmuxPythonCell(1)<CR>
+" }}}
+
 " vim-clang-format {{{
 let g:clang_format#style_options = {
     \ "AccessModifierOffset" : -4,
@@ -946,3 +951,4 @@ autocmd Syntax   * RainbowParenthesesLoadBraces
 
 "
 " }}}
+
