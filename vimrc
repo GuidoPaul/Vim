@@ -17,7 +17,7 @@ Plug 'Yggdroot/indentLine'
 Plug 'davidhalter/jedi-vim'
 Plug 'PotatoesMaster/i3-vim-syntax'
 Plug 'scrooloose/nerdtree'
-Plug 'python-mode/python-mode'
+" Plug 'python-mode/python-mode' # make python caton
 Plug 'scrooloose/syntastic'
 Plug 'majutsushi/tagbar'
 Plug 'SirVer/ultisnips'
@@ -570,8 +570,8 @@ function SetTitle()
     elseif &filetype == 'python'
         call append(0, "#!/usr/bin/env python")
         call append(1, "# -*- coding: utf-8 -*-")
-        call append(2, "# Filename: ".expand("%"))
-        call append(3, "")
+        " call append(2, "# Filename: ".expand("%"))
+        call append(2, "")
     elseif &filetype == 'markdown'
         call append(0, "<head><meta charset=\"UTF-8\"></head>")
     else
