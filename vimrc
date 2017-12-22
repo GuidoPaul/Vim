@@ -29,6 +29,7 @@ Plug 'junegunn/vim-easy-align'
 Plug 'easymotion/vim-easymotion'
 Plug 'tommcdo/vim-exchange'
 Plug 'terryma/vim-expand-region'
+Plug 'fatih/vim-go', { 'do': ':GoInstallBinaries' }
 Plug 'suan/vim-instant-markdown'
 Plug 'plasticboy/vim-markdown'
 Plug 'terryma/vim-multiple-cursors'
@@ -524,8 +525,7 @@ function! CompileAndRun()
     elseif &filetype == 'html'
         exec "!firefox % &"
     elseif &filetype == 'go'
-        exec "!go build %"
-        exec "!time ./%<"
+        exec "!time go run %"
     elseif &filetype == 'markdown'
         " exec \"!pandoc --latex-engine=xelatex % -o %<.pdf -V mainfont='YaHei Consolas Hybrid'"
         exec "!tocmd_conf -f %"
