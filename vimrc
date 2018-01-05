@@ -36,7 +36,7 @@ Plug 'terryma/vim-multiple-cursors'
 Plug 'kshenoy/vim-signature'
 Plug 'honza/vim-snippets'
 Plug 'bronson/vim-trailing-whitespace'
-Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer --system-libclang' }
+Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer --system-libclang --gocode-completer' }
 
 " google plugins
 Plug 'google/vim-maktaba'
