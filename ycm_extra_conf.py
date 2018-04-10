@@ -38,7 +38,7 @@ flags = [
     '-Wall',
     '-Wextra',
     '-Werror',
-    '-Wc++98-compat',
+    # '-Wc++98-compat',
     '-Wno-long-long',
     '-Wno-variadic-macros',
     '-fexceptions',
@@ -82,7 +82,7 @@ flags = [
     '-isystem',
     './tests/gmock/include',
     '-isystem',
-    '/usr/include/c++/6.3.1',
+    '/usr/include/c++/7.3.1',
     '-isystem',
     '/usr/include/opencv2',
 ]
