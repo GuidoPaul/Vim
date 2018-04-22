@@ -724,6 +724,33 @@ let g:pymode_rope_lookup_project = 0
 " let g:pymode_breakpoint_bind = '<leader>b'
 " }}}
 
+" rainbow_parentheses.vim {{{
+let g:rbpt_colorpairs = [
+\ ['brown',       'RoyalBlue3'],
+\ ['Darkblue',    'SeaGreen3'],
+\ ['darkgray',    'DarkOrchid3'],
+\ ['darkgreen',   'firebrick3'],
+\ ['darkcyan',    'RoyalBlue3'],
+\ ['darkred',     'SeaGreen3'],
+\ ['darkmagenta', 'DarkOrchid3'],
+\ ['brown',       'firebrick3'],
+\ ['gray',        'RoyalBlue3'],
+\ ['black',       'SeaGreen3'],
+\ ['darkmagenta', 'DarkOrchid3'],
+\ ['Darkblue',    'firebrick3'],
+\ ['darkgreen',   'RoyalBlue3'],
+\ ['darkcyan',    'SeaGreen3'],
+\ ['darkred',     'DarkOrchid3'],
+\ ['red',         'firebrick3'],
+\ ]
+let g:rbpt_max = 16
+let g:rbpt_loadcmd_toggle = 0
+autocmd VimEnter * RainbowParenthesesToggle
+autocmd Syntax   * RainbowParenthesesLoadRound
+autocmd Syntax   * RainbowParenthesesLoadSquare
+autocmd Syntax   * RainbowParenthesesLoadBraces
+" }}}
+
 " syntastic {{{
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq=0
@@ -782,6 +809,37 @@ let g:clang_format#style_options = {
 " map to <Leader>f in C++ code
 autocmd FileType c,cpp,objc nnoremap <buffer><Leader>f :ClangFormat<cr>
 autocmd FileType c,cpp,objc vnoremap <buffer><Leader>f :ClangFormat<cr>
+" }}}
+
+" vim-codefmt {{{
+if exists("*glaive#Install")
+  call glaive#Install()
+  " Optional: Enable codefmt's default mappings on the <Leader>= prefix.
+  Glaive codefmt plugin[mappings]
+  Glaive codefmt clang_format_style=Google
+endif
+augroup autoformat_settings
+  autocmd FileType bzl AutoFormatBuffer buildifier
+  autocmd FileType c,cpp,proto,javascript AutoFormatBuffer clang-format
+  autocmd FileType dart AutoFormatBuffer dartfmt
+  autocmd FileType go AutoFormatBuffer gofmt
+  autocmd FileType gn AutoFormatBuffer gn
+  autocmd FileType html,css,json AutoFormatBuffer js-beautify
+  autocmd FileType java AutoFormatBuffer google-java-format
+  autocmd FileType python AutoFormatBuffer yapf
+  " Alternative: autocmd FileType python AutoFormatBuffer autopep8
+augroup END
+" }}}
+
+" vim-commentary {{{
+autocmd FileType cmake setlocal commentstring=#\ %s
+" '\\\' or 'gcc':  Comment a line in normal mode
+" 'gc': Comment a line in Visual mode
+" 'gcap': Comment a Paragraph
+" }}}
+
+" vim-conda {{{
+let g:conda_startup_msg_suppress = 1
 " }}}
 
 " vim-easy-align {{{
@@ -843,52 +901,6 @@ let g:multi_cursor_quit_key='<Esc>'
 " m<space>  " Remove all markers
 " }}}
 
-" vim-trailing-whitespace {{{
-map <leader><space> :FixWhitespace<cr>
-" }}}
-
-" YouCompleteMe {{{
-nnoremap <leader>df :YcmCompleter GoToDefinitionElseDeclaration<cr>
-nnoremap <F5> :YcmDiags<cr>
-" nnoremap <F5> :YcmForceCompileAndDiagnostics<cr>
-let g:ycm_global_ycm_extra_conf='~/.vim/ycm_extra_conf.py'
-" Do not ask when starting vim
-let g:ycm_confirm_extra_conf              = 0
-let g:ycm_complete_in_comments            = 1
-let g:syntastic_always_populate_loc_list  = 1
-let g:ycm_min_num_of_chars_for_completion = 1
-let g:ycm_cache_omnifunc                  = 0
-let g:ycm_seed_identifiers_with_syntax    = 1
-inoremap <leader>, <C-x><C-o>
-" }}}
-
-" vim-codefmt {{{
-if exists("*glaive#Install")
-  call glaive#Install()
-  " Optional: Enable codefmt's default mappings on the <Leader>= prefix.
-  Glaive codefmt plugin[mappings]
-  Glaive codefmt clang_format_style=Google
-endif
-augroup autoformat_settings
-  autocmd FileType bzl AutoFormatBuffer buildifier
-  autocmd FileType c,cpp,proto,javascript AutoFormatBuffer clang-format
-  autocmd FileType dart AutoFormatBuffer dartfmt
-  autocmd FileType go AutoFormatBuffer gofmt
-  autocmd FileType gn AutoFormatBuffer gn
-  autocmd FileType html,css,json AutoFormatBuffer js-beautify
-  autocmd FileType java AutoFormatBuffer google-java-format
-  autocmd FileType python AutoFormatBuffer yapf
-  " Alternative: autocmd FileType python AutoFormatBuffer autopep8
-augroup END
-" }}}
-
-" vim-commentary {{{
-autocmd FileType cmake setlocal commentstring=#\ %s
-" '\\\' or 'gcc':  Comment a line in normal mode
-" 'gc': Comment a line in Visual mode
-" 'gcap': Comment a Paragraph
-" }}}
-
 " vim-surround {{{
 " 1.change
 "      Text         Command      New Text
@@ -938,31 +950,23 @@ autocmd FileType cmake setlocal commentstring=#\ %s
 " <CTRL-g>S - same as <CTRL-s><CTRL-s>
 " }}}
 
-" rainbow_parentheses.vim {{{
-let g:rbpt_colorpairs = [
-\ ['brown',       'RoyalBlue3'],
-\ ['Darkblue',    'SeaGreen3'],
-\ ['darkgray',    'DarkOrchid3'],
-\ ['darkgreen',   'firebrick3'],
-\ ['darkcyan',    'RoyalBlue3'],
-\ ['darkred',     'SeaGreen3'],
-\ ['darkmagenta', 'DarkOrchid3'],
-\ ['brown',       'firebrick3'],
-\ ['gray',        'RoyalBlue3'],
-\ ['black',       'SeaGreen3'],
-\ ['darkmagenta', 'DarkOrchid3'],
-\ ['Darkblue',    'firebrick3'],
-\ ['darkgreen',   'RoyalBlue3'],
-\ ['darkcyan',    'SeaGreen3'],
-\ ['darkred',     'DarkOrchid3'],
-\ ['red',         'firebrick3'],
-\ ]
-let g:rbpt_max = 16
-let g:rbpt_loadcmd_toggle = 0
-autocmd VimEnter * RainbowParenthesesToggle
-autocmd Syntax   * RainbowParenthesesLoadRound
-autocmd Syntax   * RainbowParenthesesLoadSquare
-autocmd Syntax   * RainbowParenthesesLoadBraces
+" vim-trailing-whitespace {{{
+map <leader><space> :FixWhitespace<cr>
+" }}}
+
+" YouCompleteMe {{{
+nnoremap <leader>df :YcmCompleter GoToDefinitionElseDeclaration<cr>
+nnoremap <F5> :YcmDiags<cr>
+" nnoremap <F5> :YcmForceCompileAndDiagnostics<cr>
+let g:ycm_global_ycm_extra_conf='~/.vim/ycm_extra_conf.py'
+" Do not ask when starting vim
+let g:ycm_confirm_extra_conf              = 0
+let g:ycm_complete_in_comments            = 1
+let g:syntastic_always_populate_loc_list  = 1
+let g:ycm_min_num_of_chars_for_completion = 1
+let g:ycm_cache_omnifunc                  = 0
+let g:ycm_seed_identifiers_with_syntax    = 1
+inoremap <leader>, <C-x><C-o>
 " }}}
 
 "
