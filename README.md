@@ -46,7 +46,11 @@ NPM behind a proxy then install instant-markdown-d
     $ sudo npm config set proxy=http://127.0.0.1:10801
     $ sudo npm -g install instant-markdown-d
 
-### 4. YouCompleteMe
+### 4. jedi-vim
+
+    $ pip install jedi
+
+### 5. YouCompleteMe
 
 you must read [YouCompleteMe](https://github.com/Valloric/YouCompleteMe) carefully.
 

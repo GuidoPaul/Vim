@@ -529,7 +529,8 @@ function! CompileAndRun()
     elseif &filetype == 'markdown'
         " exec \"!pandoc --latex-engine=xelatex % -o %<.pdf -V mainfont='YaHei Consolas Hybrid'"
         exec "!tocmd_conf -f %"
-        exec "!google-chrome-stable preview/%.html"
+        " exec "!google-chrome-stable preview/%.html"
+        exec "!firefox preview/%.html"
     elseif &filetype == 'asm'
         exec "!as -o %<.o % && ld -s -o %< %<.o"
         exec "!time ./%<"
