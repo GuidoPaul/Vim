@@ -529,8 +529,8 @@ function! CompileAndRun()
     elseif &filetype == 'markdown'
         " exec \"!pandoc --latex-engine=xelatex % -o %<.pdf -V mainfont='YaHei Consolas Hybrid'"
         exec "!tocmd_conf -f %"
-        " exec "!google-chrome-stable preview/%.html"
-        exec "!firefox preview/%.html"
+        exec "!google-chrome-stable preview/%.html"
+        " exec \"!firefox preview/%.html"
     elseif &filetype == 'asm'
         exec "!as -o %<.o % && ld -s -o %< %<.o"
         exec "!time ./%<"
@@ -762,7 +762,7 @@ let g:syntastic_enable_highlighting=1
 " pep8    code: http://pep8.readthedocs.org/en/latest/intro.html#error-codes
 " pylint codes: http://pylint-messages.wikidot.com/all-codes
 let g:syntastic_python_checkers=['pyflakes', 'pep8']
-let g:syntastic_python_pep8_args='--ignore=E501,E225,E129'
+let g:syntastic_python_pep8_args='--ignore=E501,E225,E129,W503,W504'
 
 let g:syntastic_javascript_checkers = ['jsl', 'jshint']
 let g:syntastic_html_checkers=['tidy', 'jshint']
