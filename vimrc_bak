@@ -1,48 +1,14 @@
 " VIM Configuration File
 " Author: GuidoPaul
-" License: MIT
 "
-
-let g:config = get(g:, 'config', {})
-
-" Identify platform {{{
-"
-let g:config.os = {}
-let g:config.os.mac = has('macunix')
-let g:config.os.linux = has('unix') && !has('macunix') && !has('win32unix')
-let g:config.os.windows = has('win32')
-"
-" }}}
-
-" Define config {{{
-"
-let g:config.nvim = has('nvim') && exists('*jobwait') && !g:config.os.windows
-let g:config.vim8 = exists('*job_start')
-let g:config.gui = has('gui_running')
-let g:config.timer = exists('*timer_start')
-"
-" }}}
 
 " Vim plugin manager {{{
 "
 set nocompatible              " be iMproved, required
 
 call plug#begin('~/.vim/plugged')
-"
-" syntax-checking
-if g:config.vim8 || g:config.nvim
-    " Plug 'w0rp/ale'
-else
-    Plug 'vim-syntastic/syntastic'
-endif
 
-" completion, formatting, linting
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer --system-libclang --gocode-completer' }
-
-" code-snippets
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
+" Plug 'fisadev/vim-isort'
 
 Plug 'mileszs/ack.vim'
 Plug 'vim-scripts/BufOnly.vim'
@@ -50,14 +16,17 @@ Plug 'kien/ctrlp.vim'
 Plug 'Raimondi/delimitMate'
 Plug 'sjl/gundo.vim'
 Plug 'Yggdroot/indentLine'
-" Plug 'davidhalter/jedi-vim'
+Plug 'davidhalter/jedi-vim'
 Plug 'PotatoesMaster/i3-vim-syntax'
 Plug 'scrooloose/nerdtree'
+" Plug 'python-mode/python-mode' # make python caton
 Plug 'majutsushi/tagbar'
+Plug 'SirVer/ultisnips'
 Plug 'vim-airline/vim-airline'
+" Plug 'Chiel92/vim-autoformat'
 Plug 'julienr/vim-cellmode'
 Plug 'rhysd/vim-clang-format'
-" Plug 'cjrh/vim-conda'
+Plug 'cjrh/vim-conda'
 Plug 'junegunn/vim-easy-align'
 Plug 'easymotion/vim-easymotion'
 Plug 'tommcdo/vim-exchange'
@@ -67,7 +36,18 @@ Plug 'suan/vim-instant-markdown'
 Plug 'plasticboy/vim-markdown'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'kshenoy/vim-signature'
+Plug 'honza/vim-snippets'
 Plug 'bronson/vim-trailing-whitespace'
+Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer --system-libclang --gocode-completer' }
+
+" syntax-checking
+Plug 'w0rp/ale'
+Plug 'scrooloose/syntastic'
+
+" google plugins
+" Plug 'google/vim-maktaba'
+" Plug 'google/vim-codefmt'
+" Plug 'google/vim-glaive'
 
 " tpope's awesome vim plugins
 Plug 'tpope/vim-commentary'
@@ -80,6 +60,7 @@ Plug 'kien/rainbow_parentheses.vim'
 
 call plug#end()
 " google plugins end, should after the 'call plug#end()'
+" call glaive#Install()
 "
 " }}}
 
@@ -138,7 +119,7 @@ set ruler
 set laststatus=2
 
 " Height of the command bar
-set cmdheight=2
+set cmdheight=1
 
 " A buffer becomes hidden when it is abandoned
 set hidden
@@ -215,7 +196,7 @@ catch
 endtry
 
 " Set extra options when running in GUI mode
-if g:config.gui
+if has("gui_running")
     color dracula
     let g:dracula_italic = 1
     set guioptions=""
@@ -251,7 +232,7 @@ set fileencodings=ucs-bom,utf-8,gb2312,gbk,gb18030,big5,euc-jp,euc-kr,latin1
 "
 " turn backup off, since most stuff is in SVN, git et.c anyway...
 set nobackup
-set nowritebackup
+set nowb
 set noswapfile
 
 " save when losing focus
@@ -657,34 +638,54 @@ endfunction
 
 " Plugin configuration {{{
 "
+" ack.vim {{{
+" When you press gv you Ack after the selected text
+vnoremap <silent> gv :call VisualSelection('gv', '')<cr>
+
+" Open Ack and put the cursor in the right position
+map <leader>g :Ack
+
+" When you press <leader>r you can search and replace the selected text
+vnoremap <silent> <leader>r :call VisualSelection('replace', '')<cr>
+
+" When you search with Ack, display your results in cope by doing:
+map <leader>cc :botright cope<cr>
+
+map <leader>co ggVGy:tabnew<cr>:set syntax=qf<cr>pgg
+
+" To go to the next search result
+map <leader>n :cn<cr>
+
+" To go to the previous search result
+map <leader>p :cp<cr>
+" }}}
 
 " syntax-checking {{{
-if g:config.vim8 || g:config.nvim
+if exists('*job_start')
     " ale {{{
-    " let g:ale_fix_on_save = 1
-    " let g:ale_fixers = {'python': ['isort', 'black']}
-    " let g:ale_python_black_options = '--line-length 120'
-    " let g:ale_python_flake8_options = '--max-line-length=120'
+    let g:ale_fix_on_save = 1
+    let g:ale_python_black_options = '--line-length 120'
+    let g:ale_fixers = {'python': ['isort', 'black']}
+    let g:ale_python_flake8_options = '--max-line-length=120 --ignore=E501'
 
-    " let g:ale_set_highlights = 0
-    " let g:ale_fix_on_save = 1
-    " let g:ale_echo_msg_format = '[#%linter%#] %s [%severity%]'
-    " let g:ale_statusline_format = ['E•%d', 'W•%d', 'OK']
+    let g:ale_set_highlights = 0
+    let g:ale_fix_on_save = 1
+    let g:ale_echo_msg_format = '[#%linter%#] %s [%severity%]'
+    let g:ale_statusline_format = ['E•%d', 'W•%d', 'OK']
 
-    " let g:ale_sign_error = '•'
-    " let g:ale_sign_warning = '•'
-    " let g:ale_echo_msg_error_str = g:config.gui ? 'Error' : '✹ Error'
-    " let g:ale_echo_msg_warning_str = g:config.gui ? 'Warning' : '⚠ Warning'
+    let g:ale_sign_error = '•'
+    let g:ale_sign_warning = '•'
+    let g:ale_echo_msg_error_str = has('gui_running') ? 'Error' : '✹ Error'
+    let g:ale_echo_msg_warning_str = has('gui_running') ? 'Warning' : '⚠ Warning'
 
-    " let g:ale_completion_delay = 500
-    " let g:ale_echo_delay = 20
-    " let g:ale_lint_delay = 500
-    " let g:ale_lint_on_text_changed = 'normal'
-    " let g:ale_lint_on_insert_leave = 1
-
-    " nmap <Leader>en <Plug>(ale_next)
-    " nmap <Leader>ep <Plug>(ale_previous)
-    " nnoremap <Leader>ts :ALEToggle<CR>
+    let g:ale_completion_delay = 500
+    let g:ale_echo_delay = 20
+    let g:ale_lint_delay = 500
+    let g:ale_lint_on_text_changed = 'normal'
+    let g:ale_lint_on_insert_leave = 1
+    nmap <Leader>en <Plug>(ale_next)
+    nmap <Leader>ep <Plug>(ale_previous)
+    nnoremap <Leader>ts :ALEToggle<CR>
     " }}}
 else
     " syntastic {{{
@@ -709,39 +710,6 @@ else
     nnoremap <Leader>s :call ToggleErrors()<cr>
     " }}}
 endif
-" }}}
-
-" coc.nvim {{{
-autocmd FileType python nmap <Leader>i :CocCommand python.sortImports<cr>
-" }}}
-
-" ultisnips {{{
-let g:UltiSnipsExpandTrigger="<leader><tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-let g:UltiSnipsSnippetDirectories=["UltiSnips"]
-" }}}
-
-" ack.vim {{{
-" When you press gv you Ack after the selected text
-vnoremap <silent> gv :call VisualSelection('gv', '')<cr>
-
-" Open Ack and put the cursor in the right position
-map <leader>g :Ack
-
-" When you press <leader>r you can search and replace the selected text
-vnoremap <silent> <leader>r :call VisualSelection('replace', '')<cr>
-
-" When you search with Ack, display your results in cope by doing:
-map <leader>cc :botright cope<cr>
-
-map <leader>co ggVGy:tabnew<cr>:set syntax=qf<cr>pgg
-
-" To go to the next search result
-map <leader>n :cn<cr>
-
-" To go to the previous search result
-map <leader>p :cp<cr>
 " }}}
 
 " BufOnly.vim {{{
@@ -850,11 +818,26 @@ let g:tagbar_autofocus = 1
 let g:tagbar_width = 30
 " }}}
 
+" ultisnips {{{
+let g:UltiSnipsExpandTrigger="<leader><tab>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+let g:UltiSnipsSnippetDirectories=["UltiSnips"]
+" }}}
+
 " vim-airline {{{
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 nnoremap <Tab>   :bnext<cr>
 nnoremap <S-Tab> :bprev<cr>
+" }}}
+
+" vim-autoformat {{{
+" autocmd BufWrite * :Autoformat
+" let g:formatdef_autopep8 = \"'autopep8 - --range '.a:firstline.' '.a:lastline"
+" let g:formatters_python = ['autopep8']
+" let g:autoformat_autoindent = 0
+" let g:autoformat_retab = 0
 " }}}
 
 " vim-cellmode {{{
@@ -874,6 +857,26 @@ autocmd FileType c,cpp,objc nnoremap <buffer><Leader>f :ClangFormat<cr>
 autocmd FileType c,cpp,objc vnoremap <buffer><Leader>f :ClangFormat<cr>
 " }}}
 
+" vim-codefmt {{{
+" if exists("*glaive#Install")
+"     call glaive#Install()
+"     " Optional: Enable codefmt's default mappings on the <Leader>= prefix.
+"     Glaive codefmt plugin[mappings]
+"     Glaive codefmt clang_format_style=Google
+" endif
+" augroup autoformat_settings
+"     autocmd FileType bzl AutoFormatBuffer buildifier
+"     autocmd FileType c,cpp,proto,javascript AutoFormatBuffer clang-format
+"     autocmd FileType dart AutoFormatBuffer dartfmt
+"     autocmd FileType go AutoFormatBuffer gofmt
+"     autocmd FileType gn AutoFormatBuffer gn
+"     autocmd FileType html,css,json AutoFormatBuffer js-beautify
+"     autocmd FileType java AutoFormatBuffer google-java-format
+"     autocmd FileType python AutoFormatBuffer yapf
+"     " autocmd FileType python AutoFormatBuffer autopep8
+" augroup END
+" }}}
+
 " vim-commentary {{{
 autocmd FileType cmake setlocal commentstring=#\ %s
 " '\\\' or 'gcc':  Comment a line in normal mode
@@ -882,7 +885,7 @@ autocmd FileType cmake setlocal commentstring=#\ %s
 " }}}
 
 " vim-conda {{{
-" let g:conda_startup_msg_suppress = 1
+let g:conda_startup_msg_suppress = 1
 " }}}
 
 " vim-easy-align {{{
@@ -998,18 +1001,18 @@ map <leader><space> :FixWhitespace<cr>
 " }}}
 
 " YouCompleteMe {{{
-" nnoremap <leader>df :YcmCompleter GoToDefinitionElseDeclaration<cr>
-" nnoremap <F5> :YcmDiags<cr>
-" " nnoremap <F5> :YcmForceCompileAndDiagnostics<cr>
-" let g:ycm_global_ycm_extra_conf='~/.vim/ycm_extra_conf.py'
-" " Do not ask when starting vim
-" let g:ycm_confirm_extra_conf              = 0
-" let g:ycm_complete_in_comments            = 1
-" let g:syntastic_always_populate_loc_list  = 1
-" let g:ycm_min_num_of_chars_for_completion = 1
-" let g:ycm_cache_omnifunc                  = 0
-" let g:ycm_seed_identifiers_with_syntax    = 1
-" inoremap <leader>, <C-x><C-o>
+nnoremap <leader>df :YcmCompleter GoToDefinitionElseDeclaration<cr>
+nnoremap <F5> :YcmDiags<cr>
+" nnoremap <F5> :YcmForceCompileAndDiagnostics<cr>
+let g:ycm_global_ycm_extra_conf='~/.vim/ycm_extra_conf.py'
+" Do not ask when starting vim
+let g:ycm_confirm_extra_conf              = 0
+let g:ycm_complete_in_comments            = 1
+let g:syntastic_always_populate_loc_list  = 1
+let g:ycm_min_num_of_chars_for_completion = 1
+let g:ycm_cache_omnifunc                  = 0
+let g:ycm_seed_identifiers_with_syntax    = 1
+inoremap <leader>, <C-x><C-o>
 " }}}
 
 "

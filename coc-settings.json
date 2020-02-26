@@ -1,0 +1,18 @@
+{
+    "python.pythonPath":"/home/guido/miniconda3/envs/dl/bin/python",
+
+
+    "python.linting.enabled":true,
+    "python.linting.pylintArgs":[
+        "--generate-members"
+    ],
+    "python.linting.flake8Enabled": true,
+    "python.linting.flake8Args": [
+        "--max-line-length=120",
+        "--ignore=E203"
+    ],
+
+    "coc.preferences.formatOnSaveFiletypes": ["python"],
+    "python.formatting.provider":"black",
+    "python.formatting.blackArgs": ["--line-length", "120"]
+}
