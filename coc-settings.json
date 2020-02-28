@@ -1,7 +1,6 @@
 {
     "python.pythonPath":"/home/guido/miniconda3/envs/dl/bin/python",
 
-
     "python.linting.enabled":true,
     "python.linting.pylintArgs":[
         "--generate-members"
@@ -11,8 +10,15 @@
         "--max-line-length=120",
         "--ignore=E203"
     ],
+    "diagnostic.enable": true,
+    "diagnostic.signOffset": 1000,
+    "diagnostic.errorSign": "✹ ",
+    "diagnostic.warningSign": "⚠",
+    "diagnostic.infoSign": ">>",
+    "diagnostic.hintSign": ">>",
 
     "coc.preferences.formatOnSaveFiletypes": ["python"],
     "python.formatting.provider":"black",
     "python.formatting.blackArgs": ["--line-length", "120"]
+
 }

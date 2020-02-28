@@ -14,6 +14,7 @@ let g:config.os.windows = has('win32')
 "
 " }}}
 
+
 " Define config {{{
 "
 let g:config.nvim = has('nvim') && exists('*jobwait') && !g:config.os.windows
@@ -23,10 +24,12 @@ let g:config.timer = exists('*timer_start')
 "
 " }}}
 
+
 " Vim plugin manager {{{
 "
 set nocompatible              " be iMproved, required
 
+" Specify a directory for plugins
 call plug#begin('~/.vim/plugged')
 "
 " syntax-checking
@@ -36,13 +39,22 @@ else
     Plug 'vim-syntastic/syntastic'
 endif
 
-" completion, formatting, linting
+" Completion, Formatting, Linting
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " Plug 'Valloric/YouCompleteMe', { 'do': './install.py --clang-completer --system-libclang --gocode-completer' }
 
-" code-snippets
+" Code-Snippets
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
+
+" Sync sftp scp
+Plug 'skywind3000/asyncrun.vim'
+Plug 'eshion/vim-sync'
+" Plug 'elrrrrrrr/qin-sync'
+
+" Color-Scheme
+Plug 'dracula/vim', { 'as': 'dracula' }
+Plug 'kien/rainbow_parentheses.vim'
 
 Plug 'mileszs/ack.vim'
 Plug 'vim-scripts/BufOnly.vim'
@@ -74,12 +86,8 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 
-" color scheme
-Plug 'crusoexia/vim-dracula'
-Plug 'kien/rainbow_parentheses.vim'
-
+" Initialize plugin system
 call plug#end()
-" google plugins end, should after the 'call plug#end()'
 "
 " }}}
 
@@ -216,7 +224,7 @@ endtry
 
 " Set extra options when running in GUI mode
 if g:config.gui
-    color dracula
+    colorscheme dracula
     let g:dracula_italic = 1
     set guioptions=""
     set t_Co=256
@@ -228,8 +236,11 @@ if g:config.gui
     "     set guifont=Consolas:h13.5
     "     set guifontwide=YaHei\ Consolas\ Hybrid:h12
     " endif
-    set guifont=Consolas\ 12
-    set guifontwide=YaHei\ Consolas\ Hybrid\ 11
+    if g:config.os.linux
+        set guifont=Inconsolata\ for\ Powerline\ 12
+    elseif g:config.os.mac
+        set guifont=Inconsolata\ for\ Powerline:h13.5
+    endif
 endif
 
 " Set utf8 as standard encoding and en_US as the standard language
@@ -712,7 +723,37 @@ endif
 " }}}
 
 " coc.nvim {{{
-autocmd FileType python nmap <Leader>i :CocCommand python.sortImports<cr>
+" Use `[g` and `]g` to navigate diagnostics
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+" GoTo code navigation
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Symbol renaming.
+nmap <leader>rn <Plug>(coc-rename)
+" Remap keys for applying codeAction to the current line.
+nmap <leader>ac  <Plug>(coc-codeaction)
+" Apply AutoFix to problem on the current line.
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+" Add `:Format` command to format current buffer.
+command! -nargs=0 Format :call CocAction('format')
+" Add `:Fold` command to fold current buffer.
+command! -nargs=? Fold :call CocAction('fold', <f-args>)
+" Add `:OR` command for organize imports of the current buffer.
+command! -nargs=0 OR   :call CocAction('runCommand', 'editor.action.organizeImport')
 " }}}
 
 " ultisnips {{{
