@@ -53,6 +53,7 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 " Git
 Plug 'tpope/vim-fugitive'
 Plug 'mhinz/vim-signify'
+Plug 'tpope/vim-rhubarb'
 
 " Color-Scheme
 Plug 'dracula/vim', { 'as': 'dracula' }
