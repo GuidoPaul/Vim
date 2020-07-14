@@ -1,6 +1,6 @@
-backup
-swap
-undo
-spell
-plugged
 autoload/
+backup/
+plugged/
+spell/
+swap/
+undo/

@@ -1,0 +1,62 @@
+" Neo/Vim Configuration File
+" ---
+" Maintainer: Guido
+" License: MIT
+
+" Runtime and Plugins
+" ===
+
+if &compatible
+	" vint: -ProhibitSetNoCompatible
+	set nocompatible " be improved, required
+	" vint: +ProhibitSetNoCompatible
+endif
+
+" Set main configuration directory as parent directory
+let $VIM_PATH =
+	\ get(g:, 'etc_vim_path',
+	\   exists('*stdpath') ? stdpath('config') :
+	\   ! empty($MYVIMRC) ? fnamemodify(expand($MYVIMRC), ':h') :
+	\   ! empty($VIMCONFIG) ? expand($VIMCONFIG) :
+	\   ! empty($VIM_PATH) ? expand($VIM_PATH) :
+	\   fnamemodify(resolve(expand('<sfile>:p')), ':h:h')
+	\ )
+
+" Set data/cache directory as $XDG_CACHE_HOME/vim
+let $DATA_PATH =
+	\ expand(($XDG_CACHE_HOME ? $XDG_CACHE_HOME : '~/.cache') . '/vim')
+
+function! s:source_file(path, ...)
+	" Source user configuration files with set/global sensitivity
+	let use_global = get(a:000, 0, ! has('vim_starting'))
+	let abspath = resolve($VIM_PATH . '/' . a:path)
+	if ! use_global
+		execute 'source' fnameescape(abspath)
+		return
+	endif
+
+	let tempfile = tempname()
+	let content = map(readfile(abspath),
+		\ "substitute(v:val, '^\\W*\\zsset\\ze\\W', 'setglobal', '')")
+	try
+		call writefile(content, tempfile)
+		execute printf('source %s', fnameescape(tempfile))
+	finally
+		if filereadable(tempfile)
+			call delete(tempfile)
+		endif
+	endtry
+endfunction
+
+" Initialize plugin-manager and load main config files
+call s:source_file('config/init.vim')
+
+" Initialize all my configurations
+call s:source_file('config/general.vim')
+call s:source_file('config/function.vim')
+call s:source_file('config/plugins.vim')
+"call s:source_file('config/filetype.vim')
+"call s:source_file('config/mappings.vim')
+"call s:source_file('config/theme.vim')
+
+" vim: set ts=4 sw=4 tw=80 noet :

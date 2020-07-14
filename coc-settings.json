@@ -19,6 +19,7 @@
 
     "coc.preferences.formatOnSaveFiletypes": ["python"],
     "python.formatting.provider":"black",
-    "python.formatting.blackArgs": ["--line-length", "120"]
+    "python.formatting.blackArgs": ["--line-length", "120"],
 
+    "explorer.icon.enableNerdfont": true
 }
