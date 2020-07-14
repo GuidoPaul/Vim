@@ -556,7 +556,8 @@ function! CompileAndRun()
     elseif &filetype == 'sh'
         exec "!time bash %"
     elseif &filetype == 'python'
-        exec "!time python %"
+        " exec \"!time python %"
+        exec "CocCommand python.execInTerminal"
     elseif &filetype == 'matlab'
         exec "!time runmatlab.sh %"
     elseif &filetype == 'html'
@@ -761,6 +762,10 @@ let g:UltiSnipsExpandTrigger="<leader><tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 let g:UltiSnipsSnippetDirectories=["UltiSnips"]
+" }}}
+
+" vim-sync {{{
+autocmd BufWritePost * :call SyncUploadFile()
 " }}}
 
 " ack.vim {{{
@@ -1056,3 +1061,4 @@ map <leader><space> :FixWhitespace<cr>
 "
 " }}}
 
+autocmd CursorHold * silent call CocActionAsync('highlight')
