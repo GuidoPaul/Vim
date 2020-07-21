@@ -101,7 +101,7 @@ let NERDTreeWinSize=25
 let NERDTreeShowBookmarks=1
 let NERDTreeShowHidden=1
 let NERDTreeIgnore = ['\.pyc$']
-map <Leader>nt :NERDTreeToggle<cr>
+map <leader>nt :NERDTreeToggle<cr>
 map <leader>nb :NERDTreeFromBookmark
 map <leader>nf :NERDTreeFind<cr>
 autocmd vimenter * if !argc() | NERDTree | endif
@@ -164,6 +164,7 @@ autocmd Syntax   * RainbowParenthesesLoadBraces
 
 " vim-sync {{{
 autocmd BufWritePost * :call SyncUploadFile()
+map <leader>sd :call SyncDownloadFile()
 " }}}
 
 " delimitMate {{{
@@ -222,11 +223,11 @@ nmap s <Plug>(easymotion-s2)
 nmap t <Plug>(easymotion-t2)
 map  n <Plug>(easymotion-next)
 map  N <Plug>(easymotion-prev)
-map <Leader><leader>h <Plug>(easymotion-linebackward)
-map <Leader><Leader>j <Plug>(easymotion-j)
-map <Leader><Leader>k <Plug>(easymotion-k)
-map <Leader><leader>l <Plug>(easymotion-lineforward)
-map <Leader><leader>. <Plug>(easymotion-repeat)
+map <leader><leader>h <Plug>(easymotion-linebackward)
+map <leader><leader>j <Plug>(easymotion-j)
+map <leader><leader>k <Plug>(easymotion-k)
+map <leader><leader>l <Plug>(easymotion-lineforward)
+map <leader><leader>. <Plug>(easymotion-repeat)
 " }}}
 
 " vista.vim {{{
