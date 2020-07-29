@@ -66,6 +66,7 @@ Plug 'eshion/vim-sync'
 " Misc
 Plug 'Raimondi/delimitMate'
 Plug 'Yggdroot/indentLine'
+Plug 'mhinz/vim-startify'
 Plug 'ahonn/vim-fileheader'
 Plug 'vim-scripts/BufOnly.vim'
 Plug 'preservim/nerdcommenter'

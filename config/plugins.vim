@@ -104,7 +104,8 @@ let NERDTreeIgnore = ['\.pyc$']
 map <leader>nt :NERDTreeToggle<cr>
 map <leader>nb :NERDTreeFromBookmark
 map <leader>nf :NERDTreeFind<cr>
-autocmd vimenter * if !argc() | NERDTree | endif
+"autocmd vimenter * if !argc() | NERDTree | endif
+autocmd vimenter * if !argc() | Startify | NERDTree | wincmd w | endif
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 " }}}
 
