@@ -217,10 +217,10 @@ set tw=500
 
 " Code fold
 set foldcolumn=1
-set foldmethod=marker
+set foldmethod=indent
 " autocmd BufWinLeave * if expand('%') != '' && &buftype == '' | silent mkview | endif
 " autocmd BufRead     * if expand('%') != '' && &buftype == '' | silent loadview | endif
-set foldtext=MyFoldText()
+"set foldtext=MyFoldText()
 
 " Vim fold
 augroup ft_vim

@@ -64,6 +64,7 @@ Plug 'skywind3000/asyncrun.vim'
 Plug 'eshion/vim-sync'
 
 " Misc
+Plug 'tmhedberg/SimpylFold'
 Plug 'Raimondi/delimitMate'
 Plug 'Yggdroot/indentLine'
 Plug 'mhinz/vim-startify'
