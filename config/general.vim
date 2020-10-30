@@ -139,11 +139,10 @@ if g:config.gui
     "     set guifontwide=YaHei\ Consolas\ Hybrid:h12
     " endif
     if g:config.os.linux
-		set guifont=Inconsolata\ for\ Powerline\ 12
+        set guifont=Inconsolata\ for\ Powerline\ 12
     elseif g:config.os.mac
         "set guifont=Inconsolata\ for\ Powerline:h13.5
         set guifont=Inconsolata\ Regular\ Nerd\ Font\ Complete\ Mono:h13.5
-
     endif
 endif
 

@@ -41,6 +41,7 @@ else
 endif
 
 " fuzzy finder
+Plug 'mileszs/ack.vim'
 Plug 'Yggdroot/LeaderF' " nvim needs pip install pynvim | needs nerd-fonts
 
 " Code Formatting
@@ -54,6 +55,10 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'tpope/vim-fugitive'
 Plug 'mhinz/vim-signify'
 Plug 'tpope/vim-rhubarb'
+
+" Markdown
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install'  }
+Plug 'godlygeek/tabular'
 
 " Color-Scheme
 Plug 'dracula/vim', { 'as': 'dracula' }
